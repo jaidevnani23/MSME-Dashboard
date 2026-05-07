@@ -1600,7 +1600,7 @@ const NIC_PRODUCTS = {
   '47990':{'trend':'Emerging & Fast-Growing','products':'Social-commerce fashion (Instagram Reels / WhatsApp resellers) · Live-stream shopping events · Influencer-linked product drops · D2C subscription boxes · Direct farm-to-consumer food','platforms':'Instagram, WhatsApp Commerce, Meesho resellers, YouTube Shopping'},
 };
 async function callClaude(prompt, systemPrompt, maxTokens=1200) {
-  const response = await fetch('/api/claude', {
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -2007,7 +2007,7 @@ async function handleFile(file){
     fill.style.width='50%';
     out.innerHTML=`<strong>📄 PDF detected — sending to Claude via document API…</strong><br>Extracting demand signals from ${file.name}`;
     try{
-      const response=await fetch('/api/claude',{
+      const response=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
           model:'claude-sonnet-4-6',max_tokens:1500,
@@ -2378,6 +2378,89 @@ function renderSalesHome() {
 
 // ── Sales contact table (replaces card grid for sales role) ──
 const MONTH_ORDER = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ══════════════════════════════════════════════
+// STATE × GROUP PRODUCT INTELLIGENCE
+// Source: Key_NIC_Codes_State_2026.xlsx — State × Product Matrix
+// ══════════════════════════════════════════════
+const STATE_PRODUCTS = {
+  'Delhi': {
+    ecom_retail:     {trend:`Explosive Growth`,   products:`B2B marketplace listings — Udaan & IndiaMart · WhatsApp commerce reseller supply · Multi-category gifting bundles · D2C subscription boxes (fashion/beauty/wellness)`, platforms:`Amazon IN, Flipkart, Meesho, Myntra`},
+    clothing_retail: {trend:`Very Strong`,        products:`Chandni Chowk wholesale sarees & dress materials · Gandhi Nagar readymade garments · Karol Bagh bridal lehengas & wedding sherwanis · Zardosi & embroidery work kurtas (Seelampur) · Oxidised silver earrings & kundan sets`, platforms:`Amazon IN, Flipkart, Meesho, Myntra`},
+    food_grocery:    {trend:`Strong`,             products:`Organic & gourmet grocery (premium New Delhi retail) · Specialty coffee & wellness teas · Festive mithai & dry fruit gift boxes · Protein supplements & immunity boosters · Azadpur APMC — wholesale fruit & vegetable supply`, platforms:`BigBasket, Blinkit, Amazon Fresh, JioMart`},
+    home_textile:    {trend:`Growing`,            products:`Wedding décor & return gift sets · Printed bedsheets & duvet covers (Chandni Chowk wholesale) · Curtain fabric rolls & bath towel sets · Stainless steel cookware & kitchen storage · Brass diyas & puja thali sets`, platforms:`Amazon IN, Flipkart, Pepperfry`},
+    wholesale:       {trend:`Very Strong`,        products:`Chandni Chowk bulk saree & suit-length distribution · Gandhi Nagar readymade garment wholesale · B2B food & grocery (Azadpur APMC) · Wholesale footwear & accessories · Karol Bagh bridal wholesale supply`, platforms:`Udaan, IndiaMart, local wholesale markets`},
+    general_retail:  {trend:`Very Strong`,        products:`Premium electronics & gadgets (Nehru Place) · Vitamin C serums & SPF 50 sunscreens · Smartwatches (boAt, Noise) · Perfume & deo gift sets · Waterproof kajal & lipsticks · Niacinamide face serums (Delhi D2C brands)`, platforms:`Amazon IN, Nykaa, Flipkart, Croma`}
+  },
+  'Maharashtra': {
+    clothing_retail: {trend:`Very Strong`,        products:`Oversized graphic tees (Dharavi garment belt) · Premium co-ord sets (Thane units) · Anarkali suits & party-wear lehengas · Maternity & nursing wear (Mumbai D2C) · Men's bandhgala kurtas · Sequin & mirror-work blouses`, platforms:`Amazon IN, Flipkart, Myntra`},
+    apparel_mfg:     {trend:`Very Strong`,        products:`Export T-shirts & polo shirts (Mumbai-Thane garment corridor) · Sportswear & compression tights · Swimwear & beachwear (Mumbai coastal) · Denim jeans & jeggings · Premium linen shirts · Formal trousers & blazers · Structured leather tote bags (Dharavi leather cluster) · Laptop bags & office backpacks (Kurla units) · Handcrafted leather wallets & crossbody bags`, platforms:`Manufacturer supply to Amazon/Flipkart brands; Nykaa Fashion, Myntra`},
+    food_grocery:    {trend:`Strong`,             products:`Alphonso mango pulp & pickle (Ratnagiri GI) · Malvani masala blends · Puranpoli mix (Maharashtra festive) · Kolhapuri chilli powder · Goda masala · Sol kadhi concentrate (Konkan coast) · Whey protein & mass gainer (Mumbai gym culture) · Organic ashwagandha capsules · Plant-based protein bars`, platforms:`Amazon IN Pantry, BigBasket, Blinkit, Nykaa Wellness`},
+    general_retail:  {trend:`Very Strong`,        products:`Niacinamide face serums (D2C Mumbai brands) · SPF 50 tinted sunscreen · Vitamin C brightening kits · Hair growth oils (Ayurvedic, Mumbai wellness startups) · Waterproof kajal & mascara · Luxury deo gift sets · Pre-workout energy gummies`, platforms:`Nykaa, Amazon IN, Flipkart`},
+    ecom_retail:     {trend:`Explosive Growth`,   products:`Mumbai D2C brand fulfilment — fashion, beauty & wellness · Premium electronics (iQOO, Samsung) · Multi-category gifting & subscription boxes · Social-commerce fashion (Instagram/WhatsApp resellers)`, platforms:`Amazon IN, Flipkart, Myntra, Nykaa`}
+  },
+  'Gujarat': {
+    knit_fabric:     {trend:`Very Strong`,        products:`Rayon georgette saree fabric (Surat — #1 global source) · Polyester chiffon dupatta fabric · Viscose-modal blend kurta fabric · Nylon net for lehengas & bridal wear · Jacquard weave fabric (Surat powerloom) · Organza & tissue saree fabric`, platforms:`B2B: IndiaMart, Udaan, WhatsApp trade groups`},
+    wholesale:       {trend:`Very Strong`,        products:`Chaniya choli sets (Navratri Garba — Ahmedabad wholesale) · Bandhani georgette sarees (Jamnagar Bandhani belt) · Patola silk sarees (Patan — UNESCO heritage) · Wholesale embroidered blouses & dupattas · Jari & zardosi work lehengas (Surat) · Kutch embroidery dress material · Groundnut oil (Rajkot — Saurashtra peanut belt) · Fenugreek & cumin (Unjha APMC — India's largest spice market)`, platforms:`Surat wholesale markets, Meesho supplier portal, IndiaMart`},
+    clothing_retail: {trend:`Very Strong`,        products:`Garba costume sets (chaniya choli, mojari, hair accessories) · Kutch mirror-work dupattas · Single-colour Bandhej sarees · Traditional Gujarati ghagra-choli · Festival edition lehengas · White Navratri special kurta sets · Navratri Bandhani-matched jhumka sets · Lac bangle sets (Rajkot) · Temple jewellery (Vadodara craftsmen)`, platforms:`Amazon IN, Flipkart, Meesho, local Surat stores`},
+    home_textile:    {trend:`Growing`,            products:`Ceramic floor tiles (Morbi — 70% of India's tile output) · Sanitaryware & bathroom fittings (Morbi) · Stainless steel industrial vessels · Pressure cooker whistles & gaskets (Rajkot engineering) · Diamond-finish cookware sets`, platforms:`B2B: IndiaMart; Retail: Amazon IN, Flipkart`},
+    food_grocery:    {trend:`Strong`,             products:`Groundnut oil (Rajkot — Saurashtra peanut belt) · Sesame seeds & til oil (Mehsana) · Fenugreek/jeera (Unjha APMC — India's largest spice market) · Isabgol/psyllium husk (export-grade) · Castor oil (industrial + pharma grade) · Gir Kesar mango products (GI)`, platforms:`JioMart B2B, IndiaMart, Amazon Pantry`},
+    apparel_mfg:     {trend:`Very Strong`,        products:`Surat powerloom — synthetic fabric manufacturing for pan-India garment industry · Garba costume sets wholesale production · Kutch mirror-work & embroidery manufacturing units · Jari & zardosi embellishment supply (Surat export belt)`, platforms:`B2B export; Meesho supplier portal, IndiaMart`}
+  },
+  'Uttar Pradesh': {
+    clothing_retail: {trend:`Very Strong`,        products:`Banarasi silk sarees with zari brocade (Varanasi GI — #1 bridal wear searches) · Lucknowi chikankari kurta sets hand-embroidered (Rs799–Rs4,999) · Chikankari palazzo-suit sets · Zardosi work lehengas & blouses (Lucknow atelier belt) · Banarasi brocade dupattas · Firozabad glass bangle sets (Rs99 packs, Meesho #1) · Jhumka earrings with lac inlay · Payal/anklets with ghungroo (UP artisan belt)`, platforms:`Amazon IN, Flipkart, Myntra, Meesho`},
+    home_textile:    {trend:`Very Strong`,        products:`Moradabad brass diyas & puja thali sets (Pital Nagari — 60% of India's brass exports) · Moradabad brassware flower vases & candle stands · Agra marble inlay Taj Mahal replicas (tourist + export) · Saharanpur carved wooden photo frames & trays · Varanasi silk wall hangings · Hand-knotted wool carpets (Bhadohi/Mirzapur — Carpet City of India) · Machine-made polyester area rugs · Prayer mats (Varanasi)`, platforms:`Amazon IN, Flipkart, Meesho, export via EPCH`},
+    wholesale:       {trend:`Very Strong`,        products:`Varanasi silk wholesale & export · Lucknow chikankari bulk orders (artisan cluster B2B) · Kanpur tannery leather bags & wallets wholesale · Agra shoe wholesale (India's shoe-making capital B2B) · Bhadohi carpet wholesale (custom hotel/office orders) · Moradabad brassware export wholesale · Firozabad glass bangle bulk supply`, platforms:`Meesho supplier, IndiaMart, EPCH export`},
+    food_grocery:    {trend:`Strong`,             products:`Kannauj ittar-infused wellness products & rose water · Chyawanprash (Dabur — Ghaziabad plant) · Thandai mix (Mathura) · Petha candy (Agra GI) · Mathura peda gift boxes · Organic gur/jaggery (Muzaffarnagar sugarcane belt) · Banaras paan masala & mukhwas`, platforms:`Amazon IN Pantry, BigBasket, JioMart`},
+    ecom_retail:     {trend:`Very Strong`,        products:`Meesho Tier-3/4 city e-commerce (UP = India's largest volume market) · Lucknowi chikankari D2C (Amazon & Myntra fast-growing) · Banarasi silk saree gifting (seasonal peaks) · Agra leather juttis & sandals online · Firozabad glass décor & bangles`, platforms:`Amazon IN, Flipkart, Meesho, Myntra`},
+    apparel_mfg:     {trend:`Strong`,             products:`Kanpur tannery leather goods manufacturing (wallets, bags, shoes) · Agra shoe manufacturing — India's footwear capital · Varanasi brocade fabric (zari-woven B2B supply to bridal brands) · Lucknow chikankari artisan B2B fabric panels`, platforms:`B2B: Kanpur leather trade, IndiaMart`}
+  },
+  'Tamil Nadu': {
+    apparel_mfg:     {trend:`Very Strong`,        products:`Export-quality cotton round-neck T-shirts (Tirupur — 60% of India's knitwear exports) · Polo shirts with 2-button placket · Dry-fit sportswear & compression gym wear · Kids' cotton school uniforms (Tirupur mass production) · Athleisure jogger-tee co-ord sets · Women's cotton nightwear sets · Crop tops & tank tops · Sublimation-printed graphic tees`, platforms:`B2B: export, Flipkart-Shopsy, Amazon Seller Central`},
+    knit_fabric:     {trend:`Very Strong`,        products:`Interlock cotton fabric (Tirupur/Erode mills — B2B) · Single jersey cotton fabric · Rib-knit cotton cuffs & collars · Pique cotton fabric (polo shirts) · Organic cotton GOTS-certified fabric (export) · Flame-retardant cotton knit (kids safety) · Bamboo-cotton blend knit fabric`, platforms:`B2B: IndiaMart, textile trade fairs, export via AEPC`},
+    clothing_retail: {trend:`Very Strong`,        products:`Kanchipuram silk sarees with zari borders (GI tag, Rs5,000–Rs50,000) · Coimbatore cotton sarees (Kovai Kora) · Salem & Madurai silk sarees · Karur hand-block print fabric · Pure cotton dress material (Erode cotton belt) · Handloom cotton sarees with temple border · Chennai leather formal shoes (Ambur/Vellore tanneries) · PU leather school shoes (Ambur cluster)`, platforms:`Amazon IN, Flipkart, Meesho, Nalli Silks online`},
+    food_grocery:    {trend:`Very Strong`,        products:`Moringa powder & capsules (Salem — world's largest producer) · Filter coffee powder (Coimbatore-Nilgiris blend) · Tamarind paste & sambar powder (Madurai spice units) · Organic turmeric powder (Erode — Yellow City) · Jackfruit chips & banana wafers · Millet-based health snacks (ragi, kambu) · Coconut-based ready meals`, platforms:`Amazon IN Pantry, BigBasket, Blinkit`},
+    general_retail:  {trend:`Growing`,            products:`Coconut hair oil (Parachute competitors, TN-sourced) · Turmeric & neem face packs · Kumkumadi tailam (Ayurvedic facial oil) · Natural henna powder (Madurai) · Vetiver (khus) body scrub · Sandal soap & talcum powder (TN factory brands)`, platforms:`Amazon IN, Nykaa, Meesho`}
+  },
+  'Karnataka': {
+    clothing_retail: {trend:`Very Strong`,        products:`Pure Mysore silk sarees with gold zari (GI tag — Ramanagara silk belt) · Mysore Crepe & georgette silk sarees · Ilkal cotton-silk sarees (North Karnataka GI) · Kasuti embroidered silk dupattas · Khun fabric (Dharwad weave) · Mysore silk dhoti sets (traditional)`, platforms:`Amazon IN, Flipkart, Karnataka Silk Industries online`},
+    apparel_mfg:     {trend:`Very Strong`,        products:`Bengaluru cut-and-sew garment exports (Bata, H&M, GAP, Nike, Decathlon supply chain) · Women's blouses & tailored tops (Bengaluru export units) · Denim shirts & structured jackets · Activewear sets with moisture-wicking fabric · Premium co-ord sets for D2C brands`, platforms:`B2B export; Amazon IN, Myntra D2C supply`},
+    food_grocery:    {trend:`Very Strong`,        products:`Chikmagalur single-origin arabica coffee beans (Amazon #1 specialty coffee) · Coorg robusta filter coffee blend · Sleepy Owl cold brew concentrate (Bengaluru D2C) · Blue Tokai Attikan Estate coffee pods · Organic Coorg honey (GI-certified) · Coorg pepper & cardamom (spice estate boxes) · Karnataka jackfruit chips & ragi malt`, platforms:`Amazon IN, Flipkart, D2C: BlueTokai, Sleepy Owl, BigBasket`},
+    general_retail:  {trend:`Very Strong`,        products:`Sandalwood face cream & body lotion (Mysore Sandal Soap — KSSDL, India's OG) · Pure sandalwood soap (Mysore — GI protected) · Kumkumadi serum (Bengaluru wellness brands) · Vetiver & Neem face wash · Brahmi hair oil · Charcoal face mask · Smart home devices (Bengaluru tech consumers) · Premium yoga mats & gaming peripherals`, platforms:`Nykaa, Amazon IN, Flipkart, D2C`},
+    ecom_retail:     {trend:`Explosive Growth`,   products:`Bengaluru D2C brand fulfilment — specialty coffee, wellness & fashion · Premium tech accessories & gaming gear · Artisanal craft kits & plant grow kits (Bengaluru maker culture) · Smart home IoT devices (tech workforce demand)`, platforms:`Amazon IN, Flipkart, D2C: BlueTokai, Sleepy Owl`}
+  },
+  'Punjab': {
+    knit_fabric:     {trend:`Very Strong`,        products:`Men's cotton round-neck T-shirts (Ludhiana hosiery — Manchester of India) · Thermal innerwear sets (Ludhiana winter speciality, Rs199–Rs499) · Sports socks & ankle socks in 6-pack bundles · Women's leggings & tights · Athletic compression shorts · Seamless bra packs · Ludhiana acrylic sweaters (India's #1 source) · Turtleneck cardigans · Matching muffler-glove-cap gift sets (Rs299–Rs499, Meesho top-seller)`, platforms:`B2B: IndiaMart, Udaan; Retail: Amazon IN, Flipkart, Meesho`},
+    clothing_retail: {trend:`Very Strong`,        products:`Phulkari embroidered dupatta (Punjab GI, hand-stitched on khaddar) · Patiala salwar-suit sets (Amazon IN Top-50 women's ethnic) · Amritsari jutti/mojari (hand-stitched leather, Amritsar artisans) · Bridal Phulkari lehenga sets · Men's kurta-pajama with Phulkari pocket square · Embroidered dupatta multipack (Rs299, Meesho viral)`, platforms:`Amazon IN, Flipkart, Meesho, Myntra`},
+    food_grocery:    {trend:`Strong`,             products:`Multiflora Punjab honey (Rs450–Rs900/kg, Amazon bestseller) · Amritsar walnuts & mixed dry fruit boxes · Makki di atta (corn flour) · Sarson da saag ready-to-cook kit · Whole wheat chakki atta (Punjab grain belt) · Organic desi ghee (Anand cooperative) · Lassi powder mix · Pinni (traditional energy ladoo)`, platforms:`Amazon IN Pantry, BigBasket, JioMart`},
+    home_textile:    {trend:`Strong`,             products:`Amritsar steel dastarkhwan (langar thali sets) · Brass Sikh khanda wall art & gold-plated Gurudwara serving bowls · Rumala Sahib (decorative cloth for Granth Sahib) · Hand-painted Sikh art phulkari frames · Phulkari-embroidered woollen shawls`, platforms:`Amazon IN, Flipkart, Sikh artisan markets`},
+    wholesale:       {trend:`Very Strong`,        products:`Ludhiana hosiery wholesale (T-shirts, innerwear, socks — B2B to pan-India resellers) · Acrylic sweater & woollen knitwear bulk (Ludhiana mills) · Amritsari papad & pickle festive hampers · Punjab multiflora honey wholesale · Jalandhar sports goods wholesale (cricket, football, badminton equipment)`, platforms:`Udaan, IndiaMart, Meesho Supplier`}
+  },
+  'Rajasthan': {
+    clothing_retail: {trend:`Very Strong`,        products:`Sanganer hand-block print cotton fabric (Amazon & Myntra designer favourite) · Bagru natural-dye block-print dress material · Bandhani georgette sarees (Jodhpur/Barmer Bandhani belt) · Leheriya tie-dye dupattas & sarees · Kota Doria sarees (GI — ultra-light weave) · Rajasthani ghagra-choli sets with mirror work (Rs599–Rs3,999) · Gota patti embroidered lehengas (Jaipur — wedding staple) · Lac bangle sets with mirror & stone (Meesho #1)`, platforms:`Amazon IN, Flipkart, Meesho, Myntra, Craftsvilla`},
+    home_textile:    {trend:`Very Strong`,        products:`Jaipur blue pottery mugs, plates & vases (GI craft, Amazon IN top handicraft) · Jodhpur sheesham wood furniture & side tables · Marble Ganesh & Laxmi idols (Makrana white marble) · Jodhpur bone inlay decorative trays · Camel leather cushion covers · Rajasthani embroidered table runners · Jaipur hand-woven wool dhurrie rugs (Meesho & Amazon bestseller) · Printed cotton Jaipuri razai quilt · Block-print curtain fabric`, platforms:`Amazon IN, Flipkart, Pepperfry, Etsy IN exports`},
+    wholesale:       {trend:`Very Strong`,        products:`Jaipur block-print fabric & clothing wholesale · Jodhpur export furniture (sheesham, bone inlay) · Gemstone & jewellery wholesale (Jaipur gem capital — B2B export) · Lac bangle wholesale (Jaipur artisan supply) · Bhilwara synthetic fabric wholesale · Sanganer & Bagru printed fabric B2B supply`, platforms:`Jaipur wholesale markets, EPCH export, IndiaMart`},
+    general_retail:  {trend:`Very Strong`,        products:`Rajasthani ghewar (Jaipur GI — Teej festival sweet, peaks Aug-Sep) · Mawa kachori & malpua gift boxes · Bikaner namkeen & bhujia (GI snack) · Besan ladoo & churma · Jodhpur mirchi vada mix kit · Halwai-style dry fruit barfi sets`, platforms:`Amazon IN, Flipkart, Meesho`},
+    food_grocery:    {trend:`Strong`,             products:`Rajasthani ghewar & Bikaner namkeen/bhujia (GI snacks) · Cumin & fenugreek (Rajasthan spice belt) · Organic desi ghee (Rajasthan dairy belt) · Dry fruit-based sweets (sugar-free) · Marayoor jaggery & natural sweeteners`, platforms:`Amazon IN Pantry, BigBasket, local D2C`}
+  },
+  'Kerala': {
+    food_grocery:    {trend:`Very Strong`,        products:`Idukki cardamom pods (GI — world's finest, Amazon IN top spice) · Wayanad black pepper (Malabar pepper, global export) · Kerala vanilla pods & extract (Idukki) · Cinnamon quills & nutmeg/mace (Thrissur) · Kerala coconut oil cold-pressed (Thrissur/Alappuzha) · Curry leaf powder & turmeric fingers · Vazhakulam pineapple & Marayoor jaggery`, platforms:`Amazon IN Pantry, BigBasket, specialty D2C: Kerala Spice Co.`},
+    general_retail:  {trend:`Very Strong`,        products:`Kottakkal Arya Vaidya Sala Chyawanprash & Ayurvedic products (Amazon IN Health #1) · Nagarjuna Keram coconut hair oil · Brahmi & Amla Ayurvedic hair masks · Triphala churna & Murivenna pain relief oil · Njavara rice face cream · Ashwagandha & Shatavari capsule packs · Virgin coconut oil beauty products (Alappuzha cold-press) · Coconut milk shampoo & conditioner · Kera herbal hair oil · Ayurvedic kumkumadi face serum`, platforms:`Amazon IN, Nykaa Wellness, 1mg, BigBasket, Nykaa`},
+    clothing_retail: {trend:`Strong`,             products:`Kerala kasavu saree with gold zari border (Onam — single biggest saree moment) · Kerala mundum neriyathum (women's traditional set) · Men's off-white cotton mundu with gold border · Kannur handloom cotton sarees (Kannur weaving cluster) · Kasavu-worked cotton dress material · Onam special cotton saree collections (launch Jul-Aug)`, platforms:`Amazon IN, Flipkart, Kerala Handloom Federation, Meesho`},
+    home_textile:    {trend:`Strong`,             products:`Alappuzha coir doormat (GI — India's coir capital, 70% global export) · Coir yoga mat (eco-friendly, premium wellness market) · Coir wall tiles & acoustic panels · Woven coir storage baskets · Natural coir bed mattress · Handloom cotton dhurrie floor mats (Kannur) · Kerala Ashtamangalya puja set (brass items, Thrissur) · Guruvayur Krishna idol (brass) · Kathakali mask (Thrissur artisans) · Onam pookalam kit`, platforms:`Amazon IN, Flipkart, Pepperfry, eco-brands`},
+    ecom_retail:     {trend:`Strong`,             products:`Premium electronics & lifestyle goods (high remittance income) · Onam special product bundles (spices + saree + oil gift box) · Ayurvedic wellness subscription boxes · Specialty spice gifting hampers (global NRI demand)`, platforms:`Amazon IN, Flipkart, BigBasket, Blinkit`},
+    wholesale:       {trend:`Strong`,             products:`Kerala spice wholesale export (cardamom, pepper, vanilla — global B2B) · Cashew wholesale (Kollam — world cashew hub) · Coir product wholesale (Alappuzha cooperative export) · Ayurvedic medicine & herbal wholesale (Kottakkal/Thrissur)`, platforms:`Export trade, IndiaMart, Spice Board India`}
+  },
+  'Telangana': {
+    clothing_retail: {trend:`Very Strong`,        products:`Pochampally ikat silk sarees (Nalgonda GI — double-ikat, UNESCO candidate) · Siddipet gollabama cotton sarees · Narayanpet silk-cotton sarees · Gadwal silk sarees with zari · Ikat fabric by the metre (B2B fashion designers) · Hyderabadi embroidery kurta sets (Nizam cultural aesthetic) · Ikat print co-ord sets (modern workwear, trending Myntra) · Hyderabadi sherwani with Zardozi (bridal)`, platforms:`Amazon IN, Flipkart, Myntra, Meesho, Lepakshi Emporium`},
+    food_grocery:    {trend:`Strong`,             products:`Hyderabad haleem-in-a-box (Eid — BigBasket top seller) · Nizamabad turmeric (GI — Amazon IN spice top-10) · Nalgonda sesame seed chikki · Karimnagar homestyle pickles · Sona Masuri rice (Warangal, Amazon Premium Grocery) · Jowar & bajra millet health mix (tribal belt produce)`, platforms:`Amazon IN Pantry, BigBasket, Blinkit`},
+    general_retail:  {trend:`Strong`,             products:`Hyderabad pharma-grade vitamin C & collagen supplements (Dr. Reddy's ecosystem) · Nutraceutical biotin hair gummies (Hyderabad pharma brands) · Clinical skincare serums (Hyderabad derma brands) · Sunscreen SPF 50 PA+++ (dermatologist-backed) · Anti-dandruff medical shampoos · OTC pain patches & ointments · Gaming headsets & mechanical keyboards (Hyderabad gaming boom) · Smart home speakers & IoT switches`, platforms:`Amazon IN Health, Nykaa, 1mg, PharmEasy, Flipkart`},
+    home_textile:    {trend:`Growing`,            products:`Bidriware silver-inlaid vases & decorative trays (Bidar GI) · Nirmal painted wooden toys & furniture with floral paintings (Adilabad GI) · Cheriyal scroll paintings (Warangal folk art) · Pembarthi brass repoussé work · Lepakshi stone carving figurines · Hyderabad enamel copper vessels`, platforms:`Amazon IN, Flipkart, Lepakshi Emporium, TSIIC export`},
+    ecom_retail:     {trend:`Very Strong`,        products:`Gaming headsets, mechanical keyboards & streaming gear (Hyderabad gaming boom) · Smart home speakers & IoT switches (tech workforce) · Ergonomic laptop stands & desk accessories · Noise-cancelling earbuds · Multi-port USB hubs (WFH demand)`, platforms:`Amazon IN, Flipkart, Croma`},
+    wholesale:       {trend:`Strong`,             products:`Hyderabad pharmaceutical wholesale & bulk distribution (India's pharma hub) · Ikat fabric B2B (Pochampally to fashion designers nationally) · Sona Masuri rice wholesale (Warangal grain belt) · Bidriware & handicraft export wholesale`, platforms:`IndiaMart, B2B pharma distributors`}
+  }
+};
+
 let stblData = [];       // full dataset
 let stblSortKey = 'window';
 let stblSortDir = 1;     // 1 asc, -1 desc
@@ -2401,25 +2484,37 @@ function buildSalesContactTable() {
         ? WEEK_MONTH[tWk1]
         : `${WEEK_MONTH[tWk1]}–${WEEK_MONTH[tWk2]}`;
 
-      // Aggregate product data from NIC_PRODUCTS for each code in this group
-      const productLines = [];
-      const trendSet = new Set();
-      const platformSet = new Set();
-      codes.forEach(c => {
-        const p = NIC_PRODUCTS[c];
-        if (!p) return;
-        if (p.trend) trendSet.add(p.trend);
-        if (p.products) productLines.push(p.products);
-        if (p.platforms) p.platforms.split(',').forEach(pl => platformSet.add(pl.trim()));
-      });
-      // Deduplicate products and take the top set (max 5 bullet items)
-      const allBullets = productLines.join(' · ').split(' · ').filter(Boolean);
-      const seen = new Set();
-      const dedupedBullets = allBullets.filter(b => { const k = b.toLowerCase().substring(0,20); if(seen.has(k)) return false; seen.add(k); return true; });
-      const topProducts = dedupedBullets.slice(0, 5).join(' · ');
-
-      // Pick the most prominent trend label (first hit, or first in group)
-      const trendLabel = [...trendSet][0] || '—';
+      // STATE_PRODUCTS (manufacturing-led) takes priority; fallback to NIC_PRODUCTS
+      let topProducts = '';
+      let trendLabel = '—';
+      let platformsStr = '';
+      const stateGroupData = STATE_PRODUCTS[stateName]?.[groupId];
+      if (stateGroupData) {
+        const rawBullets = stateGroupData.products.split(' · ').filter(Boolean);
+        const seen = new Set();
+        const deduped = rawBullets.filter(b => { const k = b.toLowerCase().substring(0,20); if(seen.has(k)) return false; seen.add(k); return true; });
+        topProducts = deduped.slice(0, 6).join(' · ');
+        trendLabel = (stateGroupData.trend || '—').replace(/^[🔥📈🧊⬇️]+\s*/u, '');
+        platformsStr = (stateGroupData.platforms || '').split(',').slice(0, 3).join(',');
+      } else {
+        const productLines = [];
+        const trendSet = new Set();
+        const platformSet = new Set();
+        codes.forEach(c => {
+          const p = NIC_PRODUCTS[c];
+          if (!p) return;
+          if (p.trend) trendSet.add(p.trend);
+          if (p.products) productLines.push(p.products);
+          if (p.platforms) p.platforms.split(',').forEach(pl => platformSet.add(pl.trim()));
+        });
+        const allBullets = productLines.join(' · ').split(' · ').filter(Boolean);
+        const seen = new Set();
+        const dedupedBullets = allBullets.filter(b => { const k = b.toLowerCase().substring(0,20); if(seen.has(k)) return false; seen.add(k); return true; });
+        topProducts = dedupedBullets.slice(0, 5).join(' · ');
+        trendLabel = [...trendSet][0] || '—';
+        platformsStr = [...platformSet].slice(0,3).join(', ');
+      }
+      const hasMfgData = !!stateGroupData;
 
       stblData.push({
         state: stateName,
@@ -2427,7 +2522,8 @@ function buildSalesContactTable() {
         codes: codes.join(', '),
         topProducts,
         trendLabel,
-        platforms: [...platformSet].slice(0,3).join(', '),
+        platforms: platformsStr,
+        hasMfgData: hasMfgData,
         contactWindow,
         contactMonthSort: MONTH_ORDER.indexOf(contactMonth),
         peakMonth,
@@ -2515,15 +2611,19 @@ function renderSalesTbl() {
       ? r.topProducts.split(' · ').map(p => `<span>· ${p.trim()}</span>`).join(' ')
       : '<span style="color:var(--txt4)">—</span>';
 
+    const mfgBadge = r.hasMfgData ? `<span style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;font-weight:700;padding:2px 5px;border-radius:2px;background:rgba(196,153,26,.12);color:#C4991A;border:1px solid rgba(196,153,26,.25);margin-top:4px;display:inline-block;letter-spacing:.04em">MFG INTEL</span>` : '';
+    const platformRow = r.platforms ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--txt4);margin-top:5px;padding-top:4px;border-top:1px solid var(--bdr)">&#128230; ${r.platforms}</div>` : '';
     return `<tr${isNow?' class="row-now"':''}>
       <td class="stbl-state">${r.state}</td>
       <td>
         <div class="stbl-sector">${r.sector}</div>
         <div class="stbl-codes" style="margin-top:3px">${r.codes}</div>
+        <div style="margin-top:4px">${mfgBadge}</div>
       </td>
       <td class="stbl-products">
         <div class="stbl-trend ${trendCls(r.trendLabel)}">${r.trendLabel}</div>
         <div>${productItems}</div>
+        ${platformRow}
       </td>
       <td><span class="stbl-window${isNow?' now':''}">${r.contactWindow}</span></td>
       <td class="stbl-peak">${r.peakMonth}</td>

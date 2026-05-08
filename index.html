@@ -61,23 +61,26 @@ body{font-family:'Manrope',sans-serif;background:var(--page);color:var(--txt);mi
 .btn-excel{display:inline-flex;align-items:center;gap:6px;background:#1D6F42;color:#fff;border:none;border-radius:5px;padding:6px 12px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:background .12s}
 .btn-excel:hover{background:#175a37}
 .btn-excel svg{width:13px;height:13px;fill:#fff}
+.btn-refresh{display:inline-flex;align-items:center;gap:6px;background:var(--white);color:var(--navy);border:1.5px solid var(--bdr2);border-radius:5px;padding:6px 12px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-refresh:hover{border-color:var(--navy);background:var(--page)}
+.btn-refresh svg{width:13px;height:13px;flex-shrink:0;transition:transform .5s ease}
+.btn-refresh.spinning svg{animation:spin360 .6s ease forwards}
+@keyframes spin360{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.sales-tbl-toolbar .btn-refresh{padding:5px 10px;margin-left:auto}
 .user-pill{display:inline-flex;align-items:center;gap:6px;border-radius:5px;padding:3px 9px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.04em;border:1px solid}
 .user-pill.sales{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3);color:#22C55E}
 .user-pill.exec{background:rgba(196,153,26,.12);border-color:rgba(196,153,26,.3);color:var(--gold)}
 .user-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
 
 /* KPI STRIP */
-.kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}
-.kpi{background:var(--white);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:13px 16px;box-shadow:var(--shadow);position:relative}
+.kpi-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:var(--white);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:16px 20px;box-shadow:var(--shadow);position:relative}
 .kpi:nth-child(1){border-left-color:var(--blue)}
-.kpi:nth-child(2){border-left-color:var(--teal)}
-.kpi:nth-child(3){border-left-color:#7C3AED}
-.kpi:nth-child(4){border-left-color:#15803D}
-.kpi:nth-child(5){border-left-color:#C4991A}
-.kpi:nth-child(6){border-left-color:#BE123C}
-.kpi-val{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--navy);line-height:1.1}
-.kpi-lbl{font-size:10px;font-weight:700;color:var(--txt2);margin-top:4px}
-.kpi-sub{font-size:9px;color:var(--txt4);margin-top:2px;line-height:1.5}
+.kpi:nth-child(2){border-left-color:#C4991A}
+.kpi:nth-child(3){border-left-color:#BE123C}
+.kpi-val{font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--navy);line-height:1.1}
+.kpi-lbl{font-size:11px;font-weight:700;color:var(--txt2);margin-top:5px}
+.kpi-sub{font-size:10px;color:var(--txt4);margin-top:3px;line-height:1.5}
 .kpi-trend{display:none}
 .trend-up{display:none}
 .trend-flat{display:none}
@@ -90,20 +93,14 @@ body{font-family:'Manrope',sans-serif;background:var(--page);color:var(--txt);mi
 .live-timestamp{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--txt4)}
 
 /* TAB BAR */
-.tab-bar-wrap{background:var(--white);border:1px solid var(--bdr);border-radius:12px;padding:6px 10px;margin-bottom:18px;box-shadow:var(--shadow);overflow-x:auto}
-.tab-bar{display:flex;gap:6px;min-width:max-content;align-items:center}
+.tab-bar-wrap{background:var(--white);border:1px solid var(--bdr);border-radius:12px;padding:5px 8px;margin-bottom:18px;box-shadow:var(--shadow);overflow-x:auto}
+.tab-bar{display:flex;gap:3px;min-width:max-content;align-items:center}
 .tab-group-segment{display:flex;align-items:center;gap:2px;background:var(--page);border:1px solid var(--bdr);border-radius:9px;padding:3px 4px;position:relative}
 .tab-group-label{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--txt4);padding:3px 8px 3px 6px;white-space:nowrap;border-right:1px solid var(--bdr);margin-right:2px;align-self:stretch;display:flex;align-items:center}
-.tab-group-segment.seg-overview .tab-group-label{color:#C4991A}
-.tab-group-segment.seg-analysis .tab-group-label{color:var(--blue)}
-.tab-group-segment.seg-sales .tab-group-label{color:#16A34A}
 .tab-divider{display:none}
-.tab{padding:6px 13px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:var(--txt3);background:transparent;border:none;transition:all .13s;font-family:'Manrope',sans-serif;white-space:nowrap;position:relative}
+.tab{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;color:var(--txt3);background:transparent;border:none;transition:all .13s;font-family:'Manrope',sans-serif;white-space:nowrap;position:relative}
 .tab:hover{background:rgba(7,30,61,.06);color:var(--navy)}
 .tab.active{background:var(--navy);color:#fff;box-shadow:0 1px 4px rgba(7,30,61,.2)}
-.tab-group-segment.seg-overview .tab.active{background:var(--navy)}
-.tab-group-segment.seg-analysis .tab.active{background:var(--blue)}
-.tab-group-segment.seg-sales .tab.active{background:#16A34A}
 .section{display:none}.section.visible{display:block}
 
 /* BANNERS */
@@ -445,7 +442,7 @@ table.stbl tr.row-now td{background:#F0FDF4}
 .intel-alert-banner strong{font-weight:700}
 
 /* ── MULTI-SOURCE FETCH ── */
-.fetch-source-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
+.fetch-source-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
 .fetch-source-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 6px;border:1.5px solid var(--bdr);border-radius:8px;background:var(--page);cursor:pointer;font-family:'Manrope',sans-serif;transition:all .13s;position:relative}
 .fetch-source-btn:hover{border-color:var(--blue);background:var(--blue-l)}
 .fetch-source-btn.active{border-color:var(--blue);background:var(--blue-l)}
@@ -735,9 +732,13 @@ table.stbl tr.row-now td{background:#F0FDF4}
     <div class="h-right">
       <div class="h-badges">
         <span class="badge live">&#9679; Live Data</span>
-        <span class="badge gold">May 2026</span>
+        <span class="badge gold" data-live-month>May 2026</span>
         <span class="badge">374 Products</span>
         <div id="user-pill-wrap"></div>
+        <button class="btn-refresh" id="exec-refresh-btn" onclick="triggerRefresh(this)" title="Recalculate all views with latest data">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+          Refresh
+        </button>
         <button class="btn-excel" onclick="downloadExcel()">
           <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11zm-9-4l2-3-2-3h2l1 1.5 1-1.5h2l-2 3 2 3h-2l-1-1.5-1 1.5H9z"/></svg>
           Download Excel
@@ -780,13 +781,10 @@ table.stbl tr.row-now td{background:#F0FDF4}
 </div>
 
 <!-- KPI STRIP (exec only) -->
-<div class="kpi-strip" id="kpi-strip" style="display:none">
-  <div class="kpi"><div class="kpi-val">374</div><div class="kpi-lbl">Products Tracked</div><div class="kpi-sub">19 states · 26 categories</div></div>
-  <div class="kpi"><div class="kpi-val">19</div><div class="kpi-lbl">Active States</div><div class="kpi-sub">Oct = national peak month</div></div>
-  <div class="kpi"><div class="kpi-val">7</div><div class="kpi-lbl">Category Groups</div><div class="kpi-sub">Food &amp; Clothing lead</div></div>
-  <div class="kpi"><div class="kpi-val">7</div><div class="kpi-lbl">May Products Active</div><div class="kpi-sub">Amazon Summer Sale live</div></div>
-  <div class="kpi"><div class="kpi-val">Oct</div><div class="kpi-lbl">Festive Peak</div><div class="kpi-sub">Diwali · 177 products peak</div></div>
-  <div class="kpi"><div class="kpi-val">MH</div><div class="kpi-lbl">Top State</div><div class="kpi-sub">Maharashtra · 41 products</div></div>
+<div class="kpi-strip" id="kpi-strip" style="display:none;grid-template-columns:repeat(3,1fr)">
+  <div class="kpi"><div class="kpi-val" id="kpi-active-products">7</div><div class="kpi-lbl">Active This Month</div><div class="kpi-sub" id="kpi-active-sub">Products with demand signal now</div></div>
+  <div class="kpi" style="border-left-color:#C4991A"><div class="kpi-val">Oct</div><div class="kpi-lbl">Festive Peak</div><div class="kpi-sub">Diwali · 177 products · plan now</div></div>
+  <div class="kpi" style="border-left-color:#BE123C"><div class="kpi-val">MH</div><div class="kpi-lbl">Top State</div><div class="kpi-sub">Maharashtra · 41 products</div></div>
 </div>
 
 <!-- TAB BAR -->
@@ -802,7 +800,7 @@ table.stbl tr.row-now td{background:#F0FDF4}
         <div class="home-hero-sub">Product demand signals &middot; 374 products &middot; 19 states &middot; Select a state below to personalise</div>
       </div>
       <div class="home-now-badge">
-        <div class="home-now-week">MAY 2026</div>
+        <div class="home-now-week" data-live-month="upper">MAY 2026</div>
         <div class="home-now-event">Amazon Great Summer Sale LIVE &#9733;</div>
       </div>
     </div>
@@ -841,6 +839,10 @@ table.stbl tr.row-now td{background:#F0FDF4}
           <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11zm-9-4l2-3-2-3h2l1 1.5 1-1.5h2l-2 3 2 3h-2l-1-1.5-1 1.5H9z"/></svg>
           Download Excel
         </button>
+        <button class="btn-refresh" id="sales-refresh-btn" onclick="triggerRefresh(this)" title="Recalculate targets with latest data">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+          Refresh
+        </button>
         <span class="stbl-row-count" id="stbl-row-count"></span>
       </div>
       <div class="sales-tbl-scroll">
@@ -850,6 +852,7 @@ table.stbl tr.row-now td{background:#F0FDF4}
             <th onclick="sortSalesTbl('cat')">Category / NIC Code <span class="sa" id="sa-cat">&#8597;</span></th>
             <th>Key Products</th>
             <th onclick="sortSalesTbl('month')" title="Target = when to act (4–6 weeks before peak). Peak = consumer demand month.">Target Window / Peak <span class="sa" id="sa-month">&#8597;</span></th>
+            <th onclick="sortSalesTbl('demand')" title="Live demand level for this category this month — updates when web intel is applied">Demand Now <span class="sa" id="sa-demand">&#8597;</span></th>
             <th onclick="sortSalesTbl('urgency')" title="Days until nearest peak month">Urgency <span class="sa" id="sa-urgency">&#8597;</span></th>
           </tr></thead>
           <tbody id="stbl-body"></tbody>
@@ -1234,7 +1237,87 @@ const NIC_ADJACENCY = {
   '15122': [{nic:'47713', label:'Footwear Retail', group:'beauty', reason:'Leather goods and footwear are co-purchased in Diwali'}, {nic:'47722', label:'Beauty & Cosmetics', group:'beauty', reason:'Leather goods are premium gift category alongside beauty'}],
 };
 
-const MONTH_EVENTS = ["New Year deals & Republic Day prep", "Valentine's Day gifting surge · Spring arrivals", "Holi preparation surge · Financial year-end clearances", "New FY kick-off · Eid ul-Fitr window · Summer arrivals", "Amazon Great Summer Sale LIVE ★ · EOSS inventory arrival", "EOSS — Myntra, Flipkart 50–70% off · Monsoon prep", "Monsoon deepens · B2B fabric & apparel restock begins", "Raksha Bandhan gifting · Onam (Kerala) · Pre-festive stocking", "Navratri / Garba season · Dussehra — ethnic wear & sweets surge", "Diwali PEAK — ₹1.15L cr GMV nationally · Wedding season begins", "Wedding season peak · Winterwear surge · Hosiery shipments", "Christmas gifting · New Year eve — premium retail surge"];
+// ── FESTIVAL CALENDAR ─────────────────────────────────────────────────────────
+// Structured seasonal event calendar.  Each entry drives two things:
+//   (a) MONTH_EVENTS label strings shown in UI tooltips / heatmap cells
+//   (b) a demand boost applied inside getEffectiveDemand() so high-activity
+//       months stay visible earlier and auto-adjust without manual edits each cycle.
+//
+// startMonth / endMonth  0-indexed (0 = January … 11 = December).
+// demandMultiplier       multiplies effective demand for affectedGroups in that window.
+//                        1.0 = no change.  Values above 1 slow proximity decay.
+// affectedGroups         group IDs from GROUPS that should be boosted.
+// type                   'festival' | 'commercial' | 'seasonal'  (informational)
+const FESTIVAL_CALENDAR = [
+  // ── January ──────────────────────────────────────────────────────────────
+  { name: 'Makar Sankranti · Pongal · Lohri',       startMonth:  0, endMonth:  0, demandMultiplier: 1.35, affectedGroups: ['food','fabric','crafts','clothing'],                  type: 'festival'   },
+  { name: 'New Year deals & Republic Day prep',      startMonth:  0, endMonth:  0, demandMultiplier: 1.15, affectedGroups: ['food','crafts','clothing','beauty'],                  type: 'commercial' },
+  // ── February ─────────────────────────────────────────────────────────────
+  { name: "Valentine's Day gifting surge",           startMonth:  1, endMonth:  1, demandMultiplier: 1.20, affectedGroups: ['beauty','food','crafts'],                             type: 'commercial' },
+  { name: 'Spring arrivals',                         startMonth:  1, endMonth:  2, demandMultiplier: 1.10, affectedGroups: ['clothing','apparel_mfg','fabric'],                    type: 'seasonal'   },
+  // ── March ────────────────────────────────────────────────────────────────
+  { name: 'Holi preparation surge',                  startMonth:  2, endMonth:  2, demandMultiplier: 1.35, affectedGroups: ['clothing','food','crafts','beauty'],                  type: 'festival'   },
+  { name: 'Gudi Padwa · Ugadi',                      startMonth:  2, endMonth:  2, demandMultiplier: 1.20, affectedGroups: ['clothing','food','crafts','fabric'],                  type: 'festival'   },
+  { name: 'Financial year-end clearances',           startMonth:  2, endMonth:  2, demandMultiplier: 1.15, affectedGroups: ['home','apparel_mfg'],                                 type: 'commercial' },
+  // ── April ────────────────────────────────────────────────────────────────
+  { name: 'Eid ul-Fitr window',                      startMonth:  3, endMonth:  3, demandMultiplier: 1.40, affectedGroups: ['clothing','food','beauty','crafts'],                  type: 'festival'   },
+  { name: 'Bihu · Vishu · Poila Boishakh',           startMonth:  3, endMonth:  3, demandMultiplier: 1.25, affectedGroups: ['clothing','food','crafts','fabric'],                  type: 'festival'   },
+  { name: 'New FY kick-off · Summer arrivals',       startMonth:  3, endMonth:  3, demandMultiplier: 1.10, affectedGroups: ['clothing','apparel_mfg'],                             type: 'seasonal'   },
+  // ── May ──────────────────────────────────────────────────────────────────
+  { name: 'Amazon Great Summer Sale ★',              startMonth:  4, endMonth:  4, demandMultiplier: 1.30, affectedGroups: ['clothing','beauty','home','food'],                    type: 'commercial' },
+  { name: 'EOSS inventory arrival',                  startMonth:  4, endMonth:  4, demandMultiplier: 1.15, affectedGroups: ['apparel_mfg','fabric'],                               type: 'commercial' },
+  // ── June ─────────────────────────────────────────────────────────────────
+  { name: 'EOSS — Myntra, Flipkart 50–70% off',     startMonth:  5, endMonth:  5, demandMultiplier: 1.25, affectedGroups: ['clothing','beauty','home'],                           type: 'commercial' },
+  { name: 'Monsoon prep',                            startMonth:  5, endMonth:  6, demandMultiplier: 1.10, affectedGroups: ['food','home','apparel_mfg'],                          type: 'seasonal'   },
+  // ── July ─────────────────────────────────────────────────────────────────
+  { name: 'Monsoon deepens · B2B restock begins',   startMonth:  6, endMonth:  6, demandMultiplier: 1.20, affectedGroups: ['fabric','apparel_mfg','clothing'],                    type: 'commercial' },
+  // ── August ───────────────────────────────────────────────────────────────
+  { name: 'Onam (Kerala)',                           startMonth:  7, endMonth:  7, demandMultiplier: 1.35, affectedGroups: ['clothing','food','crafts','fabric'],                  type: 'festival'   },
+  { name: 'Raksha Bandhan gifting',                  startMonth:  7, endMonth:  7, demandMultiplier: 1.30, affectedGroups: ['food','crafts','beauty','clothing'],                  type: 'festival'   },
+  { name: 'Pre-festive stocking',                    startMonth:  7, endMonth:  8, demandMultiplier: 1.20, affectedGroups: ['clothing','apparel_mfg','fabric','food'],             type: 'commercial' },
+  // ── September ────────────────────────────────────────────────────────────
+  { name: 'Navratri / Garba season',                 startMonth:  8, endMonth:  8, demandMultiplier: 1.45, affectedGroups: ['clothing','beauty','fabric','crafts'],                type: 'festival'   },
+  { name: 'Dussehra',                                startMonth:  8, endMonth:  8, demandMultiplier: 1.35, affectedGroups: ['clothing','food','crafts'],                           type: 'festival'   },
+  // ── October ──────────────────────────────────────────────────────────────
+  { name: 'Diwali PEAK — ₹1.15L cr GMV nationally', startMonth:  9, endMonth:  9, demandMultiplier: 1.60, affectedGroups: ['clothing','food','crafts','beauty','home','fabric'],  type: 'festival'   },
+  { name: 'Wedding season begins',                   startMonth:  9, endMonth: 10, demandMultiplier: 1.30, affectedGroups: ['clothing','beauty','crafts','fabric'],                type: 'seasonal'   },
+  // ── November ─────────────────────────────────────────────────────────────
+  { name: 'Wedding season peak',                     startMonth: 10, endMonth: 10, demandMultiplier: 1.40, affectedGroups: ['clothing','beauty','crafts','fabric'],                type: 'seasonal'   },
+  { name: 'Winterwear surge · Hosiery shipments',   startMonth: 10, endMonth: 10, demandMultiplier: 1.35, affectedGroups: ['apparel_mfg','fabric','clothing'],                    type: 'seasonal'   },
+  // ── December ─────────────────────────────────────────────────────────────
+  { name: 'Christmas gifting',                       startMonth: 11, endMonth: 11, demandMultiplier: 1.25, affectedGroups: ['food','crafts','beauty','home'],                      type: 'festival'   },
+  { name: 'New Year eve — premium retail surge',     startMonth: 11, endMonth: 11, demandMultiplier: 1.20, affectedGroups: ['clothing','beauty','food'],                           type: 'commercial' },
+];
+
+// Derive the 12-element label string array from the calendar.
+// Events for each month are sorted strongest-first so the primary event leads.
+// All existing MONTH_EVENTS[mi] read sites keep working with no changes.
+// The returned array is mutable so Intel Hub / live-intel runtime appends still work.
+function buildMonthEventStrings() {
+  return Array.from({length: 12}, (_, mi) =>
+    FESTIVAL_CALENDAR
+      .filter(ev => mi >= ev.startMonth && mi <= ev.endMonth)
+      .sort((a, b) => b.demandMultiplier - a.demandMultiplier)
+      .map(ev => ev.name)
+      .join(' · ') || MONTHS[mi]
+  );
+}
+
+// Returns the strongest festival demandMultiplier applicable to group g in month mi.
+// Called by getEffectiveDemand() — 1.0 when no event applies to this group/month pair.
+function getFestivalBoost(g, mi) {
+  let best = 1.0;
+  for (const ev of FESTIVAL_CALENDAR) {
+    if (mi >= ev.startMonth && mi <= ev.endMonth && ev.affectedGroups.includes(g.id)) {
+      if (ev.demandMultiplier > best) best = ev.demandMultiplier;
+    }
+  }
+  return best;
+}
+
+// Mutable per-month label strings derived from the calendar.
+// Runtime mutations (Intel Hub event_append, live intel prepend) are applied on top.
+const MONTH_EVENTS = buildMonthEventStrings();
 
 
 // ---- CONSTANTS ----
@@ -1249,7 +1332,32 @@ const PRIO = {
 const D_BG  = ['#F8FAFC','#EDF6F1','#EAF0FB','#FBF6E8','#FBF0F3'];
 const D_COL = ['#8C96A8','#1A5C3A','#1B5CB8','#9A6B00','#8B1A35'];
 const D_BDR = ['#D3DBE9','#A4D9BF','#B8D0F5','#EDD47A','#EDAABB'];
-const NOW_MI = 4; // May = index 4
+const NOW_MI   = new Date().getMonth();   // live current month index (0 = Jan … 11 = Dec)
+const NOW_YEAR = new Date().getFullYear(); // live current year
+
+// ---- PROXIMITY-WEIGHTED DEMAND ----
+// Raw demand scores (0–4) are seasonally correct but don't convey urgency.
+// getEffectiveDemand() weights a month's demand by how close we are to it:
+// a Peak score 7 months away should feel less urgent than the same score next month.
+// Multipliers indexed by months-until (0 = current month … 11 = almost a full year away).
+const PROXIMITY_MULT = [1.00, 0.87, 0.73, 0.59, 0.46, 0.35, 0.26, 0.19, 0.14, 0.11, 0.09, 0.08];
+
+function monthsUntil(mi) {
+  // Forward-looking distance from NOW_MI to mi (cyclical, 0–11)
+  return (mi - NOW_MI + 12) % 12;
+}
+
+function getEffectiveDemand(g, mi) {
+  const raw = g.demand[mi];
+  if (raw === 0) return 0;
+  const dist = monthsUntil(mi);
+  const proximityMult = PROXIMITY_MULT[dist] !== undefined ? PROXIMITY_MULT[dist] : 0.08;
+  // Festival boost scales the proximity multiplier upward for relevant groups/months,
+  // slowing decay so active festival periods stay visible further in advance.
+  // e.g. Diwali (×1.60) means a score 3 months away decays to ~4 instead of ~2.
+  const festivalBoost = getFestivalBoost(g, mi);
+  return Math.min(raw, Math.max(0, Math.round(raw * proximityMult * festivalBoost)));
+}
 
 // ---- STATE ----
 let gfPriority = 'All', gfDemand = 0;
@@ -1264,16 +1372,14 @@ const ROLE_TABS = {
     {group:'Sales Tools', tabs:[{id:'home',label:'\uD83C\uDFE0 Targets & Pipeline'}]}
   ],
   exec: [
-    {group:'Overview', tabs:[
+    {group:'', tabs:[
       {id:'home',label:'\uD83C\uDFE0 Home'},
-      {id:'overview',label:'Executive Overview'}
-    ]},
-    {group:'Analysis', tabs:[
-      {id:'heatmap',label:'Demand Heatmap'},
-      {id:'map',label:'\uD83D\uDDFA India Map'},
+      {id:'overview',label:'Overview'},
+      {id:'heatmap',label:'Heatmap'},
+      {id:'map',label:'\uD83D\uDDFA Map'},
       {id:'bystate',label:'By State'},
       {id:'bymonth',label:'By Month'},
-      {id:'targeting',label:'Targeting Calendar'}
+      {id:'targeting',label:'Calendar'}
     ]}
   ]
 };
@@ -1335,8 +1441,8 @@ function doLogin(role) {
 
   // Show/hide exec-only elements
   const isExec = role === 'exec';
-  document.getElementById('main-live-bar').style.display = isExec ? '' : 'none';
-  document.getElementById('global-filters').style.display = isExec ? '' : 'none';
+  document.getElementById('main-live-bar').style.display = 'none'; // always hidden — info in header
+  document.getElementById('global-filters').style.display = 'none'; // removed from exec for clarity
   document.getElementById('kpi-strip').style.display = isExec ? '' : 'none';
   document.getElementById('home-sales-table-section').style.display = role === 'sales' ? 'block' : 'none';
   document.getElementById('home-exec-section').style.display = isExec ? 'block' : 'none';
@@ -1351,6 +1457,13 @@ function doLogin(role) {
 
   buildTabBar();
   buildUserPill();
+
+  // Update any static HTML badges/labels that carry month+year to live values
+  const NOW_LABEL     = MONTHS[NOW_MI] + ' ' + NOW_YEAR;
+  const NOW_LABEL_UP  = MONTHS[NOW_MI].toUpperCase() + ' ' + NOW_YEAR;
+  document.querySelectorAll('[data-live-month]').forEach(el => {
+    el.textContent = el.dataset.liveMonth === 'upper' ? NOW_LABEL_UP : NOW_LABEL;
+  });
 
   // Build views
   populateSalesTblFilters();
@@ -1379,6 +1492,7 @@ function doLogin(role) {
   if (role === 'exec') {
     buildPeakCountdown();
     renderIndiaMap();
+    updateExecKPIs();
     // Auto-fetch web intel
     setTimeout(autoFetchWebIntel, 2000);
   }
@@ -1426,7 +1540,7 @@ function buildTabBar() {
   let html = '';
   groups.forEach((grp, gi) => {
     if (gi > 0) html += '<div class="tab-divider"></div>';
-    html += '<span class="tab-group-label">' + grp.group + '</span>';
+    if (grp.group) html += '<span class="tab-group-label">' + grp.group + '</span>';
     grp.tabs.forEach(t => {
       html += '<button class="tab" data-tab="' + t.id + '" onclick="switchTab(\'' + t.id + '\')">' + t.label + '</button>';
     });
@@ -1450,7 +1564,7 @@ function buildMonthRow() {
   if (!el) return;
   el.innerHTML = MONTHS.map((m, mi) => {
     const total = countMonthProducts(m);
-    const maxD = Math.max(...groups.map(g => g.demand[mi]));
+    const maxD = Math.max(...groups.map(g => getEffectiveDemand(g, mi)));
     const cls = maxD >= 4 ? 'mc-urgent' : maxD >= 3 ? 'mc-high' : maxD >= 2 ? 'mc-moderate' : 'mc-low';
     return '<div class="month-cell ' + cls + (mi === NOW_MI ? ' mc-now' : '') +
       '" onclick="showMonthDetail(' + mi + ',this)">' +
@@ -1470,7 +1584,7 @@ function showMonthDetail(mi, el) {
   const detailEl = document.getElementById('home-month-detail');
   if (!detailEl) return;
   let html = '<div style="padding:4px 0 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">' +
-    '<div style="font-family:monospace;font-size:13px;font-weight:700;color:var(--navy)">' + month + ' 2026</div>' +
+    '<div style="font-family:monospace;font-size:13px;font-weight:700;color:var(--navy)">' + month + ' ' + NOW_YEAR + '</div>' +
     '<div style="font-size:12px;color:var(--txt2)">' + MONTH_EVENTS[mi] + '</div>' +
     (mi === NOW_MI ? '<span style="font-family:monospace;font-size:8px;font-weight:700;padding:2px 8px;border-radius:4px;background:#FEF3C7;color:#B45309;border:1px solid #FDE68A">\u2605 CURRENT MONTH</span>' : '') +
     '</div>';
@@ -1479,7 +1593,7 @@ function showMonthDetail(mi, el) {
   } else {
     html += '<div class="month-grid">';
     groups.sort((a, b) => b.demand[mi] - a.demand[mi]).forEach(g => {
-      const d = g.demand[mi];
+      const d = getEffectiveDemand(g, mi);
       const prods = g.products.filter(p => p.month === month).slice(0, 4);
       const states = [...new Set(g.products.filter(p => p.month === month).map(p => p.state))];
       html += '<div class="mc-card">' +
@@ -1571,6 +1685,9 @@ function getAllRows() {
           productMonthMap: allProductMonthMap, priority, months: [], targetMonths: [], group};
         const urg = getRowUrgency(row);
         row.urgencyScore = urg.score; row.urgency = urg;
+        row.demandScore = group ? getEffectiveDemand(group, NOW_MI) : 0;
+        row.velocityScore = group && group.demand_prev ? group.demand[NOW_MI] - group.demand_prev[NOW_MI] : 0;
+        row.demandComposite = row.demandScore * 10 + row.velocityScore; // ties broken by velocity
         row._html = _renderRow(row);
         rows.push(row);
       } else {
@@ -1586,6 +1703,9 @@ function getAllRows() {
           };
           const urg = getRowUrgency(row);
           row.urgencyScore = urg.score; row.urgency = urg;
+          row.demandScore = group ? getEffectiveDemand(group, NOW_MI) : 0;
+          row.velocityScore = group && group.demand_prev ? group.demand[NOW_MI] - group.demand_prev[NOW_MI] : 0;
+          row.demandComposite = row.demandScore * 10 + row.velocityScore; // ties broken by velocity
           row._html = _renderRow(row);
           rows.push(row);
         });
@@ -1627,8 +1747,8 @@ function _renderRow(r) {
   // Build target/peak window column — shows both target (action) month and peak (demand) month
   const windowHtml = r.months.map(peakMonth => {
     const targetMonth = getTargetMonthName(peakMonth);
-    const targetIsNow = targetMonth === 'May';
-    const peakIsNow = peakMonth === 'May';
+    const targetIsNow = targetMonth === MONTHS[NOW_MI];
+    const peakIsNow = peakMonth === MONTHS[NOW_MI];
     return '<div style="margin-bottom:3px">' +
       '<span class="stbl-target-badge ' + (targetIsNow ? 'act' : 'upcoming') + '" title="Target: act in ' + targetMonth + ' to reach peak ' + peakMonth + ' demand">' +
       '▶ ' + targetMonth + '</span>' +
@@ -1636,12 +1756,19 @@ function _renderRow(r) {
       '</div>';
   }).join('');
 
+  // Demand column — badge + velocity arrow (arrow only visible after first fetch)
+  const d = r.group ? getEffectiveDemand(r.group, NOW_MI) : 0;
+  // Trend arrow intentionally not rendered — velocity is factored into demandComposite
+  // for sorting/peak calculations but kept invisible in the sales table UI.
+  const demandCell = '<td style="white-space:nowrap"><span style="background:' + D_BG[d] + ';color:' + D_COL[d] + ';border:1px solid ' + D_BDR[d] + ';font-size:9px;padding:2px 8px;border-radius:10px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;white-space:nowrap;display:inline-block">' + DWORD[d] + '</span></td>';
+
   return '<tr class="' + (isNow ? 'row-now' : '') + '">' +
     '<td><div class="stbl-state">' + r.state + '</div></td>' +
     '<td><div style="font-size:12px;font-weight:700;color:' + color + '">' + r.cat + '</div>' +
     '<div style="font-family:monospace;font-size:9px;color:var(--txt3);margin-top:2px">NIC ' + r.nic + '</div></td>' +
     '<td><div class="stbl-products">' + prodRows + more + '</div></td>' +
     '<td>' + windowHtml + '</td>' +
+    demandCell +
     '<td><div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">' +
     '<span class="urg-badge urg-' + urg.tier + '">' + urg.label + '</span>' +
     '<span class="urg-days">' + urgDaysLabel + '</span>' +
@@ -1673,7 +1800,7 @@ function _doFilter() {
     return true;
   });
 
-  const colMap = {state:'state', cat:'cat', month:'months', urgency:'urgencyScore'};
+  const colMap = {state:'state', cat:'cat', month:'months', urgency:'urgencyScore', demand:'demandComposite'};
   filtered.sort((a, b) => {
     if (stblSortCol === 'urgency') return (a.urgencyScore - b.urgencyScore) * stblSortDir;
     const av = a[colMap[stblSortCol] || 'state'], bv = b[colMap[stblSortCol] || 'state'];
@@ -1695,7 +1822,7 @@ function _doFilter() {
 
 function sortSalesTbl(col) {
   if (stblSortCol === col) stblSortDir *= -1; else { stblSortCol = col; stblSortDir = 1; }
-  ['state','cat','month','urgency'].forEach(c => {
+  ['state','cat','month','demand','urgency'].forEach(c => {
     const el = document.getElementById('sa-' + c);
     if (el) el.textContent = c === col ? (stblSortDir === 1 ? '\u2191' : '\u2193') : '\u2195';
     const th = document.querySelector('[onclick="sortSalesTbl(\'' + c + '\')"]');
@@ -1713,7 +1840,7 @@ function downloadContactList() {
   });
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'Product Contact List');
-  XLSX.writeFile(wb, 'India_Product_Demand_May2026.xlsx');
+  XLSX.writeFile(wb, 'India_Product_Demand_' + MONTHS[NOW_MI] + NOW_YEAR + '.xlsx');
   showToast('Excel downloaded');
 }
 
@@ -1726,7 +1853,7 @@ function buildOverview() {
   const oppEl = document.getElementById('opp-card');
   if (oppEl) {
     oppEl.innerHTML =
-      '<div class="opp-eyebrow">May 2026 \u00b7 Product Forward-Targeting</div>' +
+      '<div class="opp-eyebrow">' + MONTHS[NOW_MI] + ' ' + NOW_YEAR + ' \u00b7 Product Forward-Targeting</div>' +
       '<div class="opp-title">Top Priority Categories \u2014 Target Now</div>' +
       '<div class="opp-sub">Ranked by current demand signals \u00b7 Festive peak in October \u2014 plan capacity now</div>' +
       '<div class="opp-actions">' +
@@ -1738,12 +1865,12 @@ function buildOverview() {
           '<div class="opp-num">' + (i + 1) + '.</div>' +
           '<div style="flex:1">' +
           '<div class="opp-action-cat">' + g.label + '</div>' +
-          '<div class="opp-action-note">' + MONTH_EVENTS[NOW_MI] + ' \u2014 ' + DWORD[g.demand[NOW_MI]] + ' demand \u00b7 ' +
+          '<div class="opp-action-note">' + MONTH_EVENTS[NOW_MI] + ' \u2014 ' + DWORD[getEffectiveDemand(g, NOW_MI)] + ' demand \u00b7 ' +
           g.products.filter(p => MONTHS.indexOf(p.month) === NOW_MI).length + ' products peak in ' + MONTHS[NOW_MI] + '</div>' +
           '<div style="font-family:monospace;font-size:8px;color:rgba(255,255,255,.45);margin-top:3px">\u2605 Peak: ' + peakLabelG + ' \u00b7 ' + g.products.length + ' total products</div>' +
           '<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px">' + g.nics.map(n => '<span class="opp-code">NIC ' + n + '</span>').join('') + '</div>' +
           '</div>' +
-          '<div style="font-family:monospace;font-size:12px;font-weight:700;color:' + colors3[i] + '">' + DWORD[g.demand[NOW_MI]] + '</div>' +
+          '<div style="font-family:monospace;font-size:12px;font-weight:700;color:' + colors3[i] + '">' + DWORD[getEffectiveDemand(g, NOW_MI)] + '</div>' +
           '</div>';
       }).join('') + '</div>';
   }
@@ -1787,7 +1914,7 @@ function buildOverview() {
         const maxD = Math.max(...g.demand);
         const peakMis2 = g.demand.map((d, i) => d === maxD ? i : -1).filter(i => i >= 0);
         const peakLabel2 = peakMis2.map(i => MONTH_ABR[i]).join(' · ');
-        const d = g.demand[NOW_MI];
+        const d = getEffectiveDemand(g, NOW_MI);
         return '<tr>' +
           '<td><div style="display:flex;align-items:center;gap:8px"><div style="width:3px;height:32px;border-radius:2px;background:' + g.color + ';flex-shrink:0"></div><span class="mkt-name">' + g.label + '</span></div></td>' +
           '<td>' + g.nics.map(n => '<span class="c-pill" style="background:' + g.color + '12;color:' + g.color + ';border-color:' + g.color + '30">' + n + '</span>').join('') + '</td>' +
@@ -1807,7 +1934,8 @@ function buildHeatmap() {
   const bodyEl = document.getElementById('hm-body');
   if (!headEl || !bodyEl) return;
 
-  headEl.innerHTML = '<tr><th style="text-align:left;min-width:220px;padding:4px 8px">Category Group</th>' +
+  headEl.innerHTML = '<tr><th style="text-align:left;min-width:220px;padding:4px 8px">Category Group' +
+    '<div style="font-family:monospace;font-size:8px;font-weight:400;color:var(--txt4);margin-top:2px">⏱ scores proximity-weighted · ★ = raw peak</div></th>' +
     MONTH_ABR.map((m, i) => '<th class="' + (i === NOW_MI ? 'now-h' : '') + '">' + m + (i === NOW_MI ? ' \u2605' : '') + '</th>').join('') + '</tr>';
 
   bodyEl.innerHTML = groups.map(g => {
@@ -1822,20 +1950,21 @@ function buildHeatmap() {
       '<div class="hm-row-name">' + g.label + '</div>' +
       '<div class="hm-row-codes">' + g.nics.join(' \u00b7 ') + '</div>' +
       '<div class="hm-row-peak" style="color:' + g.color + '">\u2605 Peak: ' + peakLabel + ' \u00b7 ' + g.products.length + ' products</div></td>' +
-      g.demand.map((d, mi) => {
+      g.demand.map((rawD, mi) => {
+        const d = getEffectiveDemand(g, mi);  // time-proximity weighted
         const isPeak = peakMis.includes(mi);
         const prevD = (g.demand_prev || g.demand)[mi];
-        const delta = d - prevD;
+        const delta = rawD - prevD;  // trend uses raw data
         const trendSup = delta > 0 ? '<sup style="color:#16A34A;font-size:6px;font-weight:900">↑</sup>' : delta < 0 ? '<sup style="color:#BE123C;font-size:6px;font-weight:900">↓</sup>' : '';
         return '<td style="padding:2px"><div class="cell ' + DCLS[d] + (mi === NOW_MI ? ' now-c' : '') + (isPeak ? ' peak-c' : '') +
-          '" onclick="showTip(\'' + gIdSafe + '\',\'' + gLabelSafe + '\',\'' + MONTHS[mi] + '\',\'' + DWORD[d] + '\',\'' + g.color + '\',' + mi + ',' + delta + ')"' +
-          ' title="' + g.label + ' \u00b7 ' + MONTHS[mi] + ': ' + DWORD[d] + (delta !== 0 ? ' (' + (delta>0?'+':'') + delta + ' vs prev)' : '') + (isPeak ? ' \u2014 PEAK' : '') + '">' +
+          '" onclick="showTip(\'' + gIdSafe + '\',\'' + gLabelSafe + '\',\'' + MONTHS[mi] + '\',\'' + DWORD[d] + '\',\'' + g.color + '\',' + mi + ',' + delta + ',' + rawD + ')"' +
+          ' title="' + g.label + ' \u00b7 ' + MONTHS[mi] + ': ' + DWORD[d] + (d < rawD ? ' (raw: ' + DWORD[rawD] + ')' : '') + (delta !== 0 ? ' (' + (delta>0?'+':'') + delta + ' vs prev)' : '') + (isPeak ? ' \u2014 PEAK' : '') + '">' +
           (isPeak ? '\u2605' : DLBL[d]) + trendSup + '</div></td>';
       }).join('') + '</tr>';
   }).join('');
 }
 
-function showTip(gId, label, month, level, color, mi, delta) {
+function showTip(gId, label, month, level, color, mi, delta, rawD) {
   const g = GROUPS.find(g => g.id === gId);
   const prods = g ? g.products.filter(p => p.month === month).slice(0, 6) : [];
   const dColors = {Minimal:'var(--txt4)',Low:'#15803D',Moderate:'#1D4ED8',High:'#B45309',Peak:'#BE123C'};
@@ -1843,8 +1972,14 @@ function showTip(gId, label, month, level, color, mi, delta) {
   if (!panel) return;
   panel.style.display = 'block';
   panel.style.borderLeftColor = color;
+  const dist = monthsUntil(mi);
+  const proximityNote = dist === 0
+    ? '<span style="font-family:monospace;font-size:8px;background:#F0FDF4;color:#15803D;border:1px solid #86EFAC;border-radius:3px;padding:1px 6px;margin-left:6px">current month</span>'
+    : (rawD !== undefined && rawD > (DWORD.indexOf ? 0 : 0))
+      ? '<span style="font-family:monospace;font-size:8px;background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;border-radius:3px;padding:1px 6px;margin-left:6px">' + dist + 'm away · raw: ' + (rawD !== undefined ? DWORD[rawD] : level) + '</span>'
+      : '<span style="font-family:monospace;font-size:8px;color:var(--txt4);margin-left:6px">' + dist + ' months away</span>';
   panel.innerHTML = '<div class="tip-title">' + label + '</div>' +
-    '<div class="tip-level" style="color:' + (dColors[level] || color) + '">' + level + ' Demand \u2014 ' + month + ' 2026' + (delta != null && delta !== 0 ? ' <span style="font-family:monospace;font-size:9px">' + (delta > 0 ? '(<span style=\\"color:#16A34A\\">↑ +' + delta + '</span>)' : '(<span style=\\"color:#BE123C\\">↓ ' + delta + '</span>)') + '</span>' : '') + '</div>' +
+    '<div class="tip-level" style="color:' + (dColors[level] || color) + '">' + level + ' Demand \u2014 ' + month + ' ' + NOW_YEAR + proximityNote + (delta != null && delta !== 0 ? ' <span style="font-family:monospace;font-size:9px">' + (delta > 0 ? '(<span style=\\"color:#16A34A\\">↑ +' + delta + '</span>)' : '(<span style=\\"color:#BE123C\\">↓ ' + delta + '</span>)') + '</span>' : '') + '</div>' +
     '<div class="tip-note">' + MONTH_EVENTS[mi] + '</div>' +
     (prods.length ?
       '<div class="tip-products"><div class="tip-prod-title">Products in ' + month + '</div>' +
@@ -1915,7 +2050,7 @@ function buildMonthRail() {
   const groups = getFilteredGroups();
   railEl.innerHTML = MONTHS.map((m, mi) => {
     const total = countMonthProducts(m);
-    const maxD = Math.max(...groups.map(g => g.demand[mi]));
+    const maxD = Math.max(...groups.map(g => getEffectiveDemand(g, mi)));
     const cls = maxD >= 4 ? 'mc-urgent' : maxD >= 3 ? 'mc-high' : maxD >= 2 ? 'mc-moderate' : 'mc-low';
     return '<div class="month-cell ' + cls + (mi === NOW_MI ? ' mc-now' : '') + '" onclick="showMonthRailDetail(' + mi + ',this)">' +
       '<div class="mc-m">' + MONTH_ABR[mi] + '</div>' +
@@ -1933,14 +2068,14 @@ function showMonthRailDetail(mi, el) {
   }
   const month = MONTHS[mi];
   const groups = getFilteredGroups().filter(g => g.demand[mi] > 0);
-  let html = '<div style="font-family:monospace;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px">' + month + ' 2026 \u2014 ' + MONTH_EVENTS[mi] +
+  let html = '<div style="font-family:monospace;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px">' + month + ' ' + NOW_YEAR + ' \u2014 ' + MONTH_EVENTS[mi] +
     (mi === NOW_MI ? ' <span style="font-family:monospace;font-size:8px;font-weight:700;padding:2px 8px;border-radius:4px;background:#FEF3C7;color:#B45309;border:1px solid #FDE68A">\u2605 CURRENT</span>' : '') + '</div>';
   if (!groups.length) {
     html += '<div style="text-align:center;padding:32px;color:var(--txt4);font-size:12px">Low demand month \u2014 quiet logistics period</div>';
   } else {
     html += '<div class="month-grid">';
     groups.sort((a, b) => b.demand[mi] - a.demand[mi]).forEach(g => {
-      const d = g.demand[mi];
+      const d = getEffectiveDemand(g, mi);
       const monthProds = g.products.filter(p => p.month === month);
       const states = [...new Set(monthProds.map(p => p.state))];
       html += '<div class="mc-card"><div class="mc-card-top" style="background:' + g.color + '"></div>' +
@@ -1967,7 +2102,7 @@ function buildTargeting() {
   if (tgt) {
     tgt.innerHTML = states.map(state => {
       const cats = STATE_INTEL[state] || {};
-      const mayCats = Object.entries(cats).filter(([cat, info]) => info.months && info.months.includes('May'));
+      const mayCats = Object.entries(cats).filter(([cat, info]) => info.months && info.months.includes(MONTHS[NOW_MI]));
       if (!mayCats.length) return '';
       const [topCat, topInfo] = mayCats[0];
       const g = GROUPS.find(g => g.cats.includes(topCat));
@@ -2021,8 +2156,12 @@ function buildTargeting() {
 function downloadExcel() {
   if (typeof XLSX === 'undefined') { showToast('XLSX library not loaded'); return; }
   const wb = XLSX.utils.book_new();
-  const hmRows = [['Category Group','Short','NIC Codes','Priority','Total Products','Peak Month',...MONTHS]];
-  GROUPS.forEach(g => hmRows.push([g.label, g.short, g.nics.join(', '), g.priority, g.products.length, g.peak_month, ...g.demand.map(d => DWORD[d])]));
+  const hmRows = [['Category Group','Short','NIC Codes','Priority','Total Products','Target Month (Action)','Peak Month (Demand)',...MONTHS]];
+  GROUPS.forEach(g => {
+    const peakMi = MONTHS.indexOf(g.peak_month);
+    const targetMonth = peakMi >= 0 ? MONTHS[getTargetMonthIndex(peakMi)] : g.peak_month;
+    hmRows.push([g.label, g.short, g.nics.join(', '), g.priority, g.products.length, targetMonth, g.peak_month, ...g.demand.map(d => DWORD[d])]);
+  });
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(hmRows), 'Demand Profile');
   const prodRows = [['Product','Category','NIC Code','State','Month']];
   GROUPS.forEach(g => g.products.forEach(p => prodRows.push([p.name, p.cat || g.label, p.nic || g.nics[0], p.state, p.month])));
@@ -2197,38 +2336,164 @@ Months: January through December. Demand values: 0=Minimal, 1=Low, 2=Moderate, 3
 
   const maxContent = textContent.slice(0, 8000);
   
-  const prompt = `You are an India logistics demand analyst. A user uploaded the file "${fileName}" to update their product demand dashboard.
+  // ── India Seasonal Demand Calendar ──────────────────────────────────────────
+  // Injected into every Claude file-analysis call so that "month" assignments
+  // (the CONSUMER DEMAND PEAK month shown in the dashboard's Peak column) are
+  // always grounded in actual India climate + festival reality — not guessed.
+  const INDIA_SEASONAL_CALENDAR = `
+═══════════════════════════════════════════════════════════════════
+INDIA PRODUCT DEMAND PEAK-MONTH REFERENCE  (mandatory reference)
+Use this table — and ONLY this table — when setting the "month"
+field for any product in products_added.
+═══════════════════════════════════════════════════════════════════
+
+MONSOON / RAINY SEASON  (June 1 – Sep 30 nationwide; Kerala onset ~Jun 1)
+  Umbrellas, Collapsible umbrellas, Compact umbrellas           → June
+  Raincoats, Rain suits, Ponchos, Rain jackets                  → June
+  Gumboots, Rain boots, Waterproof footwear                     → June
+  Waterproof bags, Dry bags, Rain covers                        → June
+  Windcheaters, Water-resistant anoraks                         → June
+  Mosquito nets, Mosquito repellent coils, Liquid repellents    → June
+  Anti-fungal powders, ORS sachets, Oral rehydration salts      → July
+  Rainwater harvesting equipment, drain covers                  → June
+
+BACK-TO-SCHOOL  (schools reopen after summer break, typically June)
+  School bags, Backpacks, Water bottles (school)                → June
+  Notebooks, Rough books, Drawing books                         → June
+  Stationery (pens, pencils, geometry boxes, crayons)           → June
+  School uniforms, White canvas shoes, Socks                    → June
+  Tiffin boxes / lunch boxes                                    → June
+
+FESTIVE PRE-SEASON — DIWALI  (B2B stocking Sep; consumer peak Oct)
+  Diyas, Earthen lamps, Designer diyas                          → October
+  Rangoli colours, Rangoli stencils                             → October
+  Puja thalis, Incense sticks (agarbatti), Dhoop cones          → October
+  Festive packaging (boxes, ribbons, tissue paper)              → October
+  Sweets / mithai assortments, Dry-fruit gift boxes, Namkeen    → October
+  Kaju katli, Motichoor laddoo, Soan papdi (bulk B2B)           → October
+  Decorative LED string lights, Candles, Wax tealights          → October
+  Festive ethnic wear: kurtas, dhoti, Nehru jackets             → October
+  Ethnic women's wear: salwar kameez, anarkali, lehenga         → October
+  Banarasi sarees (retail), Kanjivaram sarees                   → October
+  Imitation jewellery (festive sets), Bindis, Bangles (wholesale)→ October
+  Crackers / fireworks (where permitted)                        → October
+  Home décor — brass items, silver gift articles                → October
+
+WEDDING SEASON  (Oct onset; Nov peak; Dec tail — North & West India)
+  Bridal lehenga choli, Bridal sherwani                         → November
+  Heavy embroidered sarees, Silk sherwanis                      → November
+  Wedding décor (marigold strings, mandap items)                → November
+  Catering bulk: basmati rice, ghee, dry fruits, masalas        → November
+  Floral garlands, Wedding invitation card stock                → November
+  Gift hampers, Return-gift boxes, Premium chocolates           → November
+  Footwear: mojri, jutti, bridal heels                          → November
+
+WINTER  (onset Nov North India; peak Dec–Jan)
+  Woollen sweaters, Cardigans, Woollen shawls                   → November
+  Blankets, Quilts, Razais, Comforters                          → November
+  Mufflers, Woollen scarves, Gloves, Beanies / monkey caps      → December
+  Thermal innerwear (vests + lowers)                            → December
+  Jackets, Down jackets, Windproof coats                        → November
+  Room heaters, Electric blankets, Hot-water bags               → December
+  Woollen socks, Fleece track suits                             → December
+
+SUMMER  (Mar–May; peaks Apr–May in North India; Feb–Mar in South India)
+  Ceiling fans, Pedestal fans, Table fans                       → April
+  Air coolers (desert / window coolers)                         → April
+  Khus / khas cooler pads, Cooling pads                         → April
+  Cotton kurtas, Cotton shirts, Linen clothes                   → April
+  Cotton innerwear, Cotton socks, Handkerchiefs                 → April
+  Sunscreen lotions, Sunglasses, Sun hats / caps                → April
+  Sunblock, Aloe vera gel, After-sun lotion                     → May
+  Cold cream, Talcum powder (summer)                            → April
+  ORS / electrolyte drinks, Glucon-D, Rooh Afza syrup           → May
+  Air conditioners (split, window)                              → April
+  Ice-cream cones / cups (B2B to retailers)                     → May
+
+HARVEST / CULTURAL FESTIVALS
+  Makar Sankranti · Lohri · Pongal (mid-Jan):
+    Sesame seeds (til), Jaggery (gur), Groundnuts, Kites        → January
+    Pongal pots, Sugarcane bundles                              → January
+  Holi (Mar):
+    Holi colours / gulal, Water guns (pichkari)                 → March
+    Thandai mix, Bhang (licensed), Sweets (gujiya)              → March
+  Eid ul-Fitr (lunar — falls Mar or Apr most years 2025-2030):
+    Attars / itr, Biryani masala kits, Sheer khurma ingredients → March or April
+    Seviyan (vermicelli), Premium dates                         → March or April
+  Onam (Kerala, late Aug):
+    Kasavu / Kerala set saree, Mundu                            → August
+    Payasam ingredients, Banana (nendran) in bulk               → August
+    Pookalam flower kits, Snake boat models (décor)             → August
+  Dussehra / Navratri (Sep–Oct):
+    Navratri garba chaniya cholis, Dandiya sticks               → September
+    Effigies / Ravana effigies (wholesale)                      → October
+  Christmas & New Year (Dec):
+    Christmas trees, Ornaments, Santa costumes                  → December
+    Greeting cards, Gift wrap, Plum cake ingredients            → December
+
+═══════════════════════════════════════════════════════════════════
+CRITICAL RULES — MUST FOLLOW, NO EXCEPTIONS
+1. Umbrellas / rainwear peak in JUNE (or July). NEVER October, April,
+   or any non-monsoon month. Assigning October to an umbrella is wrong.
+2. Diwali-related products (diyas, rangoli, festive sweets, decorative
+   lights) peak in OCTOBER. Not November, not September.
+3. Woollens, blankets, and winterwear peak in NOVEMBER or DECEMBER.
+   NEVER in summer or monsoon months.
+4. The "month" field = CONSUMER DEMAND PEAK month, not the upload
+   date, not the current calendar month, not a guess.
+5. demand_adjustments month_index must match the actual India seasonal
+   peak of the category — use the table above.
+6. If a product clearly belongs to multiple categories, pick the one
+   whose group_id best matches and assign its correct seasonal peak.
+═══════════════════════════════════════════════════════════════════`;
+
+  const prompt = `You are a senior India logistics demand analyst with deep expertise in Indian retail seasonality, B2B supply chains, and the NIC classification system. A user uploaded the file "${fileName}" to update their India product demand dashboard.
 
 DASHBOARD SCHEMA:
 ${schemaSummary}
 
-FILE CONTENT (truncated to 8000 chars):
+${INDIA_SEASONAL_CALENDAR}
+
+FILE CONTENT (up to 8 000 characters):
 ${maxContent}
 
-Analyse this file and extract demand intelligence. Return ONLY a valid JSON object with this EXACT structure (no markdown, no preamble):
+Carefully analyse the file content and extract demand intelligence. Apply the India Seasonal Calendar above rigorously when assigning peak months. Return ONLY a valid JSON object — no markdown fences, no preamble, no trailing text:
 {
   "products_added": [
-    {"name": "product name", "state": "exact state name from list", "month": "Month name", "cat": "category from NIC list", "nic": "NIC code", "group_id": "one of: clothing/apparel_mfg/fabric/food/crafts/beauty/home"}
+    {
+      "name": "exact product name from the file",
+      "state": "exact state name from the 19-state list",
+      "month": "CONSUMER DEMAND PEAK month per the India Seasonal Calendar — e.g. Umbrella → June, Raincoat → June, Woolens → November, Diya → October",
+      "cat": "NIC category label",
+      "nic": "NIC code string",
+      "group_id": "one of: clothing | apparel_mfg | fabric | food | crafts | beauty | home"
+    }
   ],
   "demand_adjustments": [
-    {"group_id": "group id", "month_index": 0, "delta": 1, "reason": "brief reason"}
+    {
+      "group_id": "group id",
+      "month_index": 0,
+      "delta": 1,
+      "reason": "brief reason grounded in India seasonal or market event"
+    }
   ],
   "event_updates": [
-    {"month_index": 4, "event_append": "extra context to append to May event string"}
+    {"month_index": 4, "event_append": "short string to append to that month's event label"}
   ],
   "new_states": [],
-  "summary": "1-2 sentence summary of what was found and applied",
-  "file_type": "what kind of file this appears to be",
-  "confidence": "high/medium/low",
-  "alerts": ["any important demand signals or warnings found"]
+  "summary": "1-2 sentence summary of what was found and what changes will be applied",
+  "file_type": "description of what kind of data this file contains",
+  "confidence": "high | medium | low",
+  "alerts": ["up to 3 critical demand signals or actionable warnings found in the file"]
 }
 
-Rules:
-- Only include products that map to a known state and group
-- demand_adjustments delta can be -1, +1, or +2 (clamped to 0-4 range later)
-- If file has no relevant logistics/demand data, return empty arrays with a helpful summary
-- Keep products_added to max 20 most relevant items
-- Be concise in alerts (max 3)`;
+Assignment rules:
+- month: derive EXCLUSIVELY from the India Seasonal Calendar above — never use the upload date or a random guess.
+- demand_adjustments delta: −1, +1, or +2 only (values are clamped to 0–4 by the dashboard).
+- Only include products that map to a known state AND a valid group_id.
+- Limit products_added to 20 items maximum (select highest-impact ones).
+- If the file has no relevant logistics or demand data, return empty arrays with a helpful summary.
+- Keep alerts to max 3, specific and actionable for a logistics sales team.`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -2236,7 +2501,7 @@ Rules:
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        max_tokens: 2000,
         messages: [{role: 'user', content: prompt}]
       })
     });
@@ -2313,6 +2578,9 @@ function parseCsvFallback(textContent, fileName, errorMsg) {
   const iMonth   = colIdx(['month','period','time','when']);
   const iCat     = colIdx(['category','cat','type','segment','nic']);
   const iDemand  = colIdx(['demand','score','level','intensity','quantity','qty']);
+  // Velocity columns — compare last vs this month to derive a trend signal
+  const iDemandPrev = colIdx(['last_month_demand','prev_demand','demand_prev','demand_last','previous_demand']);
+  const iDemandCurr = colIdx(['this_month_demand','curr_demand','demand_curr','demand_this','current_demand']);
 
   let matched = 0, skipped = 0;
   for (let i = 1; i < lines.length && matched < 20; i++) {
@@ -2324,6 +2592,8 @@ function parseCsvFallback(textContent, fileName, errorMsg) {
     const rawMonth = iMonth >= 0 ? cols[iMonth] : '';
     const rawCat   = iCat   >= 0 ? cols[iCat]   : '';
     const rawDemand= iDemand>= 0 ? cols[iDemand]: '';
+    const rawDemandPrev = iDemandPrev >= 0 ? cols[iDemandPrev] : '';
+    const rawDemandCurr = iDemandCurr >= 0 ? cols[iDemandCurr] : '';
 
     // Match state
     const state = KNOWN_STATES.find(s => rawState.toLowerCase().includes(s.toLowerCase()) ||
@@ -2340,13 +2610,33 @@ function parseCsvFallback(textContent, fileName, errorMsg) {
       if (kws.some(kw => lc.includes(kw))) { group_id = gid; break; }
     }
 
-    // Parse demand delta
-    const demandVal = DWORD_MAP[rawDemand.toLowerCase()];
-    if (demandVal !== undefined && month) {
+    // Parse demand: prefer explicit delta columns (velocity), fall back to absolute level
+    let resolvedDemandVal = DWORD_MAP[rawDemand.toLowerCase()];
+    const prevVal = DWORD_MAP[rawDemandPrev.toLowerCase()];
+    const currVal = DWORD_MAP[rawDemandCurr.toLowerCase()];
+    const hasVelocityCols = prevVal !== undefined && currVal !== undefined;
+
+    if (hasVelocityCols && month) {
+      // Velocity path: use current level as the new demand value and surface the delta
       const mi = KNOWN_MONTHS.indexOf(month);
       const existing = GROUPS.find(g => g.id === group_id);
       if (existing) {
-        const delta = demandVal - existing.demand[mi];
+        const velocityDelta = currVal - prevVal;
+        const absDelta = currVal - existing.demand[mi];
+        if (absDelta !== 0) {
+          const trendLabel = velocityDelta > 0 ? `rising (+${velocityDelta})` : velocityDelta < 0 ? `falling (${velocityDelta})` : 'flat';
+          result.demand_adjustments.push({
+            group_id, month_index: mi, delta: absDelta,
+            reason: `CSV velocity import: ${DWORD_MAP[prevVal] ?? prevVal}→${DWORD_MAP[currVal] ?? currVal} (${trendLabel})`
+          });
+        }
+      }
+    } else if (resolvedDemandVal !== undefined && month) {
+      // Absolute level path — original behaviour
+      const mi = KNOWN_MONTHS.indexOf(month);
+      const existing = GROUPS.find(g => g.id === group_id);
+      if (existing) {
+        const delta = resolvedDemandVal - existing.demand[mi];
         if (delta !== 0) {
           result.demand_adjustments.push({group_id, month_index: mi, delta, reason: 'CSV import: ' + rawDemand});
         }
@@ -2363,7 +2653,8 @@ function parseCsvFallback(textContent, fileName, errorMsg) {
     }
   }
 
-  result.summary = `Fallback CSV parser: extracted ${matched} products across ${[...new Set(result.products_added.map(p=>p.state))].length} states. ${result.demand_adjustments.length} demand adjustments detected. (${skipped} rows skipped — missing state/month).`;
+  const velocityDetected = iDemandPrev >= 0 && iDemandCurr >= 0;
+  result.summary = `Fallback CSV parser: extracted ${matched} products across ${[...new Set(result.products_added.map(p=>p.state))].length} states. ${result.demand_adjustments.length} demand adjustments detected${velocityDetected ? ' (velocity columns detected — delta computed from last_month vs this_month)' : ''}. (${skipped} rows skipped — missing state/month).`;
   result.confidence = matched > 5 ? 'medium' : 'low';
   if (matched === 0) result.alerts.push('No rows matched known states/months. Try ensuring columns are labelled: Product, State, Month, Demand.');
   return result;
@@ -2542,6 +2833,9 @@ function applyFileData(data) {
 function applyAndRefresh(data, source) {
   pendingFileData = null;
   
+  // Snapshot current demand BEFORE applying so velocity arrows reflect the file's delta
+  GROUPS.forEach(g => { g.demand_prev = [...g.demand]; });
+
   // Capture demand diffs BEFORE applying
   const DWORD_LOG = ['Minimal','Low','Moderate','High','Peak'];
   const MONTHS_LOG = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -2658,6 +2952,25 @@ const INTEL_SOURCES = {
 2. Expected order volumes and dispatch lead time implications
 3. Categories (apparel, beauty, food, handicrafts) seeing the biggest boosts
 
+INDIA E-COMMERCE SEASONAL CALENDAR — use this to set accurate month_index values:
+  Jan (0): Republic Day sales, Winter clearance — clothing, home, beauty
+  Feb (1): Valentine gifting sales — beauty, food, crafts
+  Mar (2): Holi sales, End-of-season — clothing, beauty, food
+  Apr (3): Summer Splash / Great Summer Sale onset — clothing, home, beauty; Eid sales
+  May (4): Amazon Great Summer Sale (usually May); Flipkart Summer Savings — clothing, home, beauty, food
+  Jun (5): End-of-Season Sale (EOSS) — Myntra, Flipkart 50–70% off — clothing, beauty, home; monsoon arrivals
+  Jul (6): Monsoon sale, Amazon Prime Day (usually July) — clothing, beauty, home, food
+  Aug (7): Raksha Bandhan gifting flash sales; Onam sale (Flipkart/Amazon Kerala push) — food, clothing, crafts
+  Sep (8): Navratri / Great Indian Festival (GIF) preview; Big Billion Days teaser — clothing, beauty, crafts
+  Oct (9): Flipkart Big Billion Days + Amazon Great Indian Festival PEAK — ALL groups; Diwali = highest GMV month
+  Nov (10): Post-Diwali clearance; Wedding collection launch; Myntra End-of-Reason Sale — clothing, beauty, fabric
+  Dec (11): Christmas & New Year sales — food, beauty, home, crafts; Winter arrivals peak
+
+CRITICAL: The month_index in demand_boost_groups must reflect the ACTUAL India sales event peak.
+  - Prime Day / EOSS → typically June–July (month_index 5–6)
+  - Big Billion Days + Great Indian Festival → October (month_index 9)
+  - Monsoon-specific products (umbrellas etc.) → month_index 5 (June), NOT 9.
+
 Return ONLY a JSON object (no markdown):
 {"events":[{"name":"Event","status":"live|upcoming","platform":"Amazon|Flipkart|Myntra|Meesho","dates":"date range","demand_impact":"impact description","month_index":4,"demand_boost_groups":[{"group_id":"clothing","delta":1}]}],"summary":"brief summary","overall_demand_signal":"bullish|neutral|bearish","key_insights":["insight"]}`
   },
@@ -2669,6 +2982,16 @@ Return ONLY a JSON object (no markdown):
 3. Rail freight — Indian Railways capacity, rake availability
 4. Cold chain / warehouse capacity warnings
 
+INDIA LOGISTICS SEASONAL CONTEXT — use this to set month_index for capacity signals:
+  Jun–Sep (5–8): Monsoon season — road freight disruptions (landslides, flooding on NH routes); increased demand for waterproofing in warehouses
+  Sep–Oct (8–9): Pre-Diwali surge — JNPT + ICD congestion peaks; trucking demand spikes; last-mile crunch in Tier-1 cities
+  Oct (9): Diwali = peak logistics month — all capacity under stress nationally
+  Nov (10): Wedding + post-Diwali returns; cold chain demand for perishables
+  Dec–Jan (11–0): Winter + year-end clearance; rail rake shortage for bulk commodities
+  Apr–May (3–4): Summer — cold chain demand for beverages/dairy; container imbalance pre-monsoon stocking
+
+When reporting disruptions that affect supply for upcoming peaks, set month_index to the DEMAND PEAK month the disruption will affect (e.g., a port delay in August affecting Diwali imports → month_index 9).
+
 Return ONLY a JSON object (no markdown):
 {"disruptions":[{"type":"port|road|rail|warehouse","location":"location","severity":"high|medium|low","description":"what's happening","action":"what logistics teams should do"}],"summary":"brief summary","overall_demand_signal":"bullish|neutral|bearish","key_insights":["insight"]}`
   },
@@ -2678,6 +3001,26 @@ Return ONLY a JSON object (no markdown):
 1. Upcoming festivals or cultural events in the next 60 days and their demand categories
 2. Which product categories are building inventory now for future peaks
 3. Any demand surprises or category shifts vs last year
+
+INDIA SEASONAL DEMAND REFERENCE — use this to set accurate month_index values:
+  Jan (0): Makar Sankranti / Lohri / Pongal — food, fabric, crafts, clothing
+  Feb (1): Valentine gifting — beauty, food, crafts; Spring arrivals — clothing, fabric
+  Mar (2): Holi — clothing, food, crafts, beauty; Gudi Padwa — clothing, food
+  Apr (3): Eid ul-Fitr (lunar) — clothing, food, beauty, crafts; Summer arrivals — clothing; Vishu/Bihu/Poila Boishakh
+  May (4): Amazon Great Summer Sale; Summer peak for fans/coolers/cotton wear — clothing, home, beauty
+  Jun (5): Monsoon onset — UMBRELLAS, RAINWEAR, RAIN BOOTS peak HERE (NOT October); Back-to-school bags/stationery; EOSS sales — clothing, beauty
+  Jul (6): Monsoon deep; Mosquito-net / repellent peak; B2B restock begins — fabric, apparel_mfg
+  Aug (7): Onam (Kerala) — clothing, food, crafts, fabric; Raksha Bandhan — food, crafts, beauty; Pre-festive stocking begins
+  Sep (8): Navratri / Garba — clothing, beauty, fabric, crafts; Dussehra — clothing, food, crafts; B2B Diwali stocking peak
+  Oct (9): Diwali PEAK — ALL groups (₹1.15L cr GMV nationally); festive sweets, diyas, lights, ethnic wear; Wedding season begins
+  Nov (10): Wedding season PEAK — clothing, beauty, crafts, fabric; Winterwear surge — apparel_mfg, fabric, clothing
+  Dec (11): Christmas gifting — food, crafts, beauty, home; New Year — clothing, beauty, food; Deep winter — apparel_mfg
+
+CRITICAL: demand_boost_groups month_index must reflect the ACTUAL India seasonal peak of that category.
+  - Umbrellas / rainwear → month_index 5 (June). NEVER 9 (October).
+  - Diwali products → month_index 9 (October).
+  - Woollens / blankets → month_index 10 (November) or 11 (December).
+  - Summer cooling items → month_index 3 (April) or 4 (May).
 
 Return ONLY a JSON object (no markdown):
 {"events":[{"name":"Festival/Season","status":"live|upcoming","platform":"Market","dates":"date range","demand_impact":"impact description","month_index":4,"demand_boost_groups":[{"group_id":"food","delta":1}]}],"summary":"brief summary","overall_demand_signal":"bullish|neutral|bearish","key_insights":["insight"]}`
@@ -2973,7 +3316,7 @@ async function runAskMarket() {
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
         tools: [{type: 'web_search_20250305', name: 'web_search'}],
-        messages: [{role: 'user', content: `Today is ${today}. You are a India logistics demand expert. Answer this question with current web search data: "${q}"\n\nProvide a clear, concise answer (3-5 sentences max) focused on what a logistics salesperson in India should know. Include specific numbers or dates where available. No markdown.`}]
+        messages: [{role: 'user', content: `Today is ${today}. You are a senior India logistics demand analyst with deep knowledge of Indian retail seasonality, B2B supply chains, and the NIC classification system. Answer this question with current web search data: "${q}"\n\nIndia seasonal context for accurate month assignment:\n- Monsoon (Jun–Sep): umbrellas, rainwear, rain boots, mosquito nets peak in JUNE–JULY\n- Diwali (Oct): festive sweets, diyas, decorative lights, ethnic wear, imitation jewellery peak in OCTOBER\n- Wedding season (Nov): bridal wear, wedding décor, bulk catering items peak in NOVEMBER\n- Winter (Nov–Dec): woollens, blankets, thermal wear, room heaters peak in NOVEMBER–DECEMBER\n- Summer (Apr–May): fans, coolers, cotton wear, sunscreen peak in APRIL–MAY\n\nProvide a clear, concise answer (3–5 sentences max) focused on what a logistics salesperson in India should act on. Include specific numbers, months, or dates where available. No markdown.`}]
       })
     });
     if (!response.ok) throw new Error('HTTP ' + response.status);
@@ -2993,6 +3336,8 @@ function applyWebIntel() {
     const el = document.getElementById('sig-' + s.sigId); return el && el.checked;
   });
   if (!selected.length) { showToast('No signals selected'); return; }
+  // Snapshot current demand BEFORE applying so velocity arrows reflect this session's delta
+  GROUPS.forEach(g => { g.demand_prev = [...g.demand]; });
   let changes = 0;
   selected.forEach(({ev}) => {
     (ev.demand_boost_groups || []).forEach(b => {
@@ -3045,12 +3390,15 @@ async function pullWebIntelligence() { return triggerFullFetch(); }
 // FEATURE 1: DEMAND TREND ARROWS
 // ══════════════════════════════════════════════════════
 function getDemandTrendArrow(g, mi) {
+  // Only emit an arrow once demand_prev has been snapshotted (after a fetch or manual apply).
+  // Before that, returning '' keeps the table uncluttered.
+  if (!g.demand_prev) return '';
   const curr = g.demand[mi];
-  const prev = (g.demand_prev || g.demand)[mi];
+  const prev = g.demand_prev[mi];
   const delta = curr - prev;
-  if (delta > 0) return '<span class="demand-trend trend-arrow-up">↑ +' + delta + '</span>';
-  if (delta < 0) return '<span class="demand-trend trend-arrow-down">↓ ' + delta + '</span>';
-  return '<span class="demand-trend trend-arrow-flat">→ 0</span>';
+  if (delta > 0) return '<span class="demand-trend trend-arrow-up" title="Rose ' + delta + ' point(s) since last fetch">\u2191 +' + delta + '</span>';
+  if (delta < 0) return '<span class="demand-trend trend-arrow-down" title="Fell ' + Math.abs(delta) + ' point(s) since last fetch">\u2193 ' + delta + '</span>';
+  return '<span class="demand-trend trend-arrow-flat" title="Unchanged since last fetch">= stable</span>';
 }
 
 // ══════════════════════════════════════════════════════
@@ -3060,7 +3408,7 @@ const PEAK_MONTH_NAMES = ['January','February','March','April','May','June','Jul
 
 function getDaysToPeak(peakMonthIndex) {
   const now = new Date();
-  const nowMi = 4; // May
+  const nowMi = now.getMonth();
   let monthsAway = peakMonthIndex - nowMi;
   if (monthsAway <= 0) monthsAway += 12;
   // Approximate days
@@ -3069,8 +3417,19 @@ function getDaysToPeak(peakMonthIndex) {
 
 // ── Urgency: nearest upcoming peak month for a given row ──
 function getRowUrgency(r) {
-  const peakIndices = (r.months || []).map(m => MONTHS.indexOf(m)).filter(i => i >= 0);
-  if (!peakIndices.length) return {days: 999, score: 999, tier: 'watch', label: 'MONITOR', nearestMi: -1, nearestTargetMi: -1, isNow: false};
+  let peakIndices = (r.months || []).map(m => MONTHS.indexOf(m)).filter(i => i >= 0);
+  // If no months are tagged on this row, derive from the group's peak month so the
+  // row isn't silently buried at score 999 just because the month tag is absent.
+  if (!peakIndices.length) {
+    if (r.group) {
+      const groupPeakMi = peakMonthOfGroup(r.group);
+      if (groupPeakMi >= 0) peakIndices = [groupPeakMi];
+    }
+    if (!peakIndices.length) {
+      // Genuine no-data case — remain at watch but don't block the rest of the function
+      return {days: 999, score: 999, tier: 'watch', label: 'MONITOR', nearestMi: -1, nearestTargetMi: -1, isNow: false};
+    }
+  }
 
   // Urgency fires on TARGET month (1 month before peak) — when salespeople should act
   let nearestTargetMi = -1, nearestPeakMi = -1, minDays = Infinity;
@@ -3173,7 +3532,7 @@ function renderIndiaMap() {
   const month = MONTHS[mi];
   
   const labelEl = document.getElementById('map-month-label');
-  if (labelEl) labelEl.textContent = month + ' 2026' + (mi === NOW_MI ? ' · Current' : '');
+  if (labelEl) labelEl.textContent = month + ' ' + NOW_YEAR + (mi === NOW_MI ? ' · Current' : '');
   
   let svgContent = '<svg viewBox="0 0 540 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">';
   
@@ -3330,7 +3689,7 @@ function updateTerritoryActions() {
     Object.entries(cats).forEach(([cat, info]) => {
       const g = GROUPS.find(g => g.cats.includes(cat));
       if (!g) return;
-      const d = g.demand[NOW_MI];
+      const d = getEffectiveDemand(g, NOW_MI);
       const score = d * priWeight[g.priority || 'base'];
       if (score > 0) {
         candidates.push({state, cat, nic: info.nic, products: info.products||[], score, d, g});
@@ -3466,6 +3825,35 @@ async function autoFetchWebIntel() {
       if (badge) { badge.textContent = totalSignals + ' signals'; badge.style.display = 'inline-flex'; }
       showToast('🌐 ' + totalSignals + ' live market signals ready — click Live Market Intel');
     }
+
+    // ── CHANGE 4: Auto-apply demand boosts from fetched signals → rebuild sales table ──
+    // Snapshot current demand into demand_prev so trend arrows work (Change 5 prerequisite)
+    GROUPS.forEach(g => { if (!g.demand_prev) g.demand_prev = [...g.demand]; });
+
+    let autoApplied = 0;
+    ['ecomm', 'logistics', 'seasonal'].forEach(srcId => {
+      const r = sourceResults[srcId];
+      if (!r || r._error) return;
+      (r.events || []).forEach(ev => {
+        (ev.demand_boost_groups || []).forEach(b => {
+          const g = GROUPS.find(g => g.id === b.group_id);
+          if (!g || !b.delta) return;
+          const mi = ev.month_index != null ? ev.month_index : NOW_MI;
+          g.demand[mi] = Math.max(0, Math.min(4, g.demand[mi] + b.delta));
+          autoApplied++;
+        });
+      });
+    });
+
+    if (autoApplied > 0) {
+      // Invalidate the cached row HTML so getAllRows() re-renders with updated demand
+      invalidateRowCache();
+      // Rebuild the sales table so the new "Demand Now" column reflects live signals
+      buildSalesTbl();
+      // Rebuild exec views too (heatmap / overview already read GROUPS directly)
+      if (CURRENT_ROLE === 'exec') { buildOverview(); buildHeatmap(); }
+    }
+
     startAutoRefreshCountdown();
   } catch(e) {
     // Silent fail on auto-fetch
@@ -3489,6 +3877,19 @@ function toggleFabMenu() {
 }
 
 // ── VIEW REFRESH (both roles) ──
+// ── REFRESH BUTTON ──
+function triggerRefresh(btnEl) {
+  if (!btnEl) return;
+  btnEl.classList.add('spinning');
+  btnEl.disabled = true;
+  setTimeout(() => {
+    refreshAllViews();
+    showToast('Data refreshed');
+    btnEl.classList.remove('spinning');
+    btnEl.disabled = false;
+  }, 620); // let the spin animation complete first
+}
+
 function refreshAllViews() {
   populateSalesTblFilters();
   buildSalesTbl();
@@ -3502,12 +3903,23 @@ function refreshAllViews() {
     buildTargeting();
     buildPeakCountdown();
     renderIndiaMap();
+    updateExecKPIs();
   }
   if (CURRENT_ROLE === 'sales') {
     updateTerritoryActions();
   }
   // Auto-save to localStorage
   try { saveSessionSnapshot(); } catch(e) {}
+}
+
+function updateExecKPIs() {
+  // Count products with demand > 0 this month
+  let activeNow = 0;
+  GROUPS.forEach(g => { if (g.demand[NOW_MI] > 0) activeNow += g.products.filter(p => MONTHS.indexOf(p.month) === NOW_MI).length; });
+  const el = document.getElementById('kpi-active-products');
+  if (el) el.textContent = activeNow || countMonthProducts(MONTHS[NOW_MI]);
+  const sub = document.getElementById('kpi-active-sub');
+  if (sub) sub.textContent = MONTHS[NOW_MI] + ' · ' + (MONTH_EVENTS[NOW_MI] ? MONTH_EVENTS[NOW_MI].split(' · ')[0] : 'Current month');
 }
 
 // ── TOGGLE PRODUCTS EXPAND ──

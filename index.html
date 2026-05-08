@@ -1529,9 +1529,7 @@ function populateSalesTblFilters() {
   stateEl.innerHTML = '<option value="">All States</option>' + states.map(s => '<option>' + s + '</option>').join('');
   monthEl.innerHTML = '<option value="">All Months</option>' + MONTHS.map(m => '<option>' + m + '</option>').join('');
   catEl.innerHTML   = '<option value="">All Categories</option>' + cats.map(c => '<option>' + c + '</option>').join('');
-  // Default to filtering by PEAK month = next month (since target = NOW means peak = next month)
-  // Currently May → products with June peak are the "act now" targets
-  monthEl.value = MONTHS[(NOW_MI + 1) % 12];
+  // No default month filter — show all rows so users can see every category's products
 }
 
 // ── Invalidate row cache whenever underlying data changes (web intel / session restore) ──
@@ -1548,13 +1546,15 @@ function getAllRows() {
     Object.entries(cats).forEach(([cat, info]) => {
       const group = GROUPS.find(g => g.cats.includes(cat));
       const priority = group ? group.priority : 'base';
-      const peakMonths = info.months || [];
 
-      // Map each product name → its specific month (from GROUPS product list)
+      // Map each product name → its specific month (from GROUPS product list — single source of truth)
       const allProductMonthMap = (info.products || []).map(prodName => {
         const match = (group ? group.products : []).find(p => p.state === state && p.name === prodName);
         return {name: prodName, month: match ? match.month : null};
       });
+
+      // Derive peak months from GROUPS data, not STATE_INTEL.months (which can be stale after edits)
+      const peakMonths = [...new Set(allProductMonthMap.map(p => p.month).filter(Boolean))];
 
       // Bucket products by their month; unassigned products go into every month row
       const productsByMonth = {};
@@ -1568,7 +1568,7 @@ function getAllRows() {
       if (peakMonths.length === 0) {
         // No months — single fallback row with all products
         const row = {state, cat, nic: info.nic, products: allProductMonthMap.map(p => p.name),
-          productMonthMap: allProductMonthMap, priority, months: [], group};
+          productMonthMap: allProductMonthMap, priority, months: [], targetMonths: [], group};
         const urg = getRowUrgency(row);
         row.urgencyScore = urg.score; row.urgency = urg;
         row._html = _renderRow(row);
@@ -1577,11 +1577,12 @@ function getAllRows() {
         // One row per month — only products tagged for that month (+ unassigned)
         peakMonths.forEach(month => {
           const monthProds = [...(productsByMonth[month] || []), ...unassignedProds];
+          if (!monthProds.length) return; // skip empty month buckets
           const row = {
             state, cat, nic: info.nic,
             products: monthProds.map(p => p.name),
             productMonthMap: monthProds,
-            priority, months: [month], group
+            priority, months: [month], targetMonths: [getTargetMonthName(month)], group
           };
           const urg = getRowUrgency(row);
           row.urgencyScore = urg.score; row.urgency = urg;
@@ -1666,7 +1667,7 @@ function _doFilter() {
 
   let filtered = stblRows.filter(r => {
     if (stateF && r.state !== stateF) return false;
-    if (monthF && !r.months.includes(monthF)) return false;
+    if (monthF && !(r.targetMonths || []).includes(monthF)) return false;
     if (catF   && r.cat !== catF) return false;
     if (gfPriority !== 'All' && r.priority !== gfPriority) return false;
     return true;

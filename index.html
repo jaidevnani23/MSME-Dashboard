@@ -737,28 +737,28 @@ table.stbl tr.row-now td{background:#F0FDF4}
     <div class="login-sub">Product Demand &amp; Targeting Platform &middot; 2026</div>
     <div class="login-cards">
       <div class="login-card sales-card" onclick="doLogin('sales')">
-        <div class="login-card-icon">&#129309;</div>
-        <div class="login-card-role">Sales View</div>
-        <div class="login-card-title">Field Sales<br>Dashboard</div>
+        <div class="login-card-icon">🤝</div>
+        <div class="login-card-role">For Sales Reps</div>
+        <div class="login-card-title">What Should I<br>Sell This Month?</div>
         <div class="login-card-perks">
-          <div class="login-perk"><div class="login-perk-dot"></div>Your territory: ranked action list this week</div>
-          <div class="login-perk"><div class="login-perk-dot"></div>Demand × priority scoring — top 5 calls</div>
-          <div class="login-perk"><div class="login-perk-dot"></div>Mark contacted toggle for pipeline tracking</div>
-          <div class="login-perk"><div class="login-perk-dot"></div>Session persists across reloads</div>
+          <div class="login-perk"><div class="login-perk-dot"></div>Pick your states — get your top 5 calls this week</div>
+          <div class="login-perk"><div class="login-perk-dot"></div>See exactly what products to push and when</div>
+          <div class="login-perk"><div class="login-perk-dot"></div>Tick off who you've contacted</div>
+          <div class="login-perk"><div class="login-perk-dot"></div>No setup needed — just tap and go</div>
         </div>
-        <div class="login-card-cta">&rarr; Enter Sales View</div>
+        <div class="login-card-cta">&rarr; Go to Sales View</div>
       </div>
       <div class="login-card exec-card" onclick="doLogin('exec')">
-        <div class="login-card-icon">&#128202;</div>
-        <div class="login-card-role">Executive View</div>
+        <div class="login-card-icon">📊</div>
+        <div class="login-card-role">For Managers &amp; Executives</div>
         <div class="login-card-title">Full Intelligence<br>Platform</div>
         <div class="login-card-perks">
-          <div class="login-perk"><div class="login-perk-dot"></div>India choropleth map — demand at a glance</div>
-          <div class="login-perk"><div class="login-perk-dot"></div>Days-to-peak countdown with urgency signals</div>
-          <div class="login-perk"><div class="login-perk-dot"></div>Demand trend arrows with month-over-month deltas</div>
-          <div class="login-perk"><div class="login-perk-dot"></div>NIC adjacency cross-sell intelligence by state</div>
+          <div class="login-perk"><div class="login-perk-dot"></div>India demand map — all 19 states at a glance</div>
+          <div class="login-perk"><div class="login-perk-dot"></div>Days-to-peak countdown with capacity signals</div>
+          <div class="login-perk"><div class="login-perk-dot"></div>Live market intel from web sources</div>
+          <div class="login-perk"><div class="login-perk-dot"></div>Upload data files to update demand curves</div>
         </div>
-        <div class="login-card-cta">&rarr; Enter Executive View</div>
+        <div class="login-card-cta">&rarr; Go to Executive View</div>
       </div>
     </div>
     <div class="login-footer">374 products · 19 states · 26 categories · v3 — Demand trends · Map · Territory planner · Session persistence</div>
@@ -865,31 +865,21 @@ table.stbl tr.row-now td{background:#F0FDF4}
   </div>
 
 
-  <!-- Sales: Territory Setup & Ranked Action List -->
-  <div id="home-territory-wrap" style="display:none;margin-bottom:20px">
-    <div class="territory-setup">
-      <div class="territory-title">📍 Your Territory</div>
-      <div class="territory-sub">Select your states to get a ranked action list — top 5 calls this week by demand × reachability</div>
-      <div class="territory-chips" id="territory-chips"></div>
-      <div class="territory-actions-wrap" id="territory-actions-wrap" style="display:none">
-        <div class="ta-header">🎯 Top calls this week — ranked by demand × priority</div>
-        <div id="territory-action-list"></div>
-      </div>
-    </div>
-  </div>
   <!-- Sales: product table -->
   <div id="home-sales-table-section" style="display:none;margin-bottom:24px">
     <div class="sales-tbl-wrap">
       <div class="sales-tbl-toolbar">
-        <span class="sales-tbl-toolbar-label">&#128203; Product Contact List &mdash; Target Now</span>
-        <select class="sales-tbl-filter" id="stbl-filter-state" onchange="filterSalesTbl()"><option value="">All States</option></select>
+        <span class="sales-tbl-toolbar-label">📋 Full product list — all states</span>
+        <select class="sales-tbl-filter" id="stbl-filter-state" onchange="filterSalesTbl()" style="font-size:12px;padding:5px 8px" title="Filter by state">
+          <option value="">All States</option>
+        </select>
         <select class="sales-tbl-filter" id="stbl-filter-month" onchange="filterSalesTbl()"><option value="">All Months</option></select>
-        <select class="sales-tbl-filter" id="stbl-filter-cat" onchange="filterSalesTbl()"><option value="">All Categories</option></select>
+        <select class="sales-tbl-filter" id="stbl-filter-cat" onchange="filterSalesTbl()" style="display:none"><option value="">All Categories</option></select>
         <button class="btn-dl" onclick="downloadContactList()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11zm-9-4l2-3-2-3h2l1 1.5 1-1.5h2l-2 3 2 3h-2l-1-1.5-1 1.5H9z"/></svg>
           Download Excel
         </button>
-        <button class="btn-refresh" id="sales-refresh-btn" onclick="triggerRefresh(this)" title="Recalculate targets with latest data">
+        <button class="btn-refresh" id="sales-refresh-btn" onclick="triggerRefresh(this)" title="Recalculate">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
           Refresh
         </button>
@@ -898,12 +888,10 @@ table.stbl tr.row-now td{background:#F0FDF4}
       <div class="sales-tbl-scroll">
         <table class="stbl">
           <thead><tr>
-            <th onclick="sortSalesTbl('state')">State <span class="sa" id="sa-state">&#8597;</span></th>
-            <th onclick="sortSalesTbl('cat')">Category / NIC Code <span class="sa" id="sa-cat">&#8597;</span></th>
-            <th>Key Products</th>
-            <th onclick="sortSalesTbl('month')" title="Target = when to act (4–6 weeks before peak). Peak = consumer demand month.">Target Window / Peak <span class="sa" id="sa-month">&#8597;</span></th>
-            <th onclick="sortSalesTbl('demand')" title="Peak demand level for this category at its seasonal high — product-level score where overrides apply">Peak Demand <span class="sa" id="sa-demand">&#8597;</span></th>
-            <th onclick="sortSalesTbl('urgency')" title="Days until nearest peak month">Urgency <span class="sa" id="sa-urgency">&#8597;</span></th>
+            <th onclick="sortSalesTbl('state')">State <span class="sa" id="sa-state">↕</span></th>
+            <th onclick="sortSalesTbl('cat')">NIC Code <span class="sa" id="sa-cat">↕</span></th>
+            <th>Products</th>
+            <th onclick="sortSalesTbl('month')">Best Time to Sell <span class="sa" id="sa-month">↕</span></th>
           </tr></thead>
           <tbody id="stbl-body"></tbody>
         </table>
@@ -917,6 +905,45 @@ table.stbl tr.row-now td{background:#F0FDF4}
     <div class="peak-countdown" style="margin-bottom:16px">
       <div class="peak-countdown-title">⏱ Days to Peak — Logistics Capacity Decision Windows</div>
       <div class="peak-cards" id="peak-countdown"></div>
+    </div>
+
+    <!-- ── EXEC UPLOAD DEMAND DATA CARD ── -->
+    <div id="exec-upload-card" style="background:var(--white);border:1px solid var(--bdr);border-radius:12px;box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden">
+      <div class="card-header" style="padding:14px 18px">
+        <div>
+          <div class="card-title">📤 Upload Demand Data</div>
+          <div class="card-sub">Drop any file — Excel, CSV, JSON, PDF, text. Claude AI extracts demand signals and updates all views.</div>
+        </div>
+        <div id="exec-upload-status" style="display:none;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;background:var(--green-l);color:var(--green);border:1px solid var(--green-m);white-space:nowrap;flex-shrink:0;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block"></span>Data loaded</div>
+      </div>
+      <div style="padding:12px 18px 16px">
+        <div id="exec-upload-zone"
+             ondragover="execHandleDragOver(event)"
+             ondragleave="execHandleDragLeave(event)"
+             ondrop="execHandleDrop(event)"
+             onclick="document.getElementById('exec-file-input').click()"
+             style="border:1.5px dashed var(--bdr2);border-radius:10px;padding:18px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .15s,background .15s;background:var(--page)">
+          <input type="file" id="exec-file-input" accept=".csv,.xlsx,.xls,.json,.txt,.pdf,.tsv" onchange="execHandleFileSelect(event)" style="display:none">
+          <div style="width:42px;height:42px;border-radius:10px;background:var(--blue-l);border:1.5px solid var(--blue-m);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📤</div>
+          <div style="min-width:0">
+            <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px">Drop a file or click to browse</div>
+            <div style="font-size:10px;color:var(--txt3);margin-bottom:6px">Claude AI extracts demand signals &amp; updates demand curves</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m)">XLSX</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m)">CSV</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m)">JSON</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m)">PDF</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--blue-l);color:var(--blue);border:1px solid var(--blue-m)">TXT</span>
+            </div>
+          </div>
+        </div>
+        <div id="exec-upload-processing" style="display:none;text-align:center;padding:18px 0 8px">
+          <div style="display:inline-block;width:22px;height:22px;border:2.5px solid var(--bdr2);border-top-color:var(--blue);border-radius:50%;animation:spin360 .8s linear infinite;margin-bottom:8px"></div>
+          <div id="exec-upload-msg" style="font-size:12px;font-weight:700;color:var(--navy)">Processing…</div>
+          <div id="exec-upload-sub" style="font-size:10px;color:var(--txt4);margin-top:3px">Claude is analysing demand signals</div>
+        </div>
+        <div id="exec-upload-result" style="margin-top:10px"></div>
+      </div>
     </div>
 
     <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--blue)">
@@ -1156,12 +1183,18 @@ table.stbl tr.row-now td{background:#F0FDF4}
         <div class="intel-drawer-sub">Upload files or pull live market signals</div>
       </div>
     </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div id="api-key-indicator" onclick="openIntelDrawer('settings');switchIntelTab('settings')"
+        style="cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;border:1px solid;display:flex;align-items:center;gap:4px">
+      </div>
     <button class="intel-close" onclick="closeIntelDrawer()">✕</button>
+    </div>
   </div>
   <div class="intel-tabs">
     <button class="intel-tab active" id="itab-upload" onclick="switchIntelTab('upload')">📁 Upload Data</button>
     <button class="intel-tab" id="itab-web" onclick="switchIntelTab('web')">🌐 Web Intelligence</button>
     <button class="intel-tab" id="itab-log" onclick="switchIntelTab('log')">🕓 Change Log</button>
+    <button class="intel-tab" id="itab-settings" onclick="switchIntelTab('settings')" style="margin-left:auto">⚙ API Key</button>
   </div>
 
   <!-- UPLOAD TAB -->
@@ -1208,6 +1241,34 @@ table.stbl tr.row-now td{background:#F0FDF4}
         <div style="font-size:10px;color:var(--txt2)"><strong style="color:var(--navy)">PDF/Text</strong><br>Market reports, any format</div>
         <div style="font-size:10px;color:var(--txt2)"><strong style="color:var(--navy)">Mixed</strong><br>Sales data, inventory, research</div>
       </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS TAB -->
+  <div class="intel-body" id="itab-settings-body" style="display:none">
+    <div style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px">🔑 Anthropic API Key</div>
+      <div style="font-size:11px;color:var(--txt3);margin-bottom:12px;line-height:1.6">
+        Required for Web Intelligence, file analysis, and Ask the Market. Your key stays in-page only and is never sent anywhere except directly to <code style="background:var(--page);padding:1px 4px;border-radius:3px;font-size:10px">api.anthropic.com</code>.
+        Get a free key at <a href="https://console.anthropic.com/settings/api-keys" target="_blank" style="color:var(--blue)">console.anthropic.com</a>.
+      </div>
+      <div style="display:flex;gap:8px;align-items:stretch">
+        <input type="password" id="api-key-input"
+          placeholder="sk-ant-api03-…"
+          style="flex:1;padding:9px 12px;border:1.5px solid var(--bdr2);border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--txt);outline:none;background:var(--white)"
+          oninput="updateApiKeyStatus()"
+          onfocus="this.style.borderColor='var(--blue)'"
+          onblur="this.style.borderColor='var(--bdr2)'">
+        <button onclick="saveApiKey()"
+          style="padding:9px 16px;background:var(--navy);color:#fff;border:none;border-radius:7px;font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .12s"
+          onmouseover="this.style.background='#0F2D5A'" onmouseout="this.style.background='var(--navy)'">
+          Save Key
+        </button>
+      </div>
+      <div id="api-key-status" style="margin-top:8px;font-size:11px;color:var(--txt4);font-family:'IBM Plex Mono',monospace"></div>
+    </div>
+    <div style="padding:12px 14px;background:var(--amber-l);border:1px solid var(--amber-m);border-radius:9px;font-size:11px;color:var(--amber);line-height:1.6">
+      <strong>Note:</strong> The key is stored in a JavaScript variable for this session only. Closing or refreshing the page clears it. For persistent use, paste your key into the <code style="background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px">ANTHROPIC_API_KEY</code> variable at the top of the HTML file.
     </div>
   </div>
 
@@ -1318,6 +1379,30 @@ const GROUPS = [{"id":"clothing","label":"Clothing & Apparel Retail","short":"Cl
 const STATE_INTEL = {"Maharashtra": {"Clothing Retail": {"nic": "47711", "products": ["Oversized graphic tees (Dharavi garment belt)", "Premium co-ord sets (Thane manufacturing units)", "Anarkali suits & party-wear lehengas", "Maternity & nursing wear (Mumbai D2C brands)", "Men's bandhgala kurtas (festive formal wear)", "Sequin & mirror-work blouses", "Diwali special sarees — net & georgette"], "months": ["September", "October", "November"]}, "Apparel Manufacturing": {"nic": "14109", "products": ["Export T-shirts & polo shirts (Mumbai-Thane corridor)", "Sportswear & compression tights", "Swimwear & beachwear (Mumbai coastal — summer peak)", "Denim jeans & jeggings", "Premium linen shirts (pre-festive dispatch)", "Formal trousers & blazers"], "months": ["May", "August", "September"]}, "Leather Goods Manufacturing": {"nic": "15122", "products": ["Structured leather tote bags (Dharavi leather cluster)", "Laptop bags & office backpacks (Kurla units)", "Handcrafted leather wallets — Diwali gifting", "Crossbody sling bags", "Leather passport holders & travel pouches", "Genuine leather sandals (Dharavi artisans)"], "months": ["October"]}, "Health Food Retail": {"nic": "47219", "products": ["Whey protein & mass gainer supplements (Mumbai gym culture)", "Greek yogurt parfait combos", "Organic ashwagandha capsules", "Plant-based protein bars", "Makhana snack packs"], "months": ["January", "February"]}, "Food & Grocery Retail": {"nic": "47211", "products": ["Alphonso mango pulp (Ratnagiri GI) — summer harvest peak Apr–Jun", "Alphonso mango ready-to-eat pulp cans (Devgad/Ratnagiri)", "Puranpoli mix (Holi / Gudi Padwa festive — March)", "Gudi Padwa special mithai hampers (Maharashtra New Year)", "Malvani masala blends — festive cooking season", "Goda masala (Maharashtra signature spice blend)", "Sol kadhi concentrate (Konkan coast — summer-monsoon cooling drink)", "Kolhapuri chilli powder", "Nagpur orange gift boxes (GI Vidarbha oranges — winter harvest Nov)"], "months": ["March", "May", "June", "October", "November"]}, "Beauty & Cosmetics Retail": {"nic": "47722", "products": ["Niacinamide face serums (Diwali gifting — D2C Mumbai brands)", "SPF 50 tinted sunscreen (summer demand peak Apr–Jun)", "Vitamin C brightening kits (Diwali gifting sets)", "Luxury deo gift sets", "Waterproof kajal & mascara (Navratri / festive season)", "Hair growth oils (Ayurvedic Mumbai wellness startups)"], "months": ["January", "April", "September", "October"]}, "Fabric Retail": {"nic": "47510", "products": ["Solapuri chaddar (GI-tagged cotton bed cover — Diwali home gifting)"], "months": ["October"]}, "Utensils & Home Goods Retail": {"nic": "47592", "products": ["Solapur terry towel sets (GI product — Diwali gifting)"], "months": ["October"]}}, "Gujarat": {"Synthetic Fabric Manufacturing": {"nic": "13913", "products": ["Rayon georgette saree fabric (Surat — pre-Navratri dispatch)", "Polyester chiffon dupatta fabric (Surat powerloom)", "Viscose-modal blend kurta fabric", "Nylon net for lehengas & bridal wear (Surat)", "Jacquard weave fabric (Surat powerloom — pre-festive dispatch)", "Organza & tissue saree fabric"], "months": ["July", "August"]}, "Wholesale Clothing": {"nic": "46419", "products": ["Chaniya choli sets (Navratri Garba — Ahmedabad peak Sep–Oct)", "Bandhani georgette sarees (Jamnagar Bandhani belt)", "Wholesale embroidered blouses & dupattas", "Jari & zardosi work lehengas (Surat wholesale)", "Kutch embroidery dress material", "Patola silk sarees (Patan — UNESCO heritage weave)"], "months": ["September"]}, "Clothing Retail": {"nic": "47711", "products": ["Garba costume sets — chaniya choli & mojari (Navratri peak)", "Kutch mirror-work dupattas", "Single-colour Bandhej sarees — Navratri", "Traditional Gujarati ghagra-choli", "White Navratri special kurta sets (men)", "Festival edition lehengas (post-Navratri wedding season)"], "months": ["September", "October"]}, "Utensils & Cookware Retail": {"nic": "47592", "products": ["Ceramic floor tiles (Morbi — 70% of India output)", "Sanitaryware & bathroom fittings (Morbi cluster)", "Diamond-finish cookware sets — Diwali kitchen gifting", "Aluminium pressure cookers (Rajkot engineering)"], "months": ["October"]}, "Imitation Jewellery Manufacturing": {"nic": "32120", "products": ["Navratri Bandhani-matched jhumka sets (Ahmedabad artisans)", "Kundan Meenakari maang tikka (Ahmedabad)", "Lac bangle sets (Rajkot — Navratri staple)", "Temple jewellery sets (Vadodara craftsmen)", "Gold-plated choker necklaces — wedding season", "Oxidised tribal jewellery from Kutch (Navratri gifting)"], "months": ["September", "October", "November"]}, "Wholesale Food & Spices": {"nic": "46305", "products": ["Groundnut oil (Rajkot — Saurashtra peanut belt, Rabi harvest)", "Sesame seeds & til oil (Mehsana)", "Fenugreek methi (Unjha APMC — India's largest spice market)", "Jeera & cumin (Unjha — post-harvest peak)", "Castor oil (industrial + pharma grade)", "Isabgol / psyllium husk (Gujarat primary producer)"], "months": ["January", "March"]}}, "Uttar Pradesh": {"Clothing Retail": {"nic": "47711", "products": ["Banarasi silk sarees with zari brocade (Varanasi GI — bridal season peak)", "Lucknowi chikankari kurta sets (hand-embroidered)", "Chikankari palazzo-suit sets (Lucknow atelier belt)", "Zardosi work lehengas & blouses (Lucknow bridal)", "Banarasi brocade dupattas", "Georgette chikankari party-wear tops (Eid peak)", "Banarasi silk shawls (winter wedding season)"], "months": ["April", "October", "November"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Moradabad brass diyas & puja thali sets (Diwali — Pital Nagari)", "Moradabad brassware flower vases & candle stands", "Agra marble inlay Taj Mahal replicas (Diwali tourist gifting)", "Saharanpur carved wooden photo frames & trays", "Firozabad glass bangles & decorative items (Navratri)", "Kannauj ittar (attar) perfume bottles — Diwali gifting", "Varanasi silk wall hangings"], "months": ["September", "October"]}, "Carpets & Rugs Retail": {"nic": "47531", "products": ["Hand-knotted wool carpets (Bhadohi/Mirzapur — Carpet City of India)", "Machine-made polyester area rugs (Diwali home refresh)", "Tufted rugs with floral/geometric patterns", "Prayer mats — namaz chadar (Varanasi — Eid peak)", "Dhurrie flat-weave rugs (Agra artisans)"], "months": ["April", "October"]}, "Leather Goods Manufacturing": {"nic": "15122", "products": ["Agra leather sandals & juttis (shoe-making capital)", "Kanpur tannery leather bags & wallets", "Genuine leather office briefcases (Kanpur leather district)", "Leather-bound diaries & planners", "Suede casual loafers (Agra export units)"], "months": ["October"]}, "Imitation Jewellery Manufacturing": {"nic": "32120", "products": ["Firozabad glass bead necklaces & chokers", "Firozabad glass bangle sets (₹99 packs — Meesho top seller)", "Jhumka earrings with lac inlay (Lucknow lacwork)", "Kundan polki sets (Lucknow bridal — wedding season)", "Payal / anklets with ghungroo (UP artisan belt)"], "months": ["September", "October", "November"]}, "Health Food Retail": {"nic": "47219", "products": ["Thandai mix (Mathura — Holi special drink, March)", "Mathura peda gift boxes (Diwali mithai gifting)", "Petha candy (Agra GI — peaks Holi & tourist trade year-round)", "Organic gur (jaggery) from Muzaffarnagar — winter cane harvest", "Chyawanprash (Dabur Ghaziabad plant — winter immunity peak)"], "months": ["January", "March", "October", "November"]}, "Food & Grocery Retail": {"nic": "47211", "products": ["Allahabad Surkha guava (GI — summer harvest Apr–Jun)"], "months": ["April"]}}, "Tamil Nadu": {"Apparel Manufacturing": {"nic": "14109", "products": ["Export cotton round-neck T-shirts (Tirupur — 60% India knitwear)", "Polo shirts with 2-button placket (Tirupur export)", "Dry-fit sportswear & compression gym wear", "Kids' cotton school uniforms (Tirupur — back-to-school June)", "Athleisure jogger-tee co-ord sets", "Women's cotton nightwear sets", "Sublimation-printed graphic tees (domestic market)"], "months": ["June", "July", "August"]}, "Cotton Knit Fabric Manufacturing": {"nic": "13911", "products": ["Interlock cotton fabric (Tirupur / Erode mills)", "Single jersey cotton fabric (peak mill supply pre-festive)", "Organic cotton GOTS-certified fabric (export peak)", "Bamboo-cotton blend knit fabric"], "months": ["July", "August"]}, "Fabric Retail": {"nic": "47510", "products": ["Kanchipuram silk sarees (GI) — Pongal gifting (new saree tradition)", "Coimbatore cotton Kovai Kora sarees — Pongal new saree tradition", "Madurai cotton sarees (Diwali)", "Salem silk sarees (Pongal season)", "Karur hand-block print fabric", "Handloom cotton sarees with temple border (Diwali)"], "months": ["January", "October"]}, "Footwear Retail": {"nic": "47713", "products": ["PU leather school shoes (Ambur cluster — back-to-school)", "Chennai leather formal shoes — Ambur/Vellore tanneries", "Women's heeled leather sandals (pre-summer clearance)"], "months": ["June", "October"]}, "Health Food Retail": {"nic": "47219", "products": ["Moringa powder & capsules (Salem — world's largest producer, Pongal health)", "Organic turmeric powder (Erode — Yellow City, post-Pongal health)", "Millet-based health snacks — ragi & kambu (post-Pongal wellness)", "Filter coffee powder (Coimbatore / Nilgiris blend)", "Tamarind paste & sambar powder (Diwali festive cooking)", "Jackfruit chips & banana wafers (summer harvest peak)"], "months": ["January", "May", "October"]}, "Beauty & Cosmetics Retail": {"nic": "47722", "products": ["Turmeric & neem face packs (Pongal beauty gifting)", "Coconut hair oil (summer peak care season Apr–Jun)", "Natural henna powder (Madurai — Pongal/Pongal festival use)", "Kumkumadi tailam (Ayurvedic facial oil — Pongal gifting)"], "months": ["January", "April"]}, "Carpets & Rugs Retail": {"nic": "47531", "products": ["Bhavani Jamakkalam handloom durrie (GI — Pongal gifting)"], "months": ["January"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Swamimalai bronze icons — Navratri / Diwali ritual gifting", "Thanjavur paintings & art plates (GI — Pongal gifting)"], "months": ["January", "October"]}, "Jewellery Retail": {"nic": "47733", "products": ["Temple Jewellery of Nagercoil (GI — Diwali bridal season)"], "months": ["October"]}}, "Karnataka": {"Fabric Retail": {"nic": "47510", "products": ["Pure Mysore silk sarees (GI — Dasara festive peak)", "Mysore crepe & georgette silk sarees (Dasara peak)", "Ilkal cotton-silk sarees (North Karnataka GI)", "Kasuti embroidered silk dupattas (Ugadi gifting)", "Khun fabric (Dharwad weave — Dasara)", "Mysore silk dhoti sets (traditional — Dasara men's wear)"], "months": ["March", "October"]}, "Apparel Manufacturing": {"nic": "14109", "products": ["Bengaluru cut-and-sew garment exports (H&M, GAP supply chain)", "Women's blouses & tailored tops (Bengaluru export units)", "Premium co-ord sets for D2C brands (pre-Navratri dispatch)", "Activewear sets (Nike, Decathlon BLR suppliers)"], "months": ["August", "September"]}, "Food & Grocery Retail": {"nic": "47211", "products": ["Chikmagalur single-origin arabica coffee beans (Diwali gifting)", "Coorg robusta filter coffee blend (Diwali hampers)", "Sleepy Owl cold brew concentrate (Valentine's gifting)", "Blue Tokai Attikan Estate coffee pods (Diwali gourmet)", "Kofee Kong monsooned malabar (post-harvest season Mar–Apr)", "Karnataka cardamom chai blend (Diwali hampers)"], "months": ["February", "March", "October"]}, "Beauty & Cosmetics Retail": {"nic": "47722", "products": ["Mysore Sandal Soap (GI — Diwali gifting peak, KSSDL)", "Pure sandalwood body lotion (Mysore — Dasara gifting)", "Vetiver & Neem face wash (summer skincare Apr–Jun)", "Kumkumadi serum (Bengaluru wellness brands — New Year health)", "Brahmi hair oil (Dasara gifting)", "Mysore sandalwood oil (GI manufactured — Diwali gifting)"], "months": ["January", "April", "October"]}, "Health Food Retail": {"nic": "47219", "products": ["Organic Coorg honey (GI-certified — Diwali gift hampers)", "Coorg pepper & cardamom (spice estate boxes — pre-festive)", "Karnataka jackfruit chips & dried mango (summer produce)", "Ragi malt & health mixes (Bengaluru D2C — New Year fitness)", "Ashwagandha latte mix (New Year wellness peak)"], "months": ["January", "May", "September", "October"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Channapatna toys & dolls (GI — Dasara children's gifting)", "Mysore agarbathi / incense sticks (GI — Dasara/Diwali ritual)", "Mysore rosewood inlay decorative boxes (GI — Dasara gifting)", "Karnataka bronzeware figurines (GI — Dasara religious gifting)", "Ganjifa cards of Mysore (GI — collector's edition, Dasara)"], "months": ["October"]}, "Carpets & Rugs Retail": {"nic": "47531", "products": ["Navalgund durries (GI Karnataka — Dasara home refresh)"], "months": ["October"]}}, "Punjab": {"Hosiery & Knitwear Manufacturing": {"nic": "14109", "products": ["Men's cotton round-neck T-shirts (Ludhiana hosiery — summer dispatch)", "Thermal innerwear sets (Ludhiana — pre-winter dispatch Sep–Oct)", "Sports socks & ankle socks in 6-pack bundles", "Women's leggings & tights", "Kids' ribbed undershirt & briefs set", "Seamless bra packs (Ludhiana lingerie cluster)"], "months": ["July", "August", "September"]}, "Woollen Knitwear Manufacturing": {"nic": "14301", "products": ["Ludhiana acrylic sweaters — round-neck & V-neck (India's #1 source)", "Men's woollen half-zip pullovers", "Turtleneck cardigans — women (trending Sep–Nov)", "Kids' school sweaters with zipper (winter school uniform)", "Woollen Patiala caps & beanies", "Matching muffler-glove-cap gift sets (Meesho top-seller)", "Phulkari-embroidered woollen shawls"], "months": ["October"]}, "Clothing Retail": {"nic": "47711", "products": ["Phulkari embroidered dupatta (Punjab GI — Lohri & wedding season)", "Patiala salwar-suit sets (Amazon IN Top-50 women's ethnic)", "Amritsari jutti / mojari (hand-stitched leather, Amritsar artisans)", "Bridal Phulkari lehenga sets (wedding season Oct–Feb)", "Men's kurta-pajama with Phulkari pocket square"], "months": ["January", "October", "November"]}, "Health Food Retail": {"nic": "47219", "products": ["Multiflora Punjab honey (pre-winter gifting peak)", "Amritsar walnuts & mixed dry fruit boxes — winter onset gifting", "Makki di atta (corn flour) — winter comfort food (Lohri peak Jan)", "Sarson da saag ready-to-cook kit (winter dish — Lohri Jan peak)", "Organic desi ghee (Anand cooperative — winter nutrition)", "Pinni (traditional energy ladoo) — Lohri winter sweet Jan"], "months": ["January", "October", "November"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Amritsar steel dastarkhwan langar thali sets (Baisakhi peak Apr)", "Brass Sikh khanda wall art (Baisakhi gifting Apr)", "Rumala sahib (decorative cloth — Gurpurab peak Nov)"], "months": ["April", "November"]}, "Woollen Fabric Manufacturing": {"nic": "13912", "products": ["Acrylic-blend sweater knit fabric (Ludhiana mills — B2B pre-winter)", "Merino wool blend jersey (premium garment supply)"], "months": ["August"]}}, "Rajasthan": {"Fabric Retail": {"nic": "47510", "products": ["Sanganer hand-block print cotton fabric (Jaipur — Diwali fashion)", "Bagru natural-dye block-print dress material", "Bandhani georgette sarees (Jodhpur/Barmer — Navratri peak)", "Leheriya tie-dye dupattas & sarees (Navratri colour play)", "Kota Doria sarees (GI — ultra-light weave, Diwali & wedding)", "Dabu mud-resist print fabric", "Ajrak block-print fabric (Rajasthan-Gujarat border craft)"], "months": ["September", "October"]}, "Clothing Retail": {"nic": "47711", "products": ["Rajasthani ghagra-choli sets with mirror work (Diwali peak)", "Bandhej sarees & suits (Navratri demand)", "Gota patti embroidered lehengas (Jaipur — wedding staple)", "Men's Jodhpuri breeches & sherwani sets (wedding season)", "Jaipuri quilted kaftans", "Anarkali suits with Rajasthani block-print"], "months": ["September", "October", "November"]}, "Handicrafts & Home Décor": {"nic": "47190", "products": ["Jaipur blue pottery mugs, plates & vases (GI — Diwali gifting)", "Jodhpur sheesham wood furniture & side tables (Diwali home décor)", "Marble Ganesh & Laxmi idols (Makrana white marble — Diwali puja)", "Jodhpur bone inlay decorative trays", "Rajasthani embroidered table runners & napkins — wedding trousseau", "Papier-mâché decorative bowls (Jaipur artisans)", "Camel leather cushion covers (Jodhpur artisans)"], "months": ["October", "November"]}, "Imitation Jewellery Manufacturing": {"nic": "32120", "products": ["Kundan polki bridal set with meenakari (Jaipur — gem capital)", "Silver oxidised earrings with embedded gems (Jaipur silversmith belt)", "Lac bangle sets (Jaipur lac artisans — Navratri top-seller)", "Tourmaline, garnet & moonstone rings (Jaipur lapidary)", "Gold-polished Jadau necklace sets (wedding season Nov–Feb)"], "months": ["September", "October", "November"]}, "Carpets & Rugs Retail": {"nic": "47531", "products": ["Jaipur hand-woven wool dhurrie rugs (Diwali home refresh)", "Embroidered Rajasthani mirror-work cushion covers", "Jaipuri razai quilt (block-print cotton — winter bedding peak)", "Handmade kilim-style area rugs"], "months": ["October", "November"]}, "Sweets & Confectionery Retail": {"nic": "47215", "products": ["Rajasthani ghewar (Jaipur GI — Teej & Raksha Bandhan peak Aug)", "Besan ladoo & churma (Diwali mithai)", "Bikaner namkeen & bhujia (GI snack — Diwali snacking peak)", "Mawa kachori & malpua gift boxes (Makar Sankranti Jan)", "Halwai-style dry fruit barfi sets (Diwali gifting)"], "months": ["January", "August", "October"]}, "Health Food Retail": {"nic": "47219", "products": ["Holi gulal powder packs (Rajasthan — origin of Holi colours)"], "months": ["March"]}}, "West Bengal": {"Clothing Retail": {"nic": "47711", "products": ["Tant cotton sarees (Shantipur/Phulia — Durga Puja wardrobe essential)", "Baluchari silk sarees (Bishnupur GI — Durga Puja luxury wear)", "Jamdani muslin sarees (UNESCO heritage — Durga Puja)", "Kantha stitch cotton sarees & dupattas (Durga Puja)", "Dhuti-panjabi sets (men's traditional Puja wear)", "Dhakai cotton sarees (Poila Boishakh — Bengali New Year Apr)", "New collection designer sarees launch (Poila Boishakh fashion)"], "months": ["April", "October"]}, "Fabric Retail": {"nic": "47510", "products": ["Tant cotton fabric by the metre (Shantipur mill — Puja season)", "Kantha-embroidered fabric panels (Durga Puja gifting)", "Matka silk fabric (Malda — Durga Puja occasion)"], "months": ["September", "October"]}, "Gifting & Cultural Retail": {"nic": "47190", "products": ["Bankura horse terracotta figurines (GI — Durga Puja gifting)", "Kalighat painting art prints (Durga Puja cultural gifting)", "Dokra brass figurines (tribal metal craft — Durga Puja)", "Shantiniketan leather bag (hand-painted Batik, Bolpur)", "Bamboo craft decorative items (Poila Boishakh)", "Bishnupur silk stole & wall art (Durga Puja)", "Nakshi Kantha embroidered quilt (GI — Durga Puja gifting)"], "months": ["April", "October"]}, "Tea & Coffee Wholesale": {"nic": "46306", "products": ["Darjeeling First Flush tea (spring harvest Mar–Apr — world's finest)", "Darjeeling Second Flush muscatel tea (May–Jun harvest)", "Darjeeling whole-leaf TGFOP1 tea boxes (Diwali gourmet gifting)", "Darjeeling white tea (premium wellness — gifting season)", "Dooars CTC breakfast tea (mass market — monsoon drinking season)"], "months": ["March", "May", "August", "October"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Clay Durga idols (Kumartuli Kolkata — Durga Puja peak)", "Dhunuchi brass incense burner (Durga Puja dance ritual)", "Lokkhi saaj — Lakshmi Puja tray set (Oct post-Durga Puja)", "Terracotta Lakshmi foot-prints — Alpona craft (Diwali)", "Bamboo & jute return gift baskets (Durga Puja)"], "months": ["October"]}, "Health Food Retail": {"nic": "47219", "products": ["Sundarbans honey (mangrove monofloral — winter harvest peak)", "Patali gur (date palm jaggery, Nadia — winter harvest Nov–Feb)", "Bengal Gobindobhog rice (GI — Puja ritual cooking)", "Mishti doi (sweet curd) mix — winter festive season", "Darjeeling tea health assortment boxes (Puja gifting)"], "months": ["October", "November"]}}, "Kerala": {"Food & Grocery Retail": {"nic": "47211", "products": ["Idukki cardamom pods (GI — Onam gift hamper peak Aug–Sep)", "Wayanad black pepper (Malabar pepper GI — post-harvest dispatch)", "Kerala vanilla pods & vanilla extract (Idukki — GI)", "Cinnamon quills (Kottayam — Onam spice hampers)", "Kerala cold-pressed coconut oil (Onam home cooking staple)", "Nutmeg & mace (Thrissur — Onam specialty)", "Kerala Onam spice estate gift box (Onasadya cooking pack)", "Alleppey Green Cardamom (GI — post-harvest export peak)"], "months": ["August", "October"]}, "Health Food Retail": {"nic": "47219", "products": ["Kottakkal Arya Vaidya Sala products (GI Ayurveda — New Year health)", "Brahmi & Amla Ayurvedic hair masks", "Triphala churna (Thrissur Ayurvedic brands)", "Murivenna pain relief oil (Onam health gifting)", "Ashwagandha & Shatavari capsule packs"], "months": ["January", "August"]}, "Clothing Retail": {"nic": "47711", "products": ["Kerala kasavu saree (GI — Onam single biggest saree event India)", "Kerala mundum neriyathum — women's traditional set (Onam)", "Men's off-white cotton mundu with gold border (Onam)", "Kannur handloom cotton sarees (Onam collection)", "Kasavu-worked cotton dress material (Onam launch)", "Vishu special kasavu set (Kerala New Year gifting Apr)"], "months": ["April", "August"]}, "Carpets & Rugs Retail": {"nic": "47531", "products": ["Alappuzha coir doormat (GI — Onam home décor peak)", "Coir yoga mat (eco-friendly — New Year wellness market)", "Woven coir storage baskets (Onam home organising)", "Natural coir bed mattress (Alappuzha factory — year-round)"], "months": ["January", "August", "October"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Kerala Ashtamangalya puja set (brass — Onam)", "Guruvayur Krishna idol (brass, Thrissur — Onam gifting)", "Kathakali mask (Thrissur artisans — Onam cultural gifting)", "Onam pookalam kit (artificial flower set — porch decoration)", "Elephant figural brass lamps — nila vilakku (Onam)", "Bamboo Onam gift hampers (spices + kasavu saree + oil box)", "Aranmula Kannadi metal mirror (GI — Onam gifting, Chingam month)"], "months": ["August"]}, "Beauty & Cosmetics Retail": {"nic": "47722", "products": ["Virgin coconut oil for hair & skin (summer care peak Apr–Jun)", "Coconut milk shampoo & conditioner (summer hair care)", "Kera herbal hair oil (Onam beauty gifting)", "Rosemary-coconut oil blend (summer hair care)", "Ayurvedic kumkumadi face serum (Diwali gifting)"], "months": ["April", "August", "October"]}}, "Telangana": {"Fabric Retail": {"nic": "47510", "products": ["Pochampally ikat silk sarees (GI — Bathukamma Dussehra peak)", "Siddipet gollabama cotton sarees (Bathukamma festival)", "Gadwal silk sarees with zari (Dussehra)", "Narayanpet silk-cotton sarees (Ugadi gifting Mar)", "Ikat fabric by the metre (B2B fashion designers — festive season)"], "months": ["March", "October"]}, "Clothing Retail": {"nic": "47711", "products": ["Hyderabadi embroidery kurta sets (Bathukamma/Dussehra)", "Ikat print co-ord sets (Dussehra trending Myntra workwear)", "Hyderabadi sherwani with Zardozi (Eid — large Muslim demographic)", "Salwar suits with ikat motif block-print (Dussehra)", "Men's Hyderabadi kurta-pajama sets (Dussehra)"], "months": ["April", "October"]}, "Beauty & Cosmetics Retail": {"nic": "47722", "products": ["Hyderabad pharma-grade vitamin C supplements (New Year health)", "Nutraceutical hair biotin gummies (Hyderabad pharma brands)", "Sunscreen SPF 50 PA++++ (dermatologist-backed — summer peak)", "Clinical skincare serums (Hyderabad derma brands)", "Collagen supplements (pharma grade — New Year wellness)"], "months": ["January", "April"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Bidriware silver-inlaid vases & trays (Bidar GI — Dussehra gifting)", "Nirmal painted wooden toys (GI — Adilabad, Dussehra gifting)", "Cheriyal scroll painting (Warangal folk art — Dussehra)", "Pembarthi brass repoussé work (Dussehra décor gifting)"], "months": ["October"]}, "Jewellery Retail": {"nic": "47733", "products": ["Silver filigree of Karimnagar (GI — Dussehra jewellery gifting)"], "months": ["October"]}, "Health Food Retail": {"nic": "47219", "products": ["Hyderabad haleem-in-a-box (Ramadan/Eid peak — Apr typically)", "Nizamabad turmeric (GI — bright yellow, post-harvest peak)", "Sona Masuri rice (Warangal GI — Amazon Premium Grocery)", "Jowar & bajra millet health mix (tribal belt harvest)"], "months": ["April", "October"]}, "General Retail": {"nic": "47190", "products": ["Gaming headsets & mechanical keyboards (Diwali tech gifting)", "Smart home speakers & IoT switches (Diwali tech gifting)", "Noise-cancelling earbuds (Diwali peak Hyderabad)", "Ergonomic laptop stands & desk accessories (New Year WFH setup)"], "months": ["January", "October"]}}, "Assam": {"Fabric Retail": {"nic": "47510", "products": ["Muga silk sarees (GI — Bihu festive peak, golden silk of Assam)", "Assam silk gamosa (GI cotton weave — Diwali/gifting)"], "months": ["April", "October"]}, "Clothing Retail": {"nic": "47711", "products": ["Assam Bihu mekhela chador sets (Rongali Bihu Apr)"], "months": ["April"]}, "Tea & Coffee Wholesale": {"nic": "46306", "products": ["Assam orthodox CTC tea (post-first-flush harvest Mar–Apr)"], "months": ["March"]}}, "Odisha": {"Fabric Retail": {"nic": "47510", "products": ["Orissa ikat handloom sarees (GI — Dussehra/Diwali peak)", "Kotpad handloom fabric (GI — tribal natural dye, Diwali)", "Sambalpuri ikat sarees (GI Odisha — Dussehra/Nuakhai)"], "months": ["October"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Konark stone carvings — Sun Temple motifs (Diwali gifting)"], "months": ["October"]}}, "Himachal Pradesh": {"Clothing Retail": {"nic": "47711", "products": ["Kullu shawl (GI — winter onset, Diwali gifting Oct–Nov)"], "months": ["October"]}, "Woollen Knitwear Manufacturing": {"nic": "14301", "products": ["Himachal woollen cap & muffler sets (winter onset Oct)"], "months": ["October"]}, "Food & Grocery Retail": {"nic": "47211", "products": ["Kangra tea gift boxes (GI — Diwali / autumn harvest)"], "months": ["October"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Chamba rumal (GI embroidered handkerchief — winter gifting)"], "months": ["November"]}}, "Madhya Pradesh": {"Fabric Retail": {"nic": "47510", "products": ["Chanderi sarees (GI — Diwali & wedding season)", "Maheshwari silk-cotton sarees (GI — Diwali peak)", "Bagh hand-block print fabric (GI — Diwali festive fashion)"], "months": ["October"]}}, "Bihar": {"Handicrafts & Religious Articles": {"nic": "47735", "products": ["Madhubani paintings (GI — Diwali gifting peak)", "Applique khatwa work (GI — Diwali festive décor)", "Sujini embroidery quilts (GI — winter festive Bihar)", "Chhath Puja soop (bamboo basket) ritual sets — Oct/Nov peak", "Sikki grass craft products (GI Bihar — Chhath Puja gifting)"], "months": ["October", "November"]}}, "Andhra Pradesh": {"Fabric Retail": {"nic": "47510", "products": ["Srikalahasti Kalamkari hand-painted sarees (GI — Diwali)", "Venkatagiri cotton sarees (GI — Diwali & wedding season)", "Mangalagiri cotton sarees (GI — Dussehra/Diwali)"], "months": ["October"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Kondapalli Bommallu wooden toys (GI — Diwali gifting)"], "months": ["October"]}, "Sweets & Confectionery Retail": {"nic": "47215", "products": ["Tirupati ladoo prasad packs (GI — peak pilgrimage Brahmotsavam Mar)"], "months": ["March"]}}, "Chhattisgarh": {"Handicrafts & Religious Articles": {"nic": "47735", "products": ["Bastar Dhokra metal craft (GI — Diwali gifting)", "Bastar wooden craft sculptures (GI — Diwali home décor)", "Bastar iron craft wall art (GI — Dussehra/Diwali)"], "months": ["October"]}}, "Goa": {"Food & Grocery Retail": {"nic": "47211", "products": ["Goa cashew nuts & feni (Christmas/New Year gifting peak Dec)", "Goa summer cashew feni cocktail kits (summer tourism peak)"], "months": ["May", "December"]}, "Sweets & Confectionery Retail": {"nic": "47215", "products": ["Christmas plum cake & Christmas hampers (Goa — Dec peak)"], "months": ["December"]}}, "Jammu & Kashmir": {"Clothing Retail": {"nic": "47711", "products": ["Kashmiri pashmina shawls (GI — winter onset gifting Nov–Jan)", "Kashmiri kani shawls (GI — winter bridal gifting)"], "months": ["November"]}, "Carpets & Rugs Retail": {"nic": "47531", "products": ["Kashmiri carpet — hand-knotted silk (GI — winter luxury market)"], "months": ["November"]}, "Food & Grocery Retail": {"nic": "47211", "products": ["Kashmiri saffron (GI — Diwali gifting, post-harvest Oct–Nov)"], "months": ["October"]}, "Health Food Retail": {"nic": "47219", "products": ["Kashmiri walnut kernels (GI — autumn harvest Oct–Nov)", "Kashmiri dry fruit hampers — badam, akhrot, khumani (winter Dec)"], "months": ["October", "December"]}, "Handicrafts & Religious Articles": {"nic": "47735", "products": ["Kashmiri papier-mâché handicrafts (GI — Diwali gifting)"], "months": ["October"]}}};
 const MONTH_DATA = {"October":{"Clothing Retail":{"Maharashtra":5,"Gujarat":1,"Uttar Pradesh":5,"Punjab":2,"Rajasthan":3,"West Bengal":5,"Telangana":4,"Himachal Pradesh":1},"Fabric Retail":{"Maharashtra":1,"Tamil Nadu":3,"Karnataka":5,"Rajasthan":5,"West Bengal":2,"Telangana":4,"Assam":1,"Odisha":3,"Madhya Pradesh":3,"Andhra Pradesh":3},"Woollen Knitwear Manufacturing":{"Punjab":7,"Himachal Pradesh":1},"Food & Grocery Retail":{"Maharashtra":3,"Karnataka":4,"Kerala":3,"Himachal Pradesh":1,"Jammu & Kashmir":1},"Health Food Retail":{"Uttar Pradesh":1,"Tamil Nadu":1,"Karnataka":1,"Punjab":2,"West Bengal":2,"Telangana":3,"Jammu & Kashmir":1},"Sweets & Confectionery Retail":{"Rajasthan":3},"Tea & Coffee Wholesale":{"West Bengal":2},"Handicrafts & Religious Articles":{"Uttar Pradesh":6,"Tamil Nadu":1,"Karnataka":5,"West Bengal":5,"Telangana":4,"Odisha":1,"Bihar":3,"Andhra Pradesh":1,"Chhattisgarh":3,"Jammu & Kashmir":1},"Carpets & Rugs Retail":{"Uttar Pradesh":4,"Karnataka":1,"Rajasthan":3,"Kerala":1},"Handicrafts & Home D\u00e9cor":{"Rajasthan":6},"Gifting & Cultural Retail":{"West Bengal":6},"Leather Goods Manufacturing":{"Maharashtra":6,"Uttar Pradesh":5},"Beauty & Cosmetics Retail":{"Maharashtra":3,"Karnataka":4,"Kerala":1},"Imitation Jewellery Manufacturing":{"Gujarat":1,"Uttar Pradesh":2,"Rajasthan":1},"Footwear Retail":{"Tamil Nadu":1},"Jewellery Retail":{"Tamil Nadu":1,"Telangana":1},"Utensils & Home Goods Retail":{"Maharashtra":1},"Utensils & Cookware Retail":{"Gujarat":4},"General Retail":{"Telangana":3}},"September":{"Clothing Retail":{"Maharashtra":1,"Gujarat":5,"Rajasthan":1},"Wholesale Clothing":{"Gujarat":6},"Apparel Manufacturing":{"Maharashtra":2,"Karnataka":1},"Hosiery & Knitwear Manufacturing":{"Punjab":1},"Fabric Retail":{"Rajasthan":2,"West Bengal":1},"Health Food Retail":{"Karnataka":1},"Handicrafts & Religious Articles":{"Uttar Pradesh":1},"Beauty & Cosmetics Retail":{"Maharashtra":1},"Imitation Jewellery Manufacturing":{"Gujarat":4,"Uttar Pradesh":2,"Rajasthan":1}},"November":{"Clothing Retail":{"Maharashtra":1,"Uttar Pradesh":1,"Punjab":2,"Rajasthan":2,"Jammu & Kashmir":2},"Food & Grocery Retail":{"Maharashtra":1},"Health Food Retail":{"Uttar Pradesh":1,"Punjab":1,"West Bengal":3},"Handicrafts & Religious Articles":{"Punjab":1,"Himachal Pradesh":1,"Bihar":2},"Handicrafts & Home D\u00e9cor":{"Rajasthan":1},"Carpets & Rugs Retail":{"Rajasthan":1,"Jammu & Kashmir":1},"Imitation Jewellery Manufacturing":{"Gujarat":1,"Uttar Pradesh":1,"Rajasthan":3}},"April":{"Clothing Retail":{"Uttar Pradesh":1,"West Bengal":2,"Kerala":1,"Telangana":1,"Assam":1},"Fabric Retail":{"Assam":1},"Food & Grocery Retail":{"Maharashtra":2,"Uttar Pradesh":1,"Goa":1},"Health Food Retail":{"Tamil Nadu":1,"Karnataka":1,"Telangana":1},"Carpets & Rugs Retail":{"Uttar Pradesh":1},"Handicrafts & Religious Articles":{"Punjab":2},"Gifting & Cultural Retail":{"West Bengal":1},"Beauty & Cosmetics Retail":{"Maharashtra":1,"Tamil Nadu":1,"Karnataka":1,"Kerala":3,"Telangana":1}},"January":{"Clothing Retail":{"Punjab":1},"Fabric Retail":{"Tamil Nadu":3},"Health Food Retail":{"Maharashtra":4,"Uttar Pradesh":1,"Tamil Nadu":4,"Karnataka":2,"Punjab":3,"Kerala":4},"Wholesale Food & Spices":{"Gujarat":1},"Sweets & Confectionery Retail":{"Rajasthan":1},"Carpets & Rugs Retail":{"Tamil Nadu":1,"Kerala":1},"Handicrafts & Religious Articles":{"Tamil Nadu":1},"Beauty & Cosmetics Retail":{"Maharashtra":1,"Tamil Nadu":3,"Karnataka":1,"Telangana":4},"General Retail":{"Telangana":1}},"August":{"Clothing Retail":{"Kerala":5},"Apparel Manufacturing":{"Maharashtra":3,"Tamil Nadu":1,"Karnataka":3},"Hosiery & Knitwear Manufacturing":{"Punjab":4},"Synthetic Fabric Manufacturing":{"Gujarat":1},"Cotton Knit Fabric Manufacturing":{"Tamil Nadu":2},"Woollen Fabric Manufacturing":{"Punjab":2},"Sweets & Confectionery Retail":{"Rajasthan":1},"Tea & Coffee Wholesale":{"West Bengal":1},"Food & Grocery Retail":{"Kerala":5},"Health Food Retail":{"Kerala":1},"Carpets & Rugs Retail":{"Kerala":2},"Handicrafts & Religious Articles":{"Kerala":7},"Beauty & Cosmetics Retail":{"Kerala":1}},"March":{"Apparel Manufacturing":{"Maharashtra":1},"Fabric Retail":{"Karnataka":1,"Telangana":1},"Food & Grocery Retail":{"Maharashtra":2,"Karnataka":1},"Wholesale Food & Spices":{"Gujarat":5},"Health Food Retail":{"Uttar Pradesh":2,"Rajasthan":1},"Tea & Coffee Wholesale":{"West Bengal":1,"Assam":1},"Sweets & Confectionery Retail":{"Andhra Pradesh":1}},"July":{"Apparel Manufacturing":{"Tamil Nadu":5},"Hosiery & Knitwear Manufacturing":{"Punjab":1},"Synthetic Fabric Manufacturing":{"Gujarat":5},"Cotton Knit Fabric Manufacturing":{"Tamil Nadu":2}},"June":{"Apparel Manufacturing":{"Tamil Nadu":1},"Food & Grocery Retail":{"Maharashtra":1},"Footwear Retail":{"Tamil Nadu":2}},"February":{"Health Food Retail":{"Maharashtra":1},"Food & Grocery Retail":{"Karnataka":1}},"May":{"Tea & Coffee Wholesale":{"West Bengal":1}},"December":{"Food & Grocery Retail":{"Goa":1},"Sweets & Confectionery Retail":{"Goa":1},"Health Food Retail":{"Jammu & Kashmir":1}}};
 const PRODUCTS_BY_CAT = {"Clothing Retail": [{"Product": "Oversized graphic tees (Dharavi garment belt)", "State": "Maharashtra", "Month": "October"}, {"Product": "Premium co-ord sets (Thane manufacturing units)", "State": "Maharashtra", "Month": "October"}, {"Product": "Anarkali suits & party-wear lehengas", "State": "Maharashtra", "Month": "October"}, {"Product": "Maternity & nursing wear (Mumbai D2C brands)", "State": "Maharashtra", "Month": "September"}, {"Product": "Men's bandhgala kurtas (festive formal wear)", "State": "Maharashtra", "Month": "October"}, {"Product": "Sequin & mirror-work blouses", "State": "Maharashtra", "Month": "October"}, {"Product": "Diwali special sarees — net & georgette", "State": "Maharashtra", "Month": "November"}, {"Product": "Garba costume sets — chaniya choli & mojari (Navratri peak)", "State": "Gujarat", "Month": "September"}, {"Product": "Kutch mirror-work dupattas", "State": "Gujarat", "Month": "September"}, {"Product": "Single-colour Bandhej sarees — Navratri", "State": "Gujarat", "Month": "September"}, {"Product": "Traditional Gujarati ghagra-choli", "State": "Gujarat", "Month": "September"}, {"Product": "White Navratri special kurta sets (men)", "State": "Gujarat", "Month": "September"}, {"Product": "Festival edition lehengas (post-Navratri wedding season)", "State": "Gujarat", "Month": "October"}, {"Product": "Banarasi silk sarees with zari brocade (Varanasi GI — bridal season peak)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Lucknowi chikankari kurta sets (hand-embroidered)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Chikankari palazzo-suit sets (Lucknow atelier belt)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Zardosi work lehengas & blouses (Lucknow bridal)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Banarasi brocade dupattas", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Georgette chikankari party-wear tops (Eid peak)", "State": "Uttar Pradesh", "Month": "April"}, {"Product": "Banarasi silk shawls (winter wedding season)", "State": "Uttar Pradesh", "Month": "November"}, {"Product": "Phulkari embroidered dupatta (Punjab GI — Lohri & wedding season)", "State": "Punjab", "Month": "January"}, {"Product": "Patiala salwar-suit sets (Amazon IN Top-50 women's ethnic)", "State": "Punjab", "Month": "November"}, {"Product": "Amritsari jutti / mojari (hand-stitched leather, Amritsar artisans)", "State": "Punjab", "Month": "October"}, {"Product": "Bridal Phulkari lehenga sets (wedding season Oct–Feb)", "State": "Punjab", "Month": "October"}, {"Product": "Men's kurta-pajama with Phulkari pocket square", "State": "Punjab", "Month": "November"}, {"Product": "Rajasthani ghagra-choli sets with mirror work (Diwali peak)", "State": "Rajasthan", "Month": "October"}, {"Product": "Bandhej sarees & suits (Navratri demand)", "State": "Rajasthan", "Month": "September"}, {"Product": "Gota patti embroidered lehengas (Jaipur — wedding staple)", "State": "Rajasthan", "Month": "November"}, {"Product": "Men's Jodhpuri breeches & sherwani sets (wedding season)", "State": "Rajasthan", "Month": "November"}, {"Product": "Jaipuri quilted kaftans", "State": "Rajasthan", "Month": "October"}, {"Product": "Anarkali suits with Rajasthani block-print", "State": "Rajasthan", "Month": "October"}, {"Product": "Tant cotton sarees (Shantipur/Phulia — Durga Puja wardrobe essential)", "State": "West Bengal", "Month": "October"}, {"Product": "Baluchari silk sarees (Bishnupur GI — Durga Puja luxury wear)", "State": "West Bengal", "Month": "October"}, {"Product": "Jamdani muslin sarees (UNESCO heritage — Durga Puja)", "State": "West Bengal", "Month": "October"}, {"Product": "Kantha stitch cotton sarees & dupattas (Durga Puja)", "State": "West Bengal", "Month": "October"}, {"Product": "Dhuti-panjabi sets (men's traditional Puja wear)", "State": "West Bengal", "Month": "October"}, {"Product": "Dhakai cotton sarees (Poila Boishakh — Bengali New Year Apr)", "State": "West Bengal", "Month": "April"}, {"Product": "New collection designer sarees launch (Poila Boishakh fashion)", "State": "West Bengal", "Month": "April"}, {"Product": "Kerala kasavu saree (GI — Onam single biggest saree event India)", "State": "Kerala", "Month": "August"}, {"Product": "Kerala mundum neriyathum — women's traditional set (Onam)", "State": "Kerala", "Month": "August"}, {"Product": "Men's off-white cotton mundu with gold border (Onam)", "State": "Kerala", "Month": "August"}, {"Product": "Kannur handloom cotton sarees (Onam collection)", "State": "Kerala", "Month": "August"}, {"Product": "Kasavu-worked cotton dress material (Onam launch)", "State": "Kerala", "Month": "August"}, {"Product": "Vishu special kasavu set (Kerala New Year gifting Apr)", "State": "Kerala", "Month": "April"}, {"Product": "Hyderabadi embroidery kurta sets (Bathukamma/Dussehra)", "State": "Telangana", "Month": "October"}, {"Product": "Ikat print co-ord sets (Dussehra trending Myntra workwear)", "State": "Telangana", "Month": "October"}, {"Product": "Hyderabadi sherwani with Zardozi (Eid — large Muslim demographic)", "State": "Telangana", "Month": "April"}, {"Product": "Salwar suits with ikat motif block-print (Dussehra)", "State": "Telangana", "Month": "October"}, {"Product": "Men's Hyderabadi kurta-pajama sets (Dussehra)", "State": "Telangana", "Month": "October"}, {"Product": "Assam Bihu mekhela chador sets (Rongali Bihu Apr)", "State": "Assam", "Month": "April"}, {"Product": "Kullu shawl (GI — winter onset, Diwali gifting Oct–Nov)", "State": "Himachal Pradesh", "Month": "October"}, {"Product": "Kashmiri pashmina shawls (GI — winter onset gifting Nov–Jan)", "State": "Jammu & Kashmir", "Month": "November"}, {"Product": "Kashmiri kani shawls (GI — winter bridal gifting)", "State": "Jammu & Kashmir", "Month": "November"}], "Apparel Manufacturing": [{"Product": "Export T-shirts & polo shirts (Mumbai-Thane corridor)", "State": "Maharashtra", "Month": "August"}, {"Product": "Sportswear & compression tights", "State": "Maharashtra", "Month": "August"}, {"Product": "Swimwear & beachwear (Mumbai coastal — summer peak)", "State": "Maharashtra", "Month": "May"}, {"Product": "Denim jeans & jeggings", "State": "Maharashtra", "Month": "August"}, {"Product": "Premium linen shirts (pre-festive dispatch)", "State": "Maharashtra", "Month": "September"}, {"Product": "Formal trousers & blazers", "State": "Maharashtra", "Month": "September"}, {"Product": "Export cotton round-neck T-shirts (Tirupur — 60% India knitwear)", "State": "Tamil Nadu", "Month": "July"}, {"Product": "Polo shirts with 2-button placket (Tirupur export)", "State": "Tamil Nadu", "Month": "July"}, {"Product": "Dry-fit sportswear & compression gym wear", "State": "Tamil Nadu", "Month": "July"}, {"Product": "Kids' cotton school uniforms (Tirupur — back-to-school June)", "State": "Tamil Nadu", "Month": "June"}, {"Product": "Athleisure jogger-tee co-ord sets", "State": "Tamil Nadu", "Month": "August"}, {"Product": "Women's cotton nightwear sets", "State": "Tamil Nadu", "Month": "July"}, {"Product": "Sublimation-printed graphic tees (domestic market)", "State": "Tamil Nadu", "Month": "July"}, {"Product": "Bengaluru cut-and-sew garment exports (H&M, GAP supply chain)", "State": "Karnataka", "Month": "August"}, {"Product": "Women's blouses & tailored tops (Bengaluru export units)", "State": "Karnataka", "Month": "August"}, {"Product": "Premium co-ord sets for D2C brands (pre-Navratri dispatch)", "State": "Karnataka", "Month": "September"}, {"Product": "Activewear sets (Nike, Decathlon BLR suppliers)", "State": "Karnataka", "Month": "August"}], "Leather Goods Manufacturing": [{"Product": "Structured leather tote bags (Dharavi leather cluster)", "State": "Maharashtra", "Month": "October"}, {"Product": "Laptop bags & office backpacks (Kurla units)", "State": "Maharashtra", "Month": "October"}, {"Product": "Handcrafted leather wallets — Diwali gifting", "State": "Maharashtra", "Month": "October"}, {"Product": "Crossbody sling bags", "State": "Maharashtra", "Month": "October"}, {"Product": "Leather passport holders & travel pouches", "State": "Maharashtra", "Month": "October"}, {"Product": "Genuine leather sandals (Dharavi artisans)", "State": "Maharashtra", "Month": "October"}, {"Product": "Agra leather sandals & juttis (shoe-making capital)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Kanpur tannery leather bags & wallets", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Genuine leather office briefcases (Kanpur leather district)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Leather-bound diaries & planners", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Suede casual loafers (Agra export units)", "State": "Uttar Pradesh", "Month": "October"}], "Health Food Retail": [{"Product": "Whey protein & mass gainer supplements (Mumbai gym culture)", "State": "Maharashtra", "Month": "January"}, {"Product": "Greek yogurt parfait combos", "State": "Maharashtra", "Month": "February"}, {"Product": "Organic ashwagandha capsules", "State": "Maharashtra", "Month": "January"}, {"Product": "Plant-based protein bars", "State": "Maharashtra", "Month": "January"}, {"Product": "Makhana snack packs", "State": "Maharashtra", "Month": "January"}, {"Product": "Thandai mix (Mathura — Holi special drink, March)", "State": "Uttar Pradesh", "Month": "March"}, {"Product": "Mathura peda gift boxes (Diwali mithai gifting)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Petha candy (Agra GI — peaks Holi & tourist trade year-round)", "State": "Uttar Pradesh", "Month": "March"}, {"Product": "Organic gur (jaggery) from Muzaffarnagar — winter cane harvest", "State": "Uttar Pradesh", "Month": "November"}, {"Product": "Chyawanprash (Dabur Ghaziabad plant — winter immunity peak)", "State": "Uttar Pradesh", "Month": "January"}, {"Product": "Moringa powder & capsules (Salem — world's largest producer, Pongal health)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Organic turmeric powder (Erode — Yellow City, post-Pongal health)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Millet-based health snacks — ragi & kambu (post-Pongal wellness)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Filter coffee powder (Coimbatore / Nilgiris blend)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Tamarind paste & sambar powder (Diwali festive cooking)", "State": "Tamil Nadu", "Month": "October"}, {"Product": "Jackfruit chips & banana wafers (summer harvest peak)", "State": "Tamil Nadu", "Month": "May"}, {"Product": "Organic Coorg honey (GI-certified — Diwali gift hampers)", "State": "Karnataka", "Month": "October"}, {"Product": "Coorg pepper & cardamom (spice estate boxes — pre-festive)", "State": "Karnataka", "Month": "September"}, {"Product": "Karnataka jackfruit chips & dried mango (summer produce)", "State": "Karnataka", "Month": "May"}, {"Product": "Ragi malt & health mixes (Bengaluru D2C — New Year fitness)", "State": "Karnataka", "Month": "January"}, {"Product": "Ashwagandha latte mix (New Year wellness peak)", "State": "Karnataka", "Month": "January"}, {"Product": "Multiflora Punjab honey (pre-winter gifting peak)", "State": "Punjab", "Month": "October"}, {"Product": "Amritsar walnuts & mixed dry fruit boxes — winter onset gifting", "State": "Punjab", "Month": "October"}, {"Product": "Makki di atta (corn flour) — winter comfort food (Lohri peak Jan)", "State": "Punjab", "Month": "January"}, {"Product": "Sarson da saag ready-to-cook kit (winter dish — Lohri Jan peak)", "State": "Punjab", "Month": "January"}, {"Product": "Organic desi ghee (Anand cooperative — winter nutrition)", "State": "Punjab", "Month": "November"}, {"Product": "Pinni (traditional energy ladoo) — Lohri winter sweet Jan", "State": "Punjab", "Month": "January"}, {"Product": "Holi gulal powder packs (Rajasthan — origin of Holi colours)", "State": "Rajasthan", "Month": "March"}, {"Product": "Sundarbans honey (mangrove monofloral — winter harvest peak)", "State": "West Bengal", "Month": "November"}, {"Product": "Patali gur (date palm jaggery, Nadia — winter harvest Nov–Feb)", "State": "West Bengal", "Month": "November"}, {"Product": "Bengal Gobindobhog rice (GI — Puja ritual cooking)", "State": "West Bengal", "Month": "October"}, {"Product": "Mishti doi (sweet curd) mix — winter festive season", "State": "West Bengal", "Month": "November"}, {"Product": "Darjeeling tea health assortment boxes (Puja gifting)", "State": "West Bengal", "Month": "October"}, {"Product": "Kottakkal Arya Vaidya Sala products (GI Ayurveda — New Year health)", "State": "Kerala", "Month": "January"}, {"Product": "Brahmi & Amla Ayurvedic hair masks", "State": "Kerala", "Month": "January"}, {"Product": "Triphala churna (Thrissur Ayurvedic brands)", "State": "Kerala", "Month": "January"}, {"Product": "Murivenna pain relief oil (Onam health gifting)", "State": "Kerala", "Month": "August"}, {"Product": "Ashwagandha & Shatavari capsule packs", "State": "Kerala", "Month": "January"}, {"Product": "Hyderabad haleem-in-a-box (Ramadan/Eid peak — Apr typically)", "State": "Telangana", "Month": "April"}, {"Product": "Nizamabad turmeric (GI — bright yellow, post-harvest peak)", "State": "Telangana", "Month": "October"}, {"Product": "Sona Masuri rice (Warangal GI — Amazon Premium Grocery)", "State": "Telangana", "Month": "October"}, {"Product": "Jowar & bajra millet health mix (tribal belt harvest)", "State": "Telangana", "Month": "October"}, {"Product": "Kashmiri walnut kernels (GI — autumn harvest Oct–Nov)", "State": "Jammu & Kashmir", "Month": "October"}, {"Product": "Kashmiri dry fruit hampers — badam, akhrot, khumani (winter Dec)", "State": "Jammu & Kashmir", "Month": "December"}], "Food & Grocery Retail": [{"Product": "Alphonso mango pulp (Ratnagiri GI) — summer harvest peak Apr–Jun", "State": "Maharashtra", "Month": "May"}, {"Product": "Alphonso mango ready-to-eat pulp cans (Devgad/Ratnagiri)", "State": "Maharashtra", "Month": "May"}, {"Product": "Puranpoli mix (Holi / Gudi Padwa festive — March)", "State": "Maharashtra", "Month": "March"}, {"Product": "Gudi Padwa special mithai hampers (Maharashtra New Year)", "State": "Maharashtra", "Month": "March"}, {"Product": "Malvani masala blends — festive cooking season", "State": "Maharashtra", "Month": "October"}, {"Product": "Goda masala (Maharashtra signature spice blend)", "State": "Maharashtra", "Month": "October"}, {"Product": "Sol kadhi concentrate (Konkan coast — summer-monsoon cooling drink)", "State": "Maharashtra", "Month": "June"}, {"Product": "Kolhapuri chilli powder", "State": "Maharashtra", "Month": "October"}, {"Product": "Nagpur orange gift boxes (GI Vidarbha oranges — winter harvest Nov)", "State": "Maharashtra", "Month": "November"}, {"Product": "Allahabad Surkha guava (GI — summer harvest Apr–Jun)", "State": "Uttar Pradesh", "Month": "April"}, {"Product": "Chikmagalur single-origin arabica coffee beans (Diwali gifting)", "State": "Karnataka", "Month": "October"}, {"Product": "Coorg robusta filter coffee blend (Diwali hampers)", "State": "Karnataka", "Month": "October"}, {"Product": "Sleepy Owl cold brew concentrate (Valentine's gifting)", "State": "Karnataka", "Month": "February"}, {"Product": "Blue Tokai Attikan Estate coffee pods (Diwali gourmet)", "State": "Karnataka", "Month": "October"}, {"Product": "Kofee Kong monsooned malabar (post-harvest season Mar–Apr)", "State": "Karnataka", "Month": "March"}, {"Product": "Karnataka cardamom chai blend (Diwali hampers)", "State": "Karnataka", "Month": "October"}, {"Product": "Idukki cardamom pods (GI — Onam gift hamper peak Aug–Sep)", "State": "Kerala", "Month": "August"}, {"Product": "Wayanad black pepper (Malabar pepper GI — post-harvest dispatch)", "State": "Kerala", "Month": "October"}, {"Product": "Kerala vanilla pods & vanilla extract (Idukki — GI)", "State": "Kerala", "Month": "October"}, {"Product": "Cinnamon quills (Kottayam — Onam spice hampers)", "State": "Kerala", "Month": "August"}, {"Product": "Kerala cold-pressed coconut oil (Onam home cooking staple)", "State": "Kerala", "Month": "August"}, {"Product": "Nutmeg & mace (Thrissur — Onam specialty)", "State": "Kerala", "Month": "August"}, {"Product": "Kerala Onam spice estate gift box (Onasadya cooking pack)", "State": "Kerala", "Month": "August"}, {"Product": "Alleppey Green Cardamom (GI — post-harvest export peak)", "State": "Kerala", "Month": "October"}, {"Product": "Kangra tea gift boxes (GI — Diwali / autumn harvest)", "State": "Himachal Pradesh", "Month": "October"}, {"Product": "Goa cashew nuts & feni (Christmas/New Year gifting peak Dec)", "State": "Goa", "Month": "December"}, {"Product": "Goa summer cashew feni cocktail kits (summer tourism peak)", "State": "Goa", "Month": "May"}, {"Product": "Kashmiri saffron (GI — Diwali gifting, post-harvest Oct–Nov)", "State": "Jammu & Kashmir", "Month": "October"}], "Beauty & Cosmetics Retail": [{"Product": "Niacinamide face serums (Diwali gifting — D2C Mumbai brands)", "State": "Maharashtra", "Month": "October"}, {"Product": "SPF 50 tinted sunscreen (summer demand peak Apr–Jun)", "State": "Maharashtra", "Month": "April"}, {"Product": "Vitamin C brightening kits (Diwali gifting sets)", "State": "Maharashtra", "Month": "October"}, {"Product": "Luxury deo gift sets", "State": "Maharashtra", "Month": "October"}, {"Product": "Waterproof kajal & mascara (Navratri / festive season)", "State": "Maharashtra", "Month": "September"}, {"Product": "Hair growth oils (Ayurvedic Mumbai wellness startups)", "State": "Maharashtra", "Month": "January"}, {"Product": "Turmeric & neem face packs (Pongal beauty gifting)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Coconut hair oil (summer peak care season Apr–Jun)", "State": "Tamil Nadu", "Month": "April"}, {"Product": "Natural henna powder (Madurai — Pongal/Pongal festival use)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Kumkumadi tailam (Ayurvedic facial oil — Pongal gifting)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Mysore Sandal Soap (GI — Diwali gifting peak, KSSDL)", "State": "Karnataka", "Month": "October"}, {"Product": "Pure sandalwood body lotion (Mysore — Dasara gifting)", "State": "Karnataka", "Month": "October"}, {"Product": "Vetiver & Neem face wash (summer skincare Apr–Jun)", "State": "Karnataka", "Month": "April"}, {"Product": "Kumkumadi serum (Bengaluru wellness brands — New Year health)", "State": "Karnataka", "Month": "January"}, {"Product": "Brahmi hair oil (Dasara gifting)", "State": "Karnataka", "Month": "October"}, {"Product": "Mysore sandalwood oil (GI manufactured — Diwali gifting)", "State": "Karnataka", "Month": "October"}, {"Product": "Virgin coconut oil for hair & skin (summer care peak Apr–Jun)", "State": "Kerala", "Month": "April"}, {"Product": "Coconut milk shampoo & conditioner (summer hair care)", "State": "Kerala", "Month": "April"}, {"Product": "Kera herbal hair oil (Onam beauty gifting)", "State": "Kerala", "Month": "August"}, {"Product": "Rosemary-coconut oil blend (summer hair care)", "State": "Kerala", "Month": "April"}, {"Product": "Ayurvedic kumkumadi face serum (Diwali gifting)", "State": "Kerala", "Month": "October"}, {"Product": "Hyderabad pharma-grade vitamin C supplements (New Year health)", "State": "Telangana", "Month": "January"}, {"Product": "Nutraceutical hair biotin gummies (Hyderabad pharma brands)", "State": "Telangana", "Month": "January"}, {"Product": "Sunscreen SPF 50 PA++++ (dermatologist-backed — summer peak)", "State": "Telangana", "Month": "April"}, {"Product": "Clinical skincare serums (Hyderabad derma brands)", "State": "Telangana", "Month": "January"}, {"Product": "Collagen supplements (pharma grade — New Year wellness)", "State": "Telangana", "Month": "January"}], "Fabric Retail": [{"Product": "Solapuri chaddar (GI-tagged cotton bed cover — Diwali home gifting)", "State": "Maharashtra", "Month": "October"}, {"Product": "Kanchipuram silk sarees (GI) — Pongal gifting (new saree tradition)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Coimbatore cotton Kovai Kora sarees — Pongal new saree tradition", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Madurai cotton sarees (Diwali)", "State": "Tamil Nadu", "Month": "October"}, {"Product": "Salem silk sarees (Pongal season)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Karur hand-block print fabric", "State": "Tamil Nadu", "Month": "October"}, {"Product": "Handloom cotton sarees with temple border (Diwali)", "State": "Tamil Nadu", "Month": "October"}, {"Product": "Pure Mysore silk sarees (GI — Dasara festive peak)", "State": "Karnataka", "Month": "October"}, {"Product": "Mysore crepe & georgette silk sarees (Dasara peak)", "State": "Karnataka", "Month": "October"}, {"Product": "Ilkal cotton-silk sarees (North Karnataka GI)", "State": "Karnataka", "Month": "October"}, {"Product": "Kasuti embroidered silk dupattas (Ugadi gifting)", "State": "Karnataka", "Month": "March"}, {"Product": "Khun fabric (Dharwad weave — Dasara)", "State": "Karnataka", "Month": "October"}, {"Product": "Mysore silk dhoti sets (traditional — Dasara men's wear)", "State": "Karnataka", "Month": "October"}, {"Product": "Sanganer hand-block print cotton fabric (Jaipur — Diwali fashion)", "State": "Rajasthan", "Month": "October"}, {"Product": "Bagru natural-dye block-print dress material", "State": "Rajasthan", "Month": "October"}, {"Product": "Bandhani georgette sarees (Jodhpur/Barmer — Navratri peak)", "State": "Rajasthan", "Month": "September"}, {"Product": "Leheriya tie-dye dupattas & sarees (Navratri colour play)", "State": "Rajasthan", "Month": "September"}, {"Product": "Kota Doria sarees (GI — ultra-light weave, Diwali & wedding)", "State": "Rajasthan", "Month": "October"}, {"Product": "Dabu mud-resist print fabric", "State": "Rajasthan", "Month": "October"}, {"Product": "Ajrak block-print fabric (Rajasthan-Gujarat border craft)", "State": "Rajasthan", "Month": "October"}, {"Product": "Tant cotton fabric by the metre (Shantipur mill — Puja season)", "State": "West Bengal", "Month": "September"}, {"Product": "Kantha-embroidered fabric panels (Durga Puja gifting)", "State": "West Bengal", "Month": "October"}, {"Product": "Matka silk fabric (Malda — Durga Puja occasion)", "State": "West Bengal", "Month": "October"}, {"Product": "Pochampally ikat silk sarees (GI — Bathukamma Dussehra peak)", "State": "Telangana", "Month": "October"}, {"Product": "Siddipet gollabama cotton sarees (Bathukamma festival)", "State": "Telangana", "Month": "October"}, {"Product": "Gadwal silk sarees with zari (Dussehra)", "State": "Telangana", "Month": "October"}, {"Product": "Narayanpet silk-cotton sarees (Ugadi gifting Mar)", "State": "Telangana", "Month": "March"}, {"Product": "Ikat fabric by the metre (B2B fashion designers — festive season)", "State": "Telangana", "Month": "October"}, {"Product": "Muga silk sarees (GI — Bihu festive peak, golden silk of Assam)", "State": "Assam", "Month": "April"}, {"Product": "Assam silk gamosa (GI cotton weave — Diwali/gifting)", "State": "Assam", "Month": "October"}, {"Product": "Orissa ikat handloom sarees (GI — Dussehra/Diwali peak)", "State": "Odisha", "Month": "October"}, {"Product": "Kotpad handloom fabric (GI — tribal natural dye, Diwali)", "State": "Odisha", "Month": "October"}, {"Product": "Sambalpuri ikat sarees (GI Odisha — Dussehra/Nuakhai)", "State": "Odisha", "Month": "October"}, {"Product": "Chanderi sarees (GI — Diwali & wedding season)", "State": "Madhya Pradesh", "Month": "October"}, {"Product": "Maheshwari silk-cotton sarees (GI — Diwali peak)", "State": "Madhya Pradesh", "Month": "October"}, {"Product": "Bagh hand-block print fabric (GI — Diwali festive fashion)", "State": "Madhya Pradesh", "Month": "October"}, {"Product": "Srikalahasti Kalamkari hand-painted sarees (GI — Diwali)", "State": "Andhra Pradesh", "Month": "October"}, {"Product": "Venkatagiri cotton sarees (GI — Diwali & wedding season)", "State": "Andhra Pradesh", "Month": "October"}, {"Product": "Mangalagiri cotton sarees (GI — Dussehra/Diwali)", "State": "Andhra Pradesh", "Month": "October"}], "Utensils & Home Goods Retail": [{"Product": "Solapur terry towel sets (GI product — Diwali gifting)", "State": "Maharashtra", "Month": "October"}], "Synthetic Fabric Manufacturing": [{"Product": "Rayon georgette saree fabric (Surat — pre-Navratri dispatch)", "State": "Gujarat", "Month": "July"}, {"Product": "Polyester chiffon dupatta fabric (Surat powerloom)", "State": "Gujarat", "Month": "July"}, {"Product": "Viscose-modal blend kurta fabric", "State": "Gujarat", "Month": "July"}, {"Product": "Nylon net for lehengas & bridal wear (Surat)", "State": "Gujarat", "Month": "August"}, {"Product": "Jacquard weave fabric (Surat powerloom — pre-festive dispatch)", "State": "Gujarat", "Month": "July"}, {"Product": "Organza & tissue saree fabric", "State": "Gujarat", "Month": "July"}], "Wholesale Clothing": [{"Product": "Chaniya choli sets (Navratri Garba — Ahmedabad peak Sep–Oct)", "State": "Gujarat", "Month": "September"}, {"Product": "Bandhani georgette sarees (Jamnagar Bandhani belt)", "State": "Gujarat", "Month": "September"}, {"Product": "Wholesale embroidered blouses & dupattas", "State": "Gujarat", "Month": "September"}, {"Product": "Jari & zardosi work lehengas (Surat wholesale)", "State": "Gujarat", "Month": "September"}, {"Product": "Kutch embroidery dress material", "State": "Gujarat", "Month": "September"}, {"Product": "Patola silk sarees (Patan — UNESCO heritage weave)", "State": "Gujarat", "Month": "September"}], "Utensils & Cookware Retail": [{"Product": "Ceramic floor tiles (Morbi — 70% of India output)", "State": "Gujarat", "Month": "October"}, {"Product": "Sanitaryware & bathroom fittings (Morbi cluster)", "State": "Gujarat", "Month": "October"}, {"Product": "Diamond-finish cookware sets — Diwali kitchen gifting", "State": "Gujarat", "Month": "October"}, {"Product": "Aluminium pressure cookers (Rajkot engineering)", "State": "Gujarat", "Month": "October"}], "Imitation Jewellery Manufacturing": [{"Product": "Navratri Bandhani-matched jhumka sets (Ahmedabad artisans)", "State": "Gujarat", "Month": "September"}, {"Product": "Kundan Meenakari maang tikka (Ahmedabad)", "State": "Gujarat", "Month": "September"}, {"Product": "Lac bangle sets (Rajkot — Navratri staple)", "State": "Gujarat", "Month": "September"}, {"Product": "Temple jewellery sets (Vadodara craftsmen)", "State": "Gujarat", "Month": "October"}, {"Product": "Gold-plated choker necklaces — wedding season", "State": "Gujarat", "Month": "November"}, {"Product": "Oxidised tribal jewellery from Kutch (Navratri gifting)", "State": "Gujarat", "Month": "September"}, {"Product": "Firozabad glass bead necklaces & chokers", "State": "Uttar Pradesh", "Month": "September"}, {"Product": "Firozabad glass bangle sets (₹99 packs — Meesho top seller)", "State": "Uttar Pradesh", "Month": "September"}, {"Product": "Jhumka earrings with lac inlay (Lucknow lacwork)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Kundan polki sets (Lucknow bridal — wedding season)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Payal / anklets with ghungroo (UP artisan belt)", "State": "Uttar Pradesh", "Month": "November"}, {"Product": "Kundan polki bridal set with meenakari (Jaipur — gem capital)", "State": "Rajasthan", "Month": "November"}, {"Product": "Silver oxidised earrings with embedded gems (Jaipur silversmith belt)", "State": "Rajasthan", "Month": "October"}, {"Product": "Lac bangle sets (Jaipur lac artisans — Navratri top-seller)", "State": "Rajasthan", "Month": "September"}, {"Product": "Tourmaline, garnet & moonstone rings (Jaipur lapidary)", "State": "Rajasthan", "Month": "November"}, {"Product": "Gold-polished Jadau necklace sets (wedding season Nov–Feb)", "State": "Rajasthan", "Month": "November"}], "Wholesale Food & Spices": [{"Product": "Groundnut oil (Rajkot — Saurashtra peanut belt, Rabi harvest)", "State": "Gujarat", "Month": "March"}, {"Product": "Sesame seeds & til oil (Mehsana)", "State": "Gujarat", "Month": "March"}, {"Product": "Fenugreek methi (Unjha APMC — India's largest spice market)", "State": "Gujarat", "Month": "March"}, {"Product": "Jeera & cumin (Unjha — post-harvest peak)", "State": "Gujarat", "Month": "March"}, {"Product": "Castor oil (industrial + pharma grade)", "State": "Gujarat", "Month": "January"}, {"Product": "Isabgol / psyllium husk (Gujarat primary producer)", "State": "Gujarat", "Month": "March"}], "Handicrafts & Religious Articles": [{"Product": "Moradabad brass diyas & puja thali sets (Diwali — Pital Nagari)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Moradabad brassware flower vases & candle stands", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Agra marble inlay Taj Mahal replicas (Diwali tourist gifting)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Saharanpur carved wooden photo frames & trays", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Firozabad glass bangles & decorative items (Navratri)", "State": "Uttar Pradesh", "Month": "September"}, {"Product": "Kannauj ittar (attar) perfume bottles — Diwali gifting", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Varanasi silk wall hangings", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Swamimalai bronze icons — Navratri / Diwali ritual gifting", "State": "Tamil Nadu", "Month": "October"}, {"Product": "Thanjavur paintings & art plates (GI — Pongal gifting)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Channapatna toys & dolls (GI — Dasara children's gifting)", "State": "Karnataka", "Month": "October"}, {"Product": "Mysore agarbathi / incense sticks (GI — Dasara/Diwali ritual)", "State": "Karnataka", "Month": "October"}, {"Product": "Mysore rosewood inlay decorative boxes (GI — Dasara gifting)", "State": "Karnataka", "Month": "October"}, {"Product": "Karnataka bronzeware figurines (GI — Dasara religious gifting)", "State": "Karnataka", "Month": "October"}, {"Product": "Ganjifa cards of Mysore (GI — collector's edition, Dasara)", "State": "Karnataka", "Month": "October"}, {"Product": "Amritsar steel dastarkhwan langar thali sets (Baisakhi peak Apr)", "State": "Punjab", "Month": "April"}, {"Product": "Brass Sikh khanda wall art (Baisakhi gifting Apr)", "State": "Punjab", "Month": "April"}, {"Product": "Rumala sahib (decorative cloth — Gurpurab peak Nov)", "State": "Punjab", "Month": "November"}, {"Product": "Clay Durga idols (Kumartuli Kolkata — Durga Puja peak)", "State": "West Bengal", "Month": "October"}, {"Product": "Dhunuchi brass incense burner (Durga Puja dance ritual)", "State": "West Bengal", "Month": "October"}, {"Product": "Lokkhi saaj — Lakshmi Puja tray set (Oct post-Durga Puja)", "State": "West Bengal", "Month": "October"}, {"Product": "Terracotta Lakshmi foot-prints — Alpona craft (Diwali)", "State": "West Bengal", "Month": "October"}, {"Product": "Bamboo & jute return gift baskets (Durga Puja)", "State": "West Bengal", "Month": "October"}, {"Product": "Kerala Ashtamangalya puja set (brass — Onam)", "State": "Kerala", "Month": "August"}, {"Product": "Guruvayur Krishna idol (brass, Thrissur — Onam gifting)", "State": "Kerala", "Month": "August"}, {"Product": "Kathakali mask (Thrissur artisans — Onam cultural gifting)", "State": "Kerala", "Month": "August"}, {"Product": "Onam pookalam kit (artificial flower set — porch decoration)", "State": "Kerala", "Month": "August"}, {"Product": "Elephant figural brass lamps — nila vilakku (Onam)", "State": "Kerala", "Month": "August"}, {"Product": "Bamboo Onam gift hampers (spices + kasavu saree + oil box)", "State": "Kerala", "Month": "August"}, {"Product": "Aranmula Kannadi metal mirror (GI — Onam gifting, Chingam month)", "State": "Kerala", "Month": "August"}, {"Product": "Bidriware silver-inlaid vases & trays (Bidar GI — Dussehra gifting)", "State": "Telangana", "Month": "October"}, {"Product": "Nirmal painted wooden toys (GI — Adilabad, Dussehra gifting)", "State": "Telangana", "Month": "October"}, {"Product": "Cheriyal scroll painting (Warangal folk art — Dussehra)", "State": "Telangana", "Month": "October"}, {"Product": "Pembarthi brass repoussé work (Dussehra décor gifting)", "State": "Telangana", "Month": "October"}, {"Product": "Konark stone carvings — Sun Temple motifs (Diwali gifting)", "State": "Odisha", "Month": "October"}, {"Product": "Chamba rumal (GI embroidered handkerchief — winter gifting)", "State": "Himachal Pradesh", "Month": "November"}, {"Product": "Madhubani paintings (GI — Diwali gifting peak)", "State": "Bihar", "Month": "October"}, {"Product": "Applique khatwa work (GI — Diwali festive décor)", "State": "Bihar", "Month": "October"}, {"Product": "Sujini embroidery quilts (GI — winter festive Bihar)", "State": "Bihar", "Month": "November"}, {"Product": "Chhath Puja soop (bamboo basket) ritual sets — Oct/Nov peak", "State": "Bihar", "Month": "October"}, {"Product": "Sikki grass craft products (GI Bihar — Chhath Puja gifting)", "State": "Bihar", "Month": "November"}, {"Product": "Kondapalli Bommallu wooden toys (GI — Diwali gifting)", "State": "Andhra Pradesh", "Month": "October"}, {"Product": "Bastar Dhokra metal craft (GI — Diwali gifting)", "State": "Chhattisgarh", "Month": "October"}, {"Product": "Bastar wooden craft sculptures (GI — Diwali home décor)", "State": "Chhattisgarh", "Month": "October"}, {"Product": "Bastar iron craft wall art (GI — Dussehra/Diwali)", "State": "Chhattisgarh", "Month": "October"}, {"Product": "Kashmiri papier-mâché handicrafts (GI — Diwali gifting)", "State": "Jammu & Kashmir", "Month": "October"}], "Carpets & Rugs Retail": [{"Product": "Hand-knotted wool carpets (Bhadohi/Mirzapur — Carpet City of India)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Machine-made polyester area rugs (Diwali home refresh)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Tufted rugs with floral/geometric patterns", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Prayer mats — namaz chadar (Varanasi — Eid peak)", "State": "Uttar Pradesh", "Month": "April"}, {"Product": "Dhurrie flat-weave rugs (Agra artisans)", "State": "Uttar Pradesh", "Month": "October"}, {"Product": "Bhavani Jamakkalam handloom durrie (GI — Pongal gifting)", "State": "Tamil Nadu", "Month": "January"}, {"Product": "Navalgund durries (GI Karnataka — Dasara home refresh)", "State": "Karnataka", "Month": "October"}, {"Product": "Jaipur hand-woven wool dhurrie rugs (Diwali home refresh)", "State": "Rajasthan", "Month": "October"}, {"Product": "Embroidered Rajasthani mirror-work cushion covers", "State": "Rajasthan", "Month": "October"}, {"Product": "Jaipuri razai quilt (block-print cotton — winter bedding peak)", "State": "Rajasthan", "Month": "November"}, {"Product": "Handmade kilim-style area rugs", "State": "Rajasthan", "Month": "October"}, {"Product": "Alappuzha coir doormat (GI — Onam home décor peak)", "State": "Kerala", "Month": "August"}, {"Product": "Coir yoga mat (eco-friendly — New Year wellness market)", "State": "Kerala", "Month": "January"}, {"Product": "Woven coir storage baskets (Onam home organising)", "State": "Kerala", "Month": "August"}, {"Product": "Natural coir bed mattress (Alappuzha factory — year-round)", "State": "Kerala", "Month": "October"}, {"Product": "Kashmiri carpet — hand-knotted silk (GI — winter luxury market)", "State": "Jammu & Kashmir", "Month": "November"}], "Cotton Knit Fabric Manufacturing": [{"Product": "Interlock cotton fabric (Tirupur / Erode mills)", "State": "Tamil Nadu", "Month": "July"}, {"Product": "Single jersey cotton fabric (peak mill supply pre-festive)", "State": "Tamil Nadu", "Month": "August"}, {"Product": "Organic cotton GOTS-certified fabric (export peak)", "State": "Tamil Nadu", "Month": "July"}, {"Product": "Bamboo-cotton blend knit fabric", "State": "Tamil Nadu", "Month": "August"}], "Footwear Retail": [{"Product": "PU leather school shoes (Ambur cluster — back-to-school)", "State": "Tamil Nadu", "Month": "June"}, {"Product": "Chennai leather formal shoes — Ambur/Vellore tanneries", "State": "Tamil Nadu", "Month": "October"}, {"Product": "Women's heeled leather sandals (pre-summer clearance)", "State": "Tamil Nadu", "Month": "June"}], "Jewellery Retail": [{"Product": "Temple Jewellery of Nagercoil (GI — Diwali bridal season)", "State": "Tamil Nadu", "Month": "October"}, {"Product": "Silver filigree of Karimnagar (GI — Dussehra jewellery gifting)", "State": "Telangana", "Month": "October"}], "Hosiery & Knitwear Manufacturing": [{"Product": "Men's cotton round-neck T-shirts (Ludhiana hosiery — summer dispatch)", "State": "Punjab", "Month": "July"}, {"Product": "Thermal innerwear sets (Ludhiana — pre-winter dispatch Sep–Oct)", "State": "Punjab", "Month": "September"}, {"Product": "Sports socks & ankle socks in 6-pack bundles", "State": "Punjab", "Month": "August"}, {"Product": "Women's leggings & tights", "State": "Punjab", "Month": "August"}, {"Product": "Kids' ribbed undershirt & briefs set", "State": "Punjab", "Month": "August"}, {"Product": "Seamless bra packs (Ludhiana lingerie cluster)", "State": "Punjab", "Month": "August"}], "Woollen Knitwear Manufacturing": [{"Product": "Ludhiana acrylic sweaters — round-neck & V-neck (India's #1 source)", "State": "Punjab", "Month": "October"}, {"Product": "Men's woollen half-zip pullovers", "State": "Punjab", "Month": "October"}, {"Product": "Turtleneck cardigans — women (trending Sep–Nov)", "State": "Punjab", "Month": "October"}, {"Product": "Kids' school sweaters with zipper (winter school uniform)", "State": "Punjab", "Month": "October"}, {"Product": "Woollen Patiala caps & beanies", "State": "Punjab", "Month": "October"}, {"Product": "Matching muffler-glove-cap gift sets (Meesho top-seller)", "State": "Punjab", "Month": "October"}, {"Product": "Phulkari-embroidered woollen shawls", "State": "Punjab", "Month": "October"}, {"Product": "Himachal woollen cap & muffler sets (winter onset Oct)", "State": "Himachal Pradesh", "Month": "October"}], "Woollen Fabric Manufacturing": [{"Product": "Acrylic-blend sweater knit fabric (Ludhiana mills — B2B pre-winter)", "State": "Punjab", "Month": "August"}, {"Product": "Merino wool blend jersey (premium garment supply)", "State": "Punjab", "Month": "August"}], "Handicrafts & Home Décor": [{"Product": "Jaipur blue pottery mugs, plates & vases (GI — Diwali gifting)", "State": "Rajasthan", "Month": "October"}, {"Product": "Jodhpur sheesham wood furniture & side tables (Diwali home décor)", "State": "Rajasthan", "Month": "October"}, {"Product": "Marble Ganesh & Laxmi idols (Makrana white marble — Diwali puja)", "State": "Rajasthan", "Month": "October"}, {"Product": "Jodhpur bone inlay decorative trays", "State": "Rajasthan", "Month": "October"}, {"Product": "Rajasthani embroidered table runners & napkins — wedding trousseau", "State": "Rajasthan", "Month": "November"}, {"Product": "Papier-mâché decorative bowls (Jaipur artisans)", "State": "Rajasthan", "Month": "October"}, {"Product": "Camel leather cushion covers (Jodhpur artisans)", "State": "Rajasthan", "Month": "October"}], "Sweets & Confectionery Retail": [{"Product": "Rajasthani ghewar (Jaipur GI — Teej & Raksha Bandhan peak Aug)", "State": "Rajasthan", "Month": "August"}, {"Product": "Besan ladoo & churma (Diwali mithai)", "State": "Rajasthan", "Month": "October"}, {"Product": "Bikaner namkeen & bhujia (GI snack — Diwali snacking peak)", "State": "Rajasthan", "Month": "October"}, {"Product": "Mawa kachori & malpua gift boxes (Makar Sankranti Jan)", "State": "Rajasthan", "Month": "January"}, {"Product": "Halwai-style dry fruit barfi sets (Diwali gifting)", "State": "Rajasthan", "Month": "October"}, {"Product": "Tirupati ladoo prasad packs (GI — peak pilgrimage Brahmotsavam Mar)", "State": "Andhra Pradesh", "Month": "March"}, {"Product": "Christmas plum cake & Christmas hampers (Goa — Dec peak)", "State": "Goa", "Month": "December"}], "Gifting & Cultural Retail": [{"Product": "Bankura horse terracotta figurines (GI — Durga Puja gifting)", "State": "West Bengal", "Month": "October"}, {"Product": "Kalighat painting art prints (Durga Puja cultural gifting)", "State": "West Bengal", "Month": "October"}, {"Product": "Dokra brass figurines (tribal metal craft — Durga Puja)", "State": "West Bengal", "Month": "October"}, {"Product": "Shantiniketan leather bag (hand-painted Batik, Bolpur)", "State": "West Bengal", "Month": "October"}, {"Product": "Bamboo craft decorative items (Poila Boishakh)", "State": "West Bengal", "Month": "April"}, {"Product": "Bishnupur silk stole & wall art (Durga Puja)", "State": "West Bengal", "Month": "October"}, {"Product": "Nakshi Kantha embroidered quilt (GI — Durga Puja gifting)", "State": "West Bengal", "Month": "October"}], "Tea & Coffee Wholesale": [{"Product": "Darjeeling First Flush tea (spring harvest Mar–Apr — world's finest)", "State": "West Bengal", "Month": "March"}, {"Product": "Darjeeling Second Flush muscatel tea (May–Jun harvest)", "State": "West Bengal", "Month": "May"}, {"Product": "Darjeeling whole-leaf TGFOP1 tea boxes (Diwali gourmet gifting)", "State": "West Bengal", "Month": "October"}, {"Product": "Darjeeling white tea (premium wellness — gifting season)", "State": "West Bengal", "Month": "October"}, {"Product": "Dooars CTC breakfast tea (mass market — monsoon drinking season)", "State": "West Bengal", "Month": "August"}, {"Product": "Assam orthodox CTC tea (post-first-flush harvest Mar–Apr)", "State": "Assam", "Month": "March"}], "General Retail": [{"Product": "Gaming headsets & mechanical keyboards (Diwali tech gifting)", "State": "Telangana", "Month": "October"}, {"Product": "Smart home speakers & IoT switches (Diwali tech gifting)", "State": "Telangana", "Month": "October"}, {"Product": "Noise-cancelling earbuds (Diwali peak Hyderabad)", "State": "Telangana", "Month": "October"}, {"Product": "Ergonomic laptop stands & desk accessories (New Year WFH setup)", "State": "Telangana", "Month": "January"}]};
+// ── ANTHROPIC API KEY ─────────────────────────────────────────────────────────
+// Enter your Anthropic API key below, or use the key input in the Data Hub drawer.
+// Get a key at: https://console.anthropic.com/settings/api-keys
+let ANTHROPIC_API_KEY = '';
+
+function getApiHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'x-api-key': ANTHROPIC_API_KEY,
+    'anthropic-version': '2023-06-01',
+    'anthropic-dangerous-direct-browser-access': 'true'
+  };
+}
+
+function requireApiKey() {
+  if (!ANTHROPIC_API_KEY || ANTHROPIC_API_KEY.trim() === '') {
+    showToast('⚠ Enter your Anthropic API key in Data Hub → Settings first');
+    openIntelDrawer('settings');
+    return false;
+  }
+  return true;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 const STATE_SUMMARY = {"Maharashtra": {"categories": 8, "products": 41}, "Gujarat": {"categories": 6, "products": 34}, "Uttar Pradesh": {"categories": 7, "products": 35}, "Tamil Nadu": {"categories": 9, "products": 34}, "Karnataka": {"categories": 7, "products": 33}, "Punjab": {"categories": 6, "products": 29}, "Rajasthan": {"categories": 7, "products": 35}, "West Bengal": {"categories": 6, "products": 32}, "Kerala": {"categories": 6, "products": 35}, "Telangana": {"categories": 7, "products": 28}, "Assam": {"categories": 3, "products": 4}, "Odisha": {"categories": 2, "products": 4}, "Himachal Pradesh": {"categories": 4, "products": 4}, "Madhya Pradesh": {"categories": 1, "products": 3}, "Bihar": {"categories": 1, "products": 5}, "Andhra Pradesh": {"categories": 3, "products": 5}, "Chhattisgarh": {"categories": 1, "products": 3}, "Goa": {"categories": 2, "products": 3}, "Jammu & Kashmir": {"categories": 5, "products": 7}};
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const MONTH_ABR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -1646,7 +1731,6 @@ function doLogin(role) {
   document.getElementById('home-exec-section').style.display = isExec ? 'block' : 'none';
   document.getElementById('home-state-bar-wrap').style.display = 'none';
   document.getElementById('home-hero-banner').style.display = isExec ? '' : 'none';
-  document.getElementById('home-territory-wrap').style.display = 'none';
   // Hide header chrome and FAB for sales
   document.querySelector('.header').style.display = isExec ? '' : 'none';
   document.querySelector('.tab-bar-wrap').style.display = isExec ? '' : 'none';
@@ -1950,13 +2034,10 @@ function _renderRow(r) {
   const windowHtml = r.months.map(peakMonth => {
     const targetMonth = getTargetMonthName(peakMonth);
     const targetIsNow = targetMonth === MONTHS[NOW_MI];
-    const peakIsNow = peakMonth === MONTHS[NOW_MI];
-    return '<div style="margin-bottom:3px">' +
-      '<span class="stbl-target-badge ' + (targetIsNow ? 'act' : 'upcoming') + '" title="Target: act in ' + targetMonth + ' to reach peak ' + peakMonth + ' demand">' +
-      '▶ ' + targetMonth + '</span>' +
-      '<span class="stbl-peak-badge">⚡ Peak: ' + peakMonth + '</span>' +
-      '</div>';
-  }).join('');
+    return targetIsNow
+      ? '<span style="font-weight:700;color:var(--rose)">🔥 Now — ' + peakMonth + '</span>'
+      : '<span style="color:var(--txt2)">' + targetMonth + ' → ' + peakMonth + '</span>';
+  }).join('<br>');
 
   // Peak Demand column — scores at the row's designated peak month (not NOW_MI),
   // so the badge always reflects category/product strength at its seasonal high.
@@ -1968,17 +2049,17 @@ function _renderRow(r) {
   // for sorting/peak calculations but kept invisible in the sales table UI.
   const demandCell = '<td style="white-space:nowrap"><span style="background:' + D_BG[d] + ';color:' + D_COL[d] + ';border:1px solid ' + D_BDR[d] + ';font-size:9px;padding:2px 8px;border-radius:10px;font-family:\'IBM Plex Mono\',monospace;font-weight:700;white-space:nowrap;display:inline-block">' + DWORD[d] + '</span>' + overridePill + '</td>';
 
+  const nicCode = r.nic || (r.group && r.group.nics && r.group.nics[0]) || '—';
   return '<tr class="' + (isNow ? 'row-now' : '') + '">' +
     '<td><div class="stbl-state">' + r.state + '</div></td>' +
-    '<td><div style="font-size:12px;font-weight:700;color:' + color + '">' + r.cat + '</div>' +
-    '<div style="font-family:monospace;font-size:9px;color:var(--txt3);margin-top:2px">NIC ' + r.nic + '</div></td>' +
+    '<td>' +
+      '<div style="margin-bottom:4px">' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:13px;font-weight:800;color:' + color + ';letter-spacing:.04em;background:' + color + '12;border:1.5px solid ' + color + '30;padding:2px 9px;border-radius:5px;white-space:nowrap;display:inline-block">NIC ' + nicCode + '</span>' +
+      '</div>' +
+      '<div style="font-size:10px;color:var(--txt3);font-weight:600;line-height:1.4">' + r.cat + '</div>' +
+    '</td>' +
     '<td><div class="stbl-products">' + prodRows + more + '</div></td>' +
     '<td>' + windowHtml + '</td>' +
-    demandCell +
-    '<td><div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">' +
-    '<span class="urg-badge urg-' + urg.tier + '">' + urg.label + '</span>' +
-    '<span class="urg-days">' + urgDaysLabel + '</span>' +
-    '</div></td>' +
     '</tr>';
 }
 
@@ -2432,9 +2513,26 @@ var doLogin = (function(_orig) {
 })(doLogin);
 
 // ── DRAWER CONTROLS ──
+function updateApiKeyIndicator() {
+  const el = document.getElementById('api-key-indicator');
+  if (!el) return;
+  if (ANTHROPIC_API_KEY && ANTHROPIC_API_KEY.trim() !== '') {
+    el.textContent = '🔑 Key active';
+    el.style.background = 'rgba(26,92,58,.15)';
+    el.style.borderColor = 'var(--green-m)';
+    el.style.color = 'var(--green)';
+  } else {
+    el.textContent = '⚠ No API key';
+    el.style.background = 'rgba(154,107,0,.12)';
+    el.style.borderColor = 'var(--amber-m)';
+    el.style.color = 'var(--amber)';
+  }
+}
+
 function openIntelDrawer(tab) {
   document.getElementById('intel-drawer').classList.add('open');
   document.getElementById('intel-overlay').classList.add('show');
+  updateApiKeyIndicator();
   switchIntelTab(tab || 'upload');
 }
 function closeIntelDrawer() {
@@ -2442,10 +2540,37 @@ function closeIntelDrawer() {
   document.getElementById('intel-overlay').classList.remove('show');
 }
 function switchIntelTab(name) {
-  ['upload','web','log'].forEach(t => {
-    document.getElementById('itab-' + t).classList.toggle('active', t === name);
-    document.getElementById('itab-' + t + '-body').style.display = t === name ? 'block' : 'none';
+  ['upload','web','log','settings'].forEach(t => {
+    const btn = document.getElementById('itab-' + t);
+    const body = document.getElementById('itab-' + t + '-body');
+    if (btn) btn.classList.toggle('active', t === name);
+    if (body) body.style.display = t === name ? 'block' : 'none';
   });
+}
+
+function saveApiKey() {
+  const val = (document.getElementById('api-key-input').value || '').trim();
+  if (!val) { updateApiKeyStatus(); return; }
+  ANTHROPIC_API_KEY = val;
+  updateApiKeyStatus();
+  updateApiKeyIndicator();
+  showToast('✓ API key saved for this session');
+}
+
+function updateApiKeyStatus() {
+  const val = (document.getElementById('api-key-input').value || '').trim();
+  const el = document.getElementById('api-key-status');
+  if (!el) return;
+  if (!val) {
+    el.textContent = 'No key entered';
+    el.style.color = 'var(--txt4)';
+  } else if (val.startsWith('sk-ant-')) {
+    el.textContent = '✓ Looks valid — save to activate';
+    el.style.color = 'var(--green)';
+  } else {
+    el.textContent = '⚠ Key should start with sk-ant-';
+    el.style.color = 'var(--amber)';
+  }
 }
 
 // ── DRAG & DROP ──
@@ -2535,6 +2660,9 @@ function readExcelFile(file) {
 
 // ── CLAUDE API: FILE ANALYSIS ──
 async function analyseFileWithClaude(textContent, fileName) {
+  if (!ANTHROPIC_API_KEY || ANTHROPIC_API_KEY.trim() === '') {
+    throw new Error('No API key set. Open Data Hub → API Key tab to add your Anthropic key.');
+  }
   const schemaSummary = `Dashboard tracks: 374 products, 19 Indian states, 7 category groups.
 Category groups: clothing (NIC 46419/47711), apparel_mfg (14109/14301), fabric (13911-13913/14301/47510), food (46305/46306/47211/47215/47219), crafts (47190/47531/47735), beauty (15122/32120/47713/47722/47733), home (47190/47592).
 States: Maharashtra, Gujarat, Uttar Pradesh, Tamil Nadu, Karnataka, Punjab, Rajasthan, West Bengal, Kerala, Telangana, Assam, Odisha, Himachal Pradesh, Madhya Pradesh, Bihar, Andhra Pradesh, Chhattisgarh, Goa, Jammu & Kashmir.
@@ -2704,7 +2832,7 @@ Assignment rules:
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: getApiHeaders(),
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2000,
@@ -3244,6 +3372,7 @@ const AUTO_REFRESH_MINS = 30;
 async function fetchSource(sourceId) {
   const src = INTEL_SOURCES[sourceId];
   if (!src) return;
+  if (!requireApiKey()) return;
   const today = new Date().toLocaleDateString('en-IN', {month:'long', year:'numeric'});
 
   setSrcState(sourceId, 'loading');
@@ -3251,7 +3380,7 @@ async function fetchSource(sourceId) {
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: getApiHeaders(),
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
@@ -3506,6 +3635,7 @@ async function runAskMarket() {
   const input = document.getElementById('ask-market-input');
   const q = (input.value || '').trim();
   if (!q) return;
+  if (!requireApiKey()) return;
   const btn = document.getElementById('ask-market-go');
   btn.disabled = true; btn.textContent = '...';
   const resultEl = document.getElementById('ask-result');
@@ -3517,7 +3647,7 @@ async function runAskMarket() {
     const today = new Date().toLocaleDateString('en-IN', {month:'long', year:'numeric', day:'numeric'});
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: getApiHeaders(),
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
@@ -3865,7 +3995,8 @@ function toggleTerritoryState(state, el) {
     document.querySelectorAll('#territory-chips .terr-chip').forEach(c => c.classList.remove('sel'));
     el.classList.add('sel');
   } else {
-    document.querySelector('#territory-chips [data-state="__ALL__"]').classList.remove('sel');
+    const allChip = document.querySelector('#territory-chips [data-state="__ALL__"]');
+    if (allChip) allChip.classList.remove('sel');
     if (territoryStates.has(state)) {
       territoryStates.delete(state);
       el.classList.remove('sel');
@@ -3874,7 +4005,7 @@ function toggleTerritoryState(state, el) {
       el.classList.add('sel');
     }
     if (!territoryStates.size) {
-      document.querySelector('#territory-chips [data-state="__ALL__"]').classList.add('sel');
+      if (allChip) allChip.classList.add('sel');
     }
   }
   updateTerritoryActions();
@@ -3920,12 +4051,13 @@ function updateTerritoryActions() {
     const itemKey = c.state + '|' + c.cat;
     const done = contactedItems.has(itemKey);
     const d = c.d;
+    const prodPreview = c.products.slice(0,2).join(' · ');
     return `<div class="ta-item" id="ta-item-${i}">
       <div class="ta-rank ${rankCls[i]}">${rankLabels[i]}</div>
       <div class="ta-info">
         <div class="ta-cat" style="color:${c.g.color}">${c.cat}</div>
-        <div class="ta-state">📍 ${c.state} · NIC ${c.nic}</div>
-        <div style="font-size:10px;color:var(--txt2);margin-top:3px">${c.products.slice(0,2).join(' · ')}</div>
+        <div class="ta-state">📍 ${c.state}</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:3px">${prodPreview}</div>
       </div>
       <div class="ta-demand" style="background:${D_BG[d]};color:${D_COL[d]};border:1px solid ${D_BDR[d]}">${DWORD[d]}</div>
       <button class="ta-contact-btn ${done?'done':''}" onclick="toggleContact('${itemKey.replace(/'/g,"\'")}',this)">${done?'✓ Contacted':'Mark contacted'}</button>
@@ -4381,7 +4513,7 @@ const FESTIVAL_DATABASE = [
 // Calendarific API for live festival updates
 // Free tier: 1000 requests/month - sufficient for periodic updates
 // Get your free API key at: https://calendarific.com/api-documentation
-const CALENDARIFIC_API_KEY = 'M7UcdEfpoO7MOXXZktkyctWHkrxh2waF';  // Replace with your key from calendarific.com
+const CALENDARIFIC_API_KEY = 'YOUR_API_KEY_HERE';  // Replace with your key from calendarific.com
 const USE_LIVE_UPDATES = true;  // Set to false to use static dates only
 
 async function refreshFestivalDates() {
@@ -4522,6 +4654,123 @@ function autoAdjustForFestivals() {
     });
   });
   return adjustments;
+}
+
+// ══════════════════════════════════════════════════════
+//  EXEC HOME UPLOAD CARD — inline demand curve upload
+//  Uses shared helpers: analyseFileWithClaude, readExcelFile,
+//  readTextFile, showDiffModal, pendingFileData.
+//  doLogin and the intel-drawer upload are untouched.
+// ══════════════════════════════════════════════════════
+function execHandleDragOver(e) {
+  e.preventDefault();
+  const z = document.getElementById('exec-upload-zone');
+  if (z) { z.style.borderColor = 'var(--blue)'; z.style.background = 'var(--blue-l)'; }
+}
+function execHandleDragLeave(e) {
+  const z = document.getElementById('exec-upload-zone');
+  if (z) { z.style.borderColor = 'var(--bdr2)'; z.style.background = 'var(--page)'; }
+}
+function execHandleDrop(e) {
+  e.preventDefault();
+  execHandleDragLeave(e);
+  const file = e.dataTransfer.files[0];
+  if (file) execProcessFile(file);
+}
+function execHandleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) execProcessFile(file);
+  // Reset input so the same file can be re-uploaded
+  e.target.value = '';
+}
+
+async function execProcessFile(file) {
+  const zone   = document.getElementById('exec-upload-zone');
+  const proc   = document.getElementById('exec-upload-processing');
+  const result = document.getElementById('exec-upload-result');
+  const msgEl  = document.getElementById('exec-upload-msg');
+  const subEl  = document.getElementById('exec-upload-sub');
+
+  // Show processing state
+  if (zone)   zone.style.display   = 'none';
+  if (proc)   proc.style.display   = 'block';
+  if (result) result.innerHTML     = '';
+
+  const ext = file.name.toLowerCase().split('.').pop();
+  if (msgEl) msgEl.textContent = 'Reading ' + file.name + '…';
+  if (subEl) subEl.textContent = 'Extracting content from ' + ext.toUpperCase() + ' file';
+
+  try {
+    let textContent = '';
+    if (ext === 'xlsx' || ext === 'xls') {
+      textContent = await readExcelFile(file);
+    } else if (ext === 'json') {
+      const raw = await readTextFile(file);
+      try { textContent = JSON.stringify(JSON.parse(raw), null, 2); } catch { textContent = raw; }
+    } else {
+      textContent = await readTextFile(file);
+    }
+
+    if (!textContent || textContent.trim().length < 10) {
+      execShowUploadError('File appears empty or unreadable. Please try a different format.');
+      return;
+    }
+
+    if (msgEl) msgEl.textContent = 'Sending to Claude AI…';
+    if (subEl) subEl.textContent = 'Analysing demand signals in your data';
+
+    const data = await analyseFileWithClaude(textContent, file.name);
+
+    if (proc) proc.style.display = 'none';
+    if (zone) zone.style.display = '';
+
+    // Store as pending (shared with drawer apply flow)
+    pendingFileData = data;
+
+    const conf      = data.confidence || 'low';
+    const confColor = { high: 'var(--green)', medium: 'var(--amber)', low: 'var(--rose)' }[conf] || 'var(--txt3)';
+    const products  = data.products_added     || [];
+    const adjusts   = data.demand_adjustments || [];
+    const safeName  = file.name.replace(/'/g, "\\'");
+
+    let html = '<div style="padding:12px 14px;background:var(--blue-l);border:1px solid var(--blue-m);border-radius:8px;font-size:11px;color:var(--txt2);line-height:1.6">' +
+      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:5px">' +
+      (conf === 'low' ? '⚠ ' : '✓ ') + (data.file_type || 'File') + ' · <span style="color:' + confColor + '">' + conf + ' confidence</span></div>' +
+      '<div style="margin-bottom:8px">' + (data.summary || '') + '</div>';
+
+    if (data._usedFallback) {
+      html += '<div style="background:var(--amber-l);border:1px solid var(--amber-m);border-radius:5px;padding:6px 10px;font-size:10px;color:var(--amber);margin-bottom:8px">⚠ Fallback CSV parser used — Claude API unavailable. Review changes carefully.</div>';
+    }
+
+    if (products.length || adjusts.length) {
+      html += '<div style="font-size:10px;color:var(--txt3);margin-bottom:8px">' +
+        '📦 ' + products.length + ' product(s) &nbsp;·&nbsp; ⚡ ' + adjusts.length + ' demand curve change(s)</div>' +
+        '<button onclick="showDiffModal(pendingFileData,\'File: ' + safeName + '\')" ' +
+        'style="padding:6px 14px;background:var(--blue);color:#fff;border:none;border-radius:6px;' +
+        'font-family:\'Manrope\',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:background .12s" ' +
+        'onmouseover="this.style.background=\'var(--navy)\'" onmouseout="this.style.background=\'var(--blue)\'">' +
+        '📋 Review &amp; Apply Changes →</button>';
+    } else {
+      html += '<div style="font-size:10px;color:var(--txt4);font-style:italic">No applicable demand data found in this file.</div>';
+    }
+    html += '</div>';
+    if (result) result.innerHTML = html;
+
+    const statusPill = document.getElementById('exec-upload-status');
+    if (statusPill && (products.length || adjusts.length)) statusPill.style.display = 'inline-flex';
+
+  } catch (err) {
+    execShowUploadError('Error reading file: ' + err.message);
+  }
+}
+
+function execShowUploadError(msg) {
+  const zone = document.getElementById('exec-upload-zone');
+  const proc = document.getElementById('exec-upload-processing');
+  const result = document.getElementById('exec-upload-result');
+  if (proc)   proc.style.display   = 'none';
+  if (zone)   zone.style.display   = '';
+  if (result) result.innerHTML = '<div style="padding:10px 12px;color:var(--rose);font-size:11px;background:var(--rose-l);border:1px solid var(--rose-m);border-radius:7px">✕ ' + msg + '</div>';
 }
 
 function initDataIntelligence() {

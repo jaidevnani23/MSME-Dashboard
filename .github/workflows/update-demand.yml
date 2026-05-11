@@ -2,15 +2,15 @@ name: Update Demand Data
 
 on:
   schedule:
-    - cron: '0 2 * * 1'   # Every Monday at 2 AM UTC
-  workflow_dispatch:        # Also allows manual trigger
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
 
 jobs:
   update-demand:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write       # Needed to commit demand.json back to repo
+      contents: write
 
     steps:
       - name: Checkout repo
@@ -22,7 +22,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install pytrends --break-system-packages
+        run: pip install pytrends pandas requests --break-system-packages
 
       - name: Run demand patcher
         run: python patch_demand.py

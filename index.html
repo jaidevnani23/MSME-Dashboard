@@ -1086,11 +1086,11 @@ table.stbl tr.row-now td{background:#F0FDF4}
     <div class="intel-section-head">
       <div>
         <div class="intel-section-title">🎉 Festival Demand Calendar</div>
-        <div class="intel-section-sub">Next 120 days · Auto-adjusts demand scores within 14-day window</div>
+        <div class="intel-section-sub">Next 120 days · Auto-adjusts demand scores · Live updates via Calendarific API</div>
       </div>
       <div id="festival-auto-badge" style="display:none" class="validation-status validated"><span class="status-dot"></span><span id="festival-adj-count">0 adjustments</span></div>
       <button class="btn-refresh" onclick="refreshFestivalDates()"
-        title="Re-fetch dates from Drik Panchang endpoint"
+        title="Sync festival dates from Calendarific API"
         style="padding:3px 9px;font-size:10px;gap:5px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
           stroke-linecap="round" stroke-linejoin="round">
@@ -4362,7 +4362,9 @@ const FESTIVAL_DATABASE = [
   { name: 'Holi',               date: '2026-03-13', impact: '45 products · Colors, sweets, festive wear',    categories: ['food','clothing'] },
   { name: 'Ugadi / Gudi Padwa', date: '2026-03-22', impact: '28 products · Sweets, new clothes',             categories: ['food','clothing','fabric'] },
   { name: 'Eid al-Fitr',        date: '2026-04-21', impact: '41 products · Ethnic wear, sweets',             categories: ['clothing','food'] },
-  { name: 'Onam',               date: '2026-08-24', impact: '67 products · Kerala sarees, spices, crafts',   categories: ['clothing','food','crafts'] },
+  { name: 'Eid al-Adha',        date: '2026-05-27', impact: '38 products · Ethnic wear, food items',         categories: ['clothing','food'] },
+  { name: 'Muharram',           date: '2026-07-26', impact: '15 products · Religious items',                 categories: ['crafts','clothing'] },
+  { name: 'Onam',               date: '2026-08-26', impact: '67 products · Kerala sarees, spices, crafts',   categories: ['clothing','food','crafts'] },
   { name: 'Ganesh Chaturthi',   date: '2026-09-11', impact: '38 products · Idols, sweets, decorations',      categories: ['crafts','food'] },
   { name: 'Navratri',           date: '2026-10-13', impact: '89 products · Chaniya choli, jewelry, crafts',  categories: ['clothing','beauty','crafts'] },
   { name: 'Dussehra',           date: '2026-10-22', impact: '124 products · Regional wear, handicrafts',     categories: ['clothing','crafts','fabric'] },
@@ -4371,53 +4373,99 @@ const FESTIVAL_DATABASE = [
   { name: 'Christmas',          date: '2026-12-25', impact: '23 products · Goa specific items',              categories: ['food','clothing'] },
 ];
 
-// Google Apps Script Web App URL returning [{name,date:'YYYY-MM-DD'},...]
-// GAS code: function doGet(e){const year=e?.parameter?.year||new Date().getFullYear();
-//   const html=UrlFetchApp.fetch('https://www.drikpanchang.com/festivals/indian-festival-calendar.html?year='+year,
-//   {muteHttpExceptions:true,headers:{'User-Agent':'Mozilla/5.0'}}).getContentText();
-//   const names=['Maha Shivaratri','Holi','Ugadi','Gudi Padwa','Eid al-Fitr','Onam',
-//   'Ganesh Chaturthi','Navratri','Dussehra','Diwali','Guru Nanak Jayanti','Christmas'];
-//   const mmap={january:1,february:2,march:3,april:4,may:5,june:6,july:7,august:8,
-//   september:9,october:10,november:11,december:12};
-//   const results=[];names.forEach(name=>{
-//   const pat=new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+
-//   '[\\s\\S]{0,800}?(January|February|March|April|May|June|July|August|September|October|November|December)\\s+(\\d{1,2}),?\\s+(\\d{4})','i');
-//   const m=html.match(pat);if(m){const mon=mmap[m[1].toLowerCase()];
-//   results.push({name,date:m[3]+'-'+String(mon).padStart(2,'0')+'-'+m[2].padStart(2,'0')});}});
-//   return ContentService.createTextOutput(JSON.stringify(results))
-//   .setMimeType(ContentService.MimeType.JSON);}
-// Deploy: script.google.com → Deploy → Web app → Anyone
-const FESTIVAL_API_ENDPOINT = '';  // e.g. 'https://script.google.com/macros/s/YOUR_ID/exec'
+// Calendarific API Documentation: https://calendarific.com/api-documentation
+// Free tier provides 1000 API calls per month
+// Sign up at: https://calendarific.com/signup to get your API key
+
+
+// Calendarific API for live festival updates
+// Free tier: 1000 requests/month - sufficient for periodic updates
+// Get your free API key at: https://calendarific.com/api-documentation
+const CALENDARIFIC_API_KEY = 'YOUR_API_KEY_HERE';  // Replace with your key from calendarific.com
+const USE_LIVE_UPDATES = true;  // Set to false to use static dates only
 
 async function refreshFestivalDates() {
-  if (!FESTIVAL_API_ENDPOINT) return;
+  if (!USE_LIVE_UPDATES) {
+    console.log('Live updates disabled, using static dates');
+    return;
+  }
+  
   try {
-    const url = FESTIVAL_API_ENDPOINT +
-      (FESTIVAL_API_ENDPOINT.includes('?') ? '&' : '?') + 'year=' + NOW_YEAR;
+    // Calendarific API endpoint for Indian holidays
+    const apiKey = CALENDARIFIC_API_KEY;
+    if (!apiKey || apiKey === 'YOUR_API_KEY_HERE') {
+      console.log('No API key configured. Get free key at https://calendarific.com');
+      showToast('📅 Using static festival dates. Configure API key for live updates.');
+      return;
+    }
+    
+    const url = `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=IN&year=${NOW_YEAR}&type=national,religious`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const incoming = await res.json();
-    if (!Array.isArray(incoming)) throw new Error('Expected array');
+    
+    const data = await res.json();
+    if (!data.response || !data.response.holidays) {
+      throw new Error('Invalid API response');
+    }
+    
+    // Map Calendarific holiday names to our festival names
+    const holidayMap = {
+      'Maha Shivaratri': ['Maha Shivaratri', 'Mahashivratri'],
+      'Holi': ['Holi'],
+      'Ugadi / Gudi Padwa': ['Ugadi', 'Gudi Padwa'],
+      'Eid al-Fitr': ['Eid al-Fitr', 'Eid-ul-Fitr', "Id-ul-Fitr"],
+      'Eid al-Adha': ['Eid al-Adha', 'Eid-ul-Adha', 'Bakrid', 'Bakri Id'],
+      'Muharram': ['Muharram', 'Islamic New Year'],
+      'Onam': ['Onam', 'Thiruvonam'],
+      'Ganesh Chaturthi': ['Ganesh Chaturthi', 'Vinayaka Chaturthi'],
+      'Navratri': ['Navratri', 'Navaratri'],
+      'Dussehra': ['Dussehra', 'Vijayadashami', 'Dasara'],
+      'Diwali': ['Diwali', 'Deepavali'],
+      'Guru Nanak Jayanti': ['Guru Nanak Jayanti', "Guru Nanak's Birthday"],
+      'Christmas': ['Christmas', 'Christmas Day']
+    };
+    
     let updated = 0;
-    incoming.forEach(item => {
-      if (!item.name || !item.date) return;
-      const match = FESTIVAL_DATABASE.find(
-        f => f.name.toLowerCase() === item.name.toLowerCase()
+    const holidays = data.response.holidays;
+    
+    // Process each festival in our database
+    FESTIVAL_DATABASE.forEach(festival => {
+      const possibleNames = holidayMap[festival.name] || [festival.name];
+      
+      // Find matching holiday from API
+      const matchedHoliday = holidays.find(h => 
+        possibleNames.some(name => 
+          h.name.toLowerCase().includes(name.toLowerCase())
+        )
       );
-      if (match && /^\d{4}-\d{2}-\d{2}$/.test(item.date)) {
-        match.date = item.date; updated++;
+      
+      if (matchedHoliday && matchedHoliday.date && matchedHoliday.date.iso) {
+        const newDate = matchedHoliday.date.iso;
+        if (festival.date !== newDate) {
+          console.log(`📅 Updated ${festival.name}: ${festival.date} → ${newDate}`);
+          festival.date = newDate;
+          updated++;
+        }
       }
     });
+    
     renderFestivalTimeline();
-    showToast('📅 Festival dates refreshed — ' + updated + ' updated');
-    intelLog.unshift({
-      ts: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),
-      source: '📅 Drik Panchang Sync',
-      summary: updated + ' festival date(s) updated from remote source',
-      n: updated, demandDiffs: [], productsAdded: 0
-    });
+    
+    if (updated > 0) {
+      showToast(`📅 Festival calendar synced — ${updated} date(s) updated from live source`);
+      intelLog.unshift({
+        ts: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),
+        source: '📅 Calendarific API Sync',
+        summary: `${updated} festival date(s) updated from live source`,
+        n: updated, demandDiffs: [], productsAdded: 0
+      });
+    } else {
+      showToast('✓ Festival dates verified — all dates current');
+    }
+    
   } catch (err) {
-    console.warn('Festival refresh failed, keeping hardcoded dates:', err);
+    console.warn('Festival refresh failed, keeping current dates:', err);
+    showToast('⚠️ Could not sync festival dates — using current data');
   }
 }
 
@@ -4479,7 +4527,10 @@ function autoAdjustForFestivals() {
 function initDataIntelligence() {
   if (!document.getElementById('trends-grid')) return;
   fetchGoogleTrends();
+  
+  // Fetch festival dates on load and refresh weekly
   refreshFestivalDates().then(() => renderFestivalTimeline());
+  
   const adjustments = autoAdjustForFestivals();
   if (adjustments > 0) {
     showToast('🎉 ' + adjustments + ' demand scores auto-adjusted for upcoming festivals');
@@ -4490,8 +4541,11 @@ function initDataIntelligence() {
     if (badge) badge.style.display = 'inline-flex';
     if (countEl) countEl.textContent = adjustments + ' adjustments applied';
   }
-  setInterval(fetchGoogleTrends, 6 * 60 * 60 * 1000);
-  setInterval(renderFestivalTimeline, 60 * 60 * 1000);
+  
+  // Periodic updates
+  setInterval(fetchGoogleTrends, 6 * 60 * 60 * 1000);  // Every 6 hours
+  setInterval(renderFestivalTimeline, 60 * 60 * 1000);  // Every hour
+  setInterval(refreshFestivalDates, 7 * 24 * 60 * 60 * 1000);  // Every 7 days (weekly refresh)
 }
 </script>
 </body>

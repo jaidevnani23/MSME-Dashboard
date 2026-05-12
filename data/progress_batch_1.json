@@ -1,0 +1,478 @@
+{
+  "batch": 1,
+  "started": "2026-05-12T06:58:08.337649",
+  "completed_products": [],
+  "failed_products": [
+    {
+      "product": "clothing_retail:Oversized graphic tees (Dharavi garment belt)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T06:58:28.416404"
+    },
+    {
+      "product": "clothing_retail:Premium co-ord sets (Thane manufacturing units)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T06:58:52.893942"
+    },
+    {
+      "product": "clothing_retail:Anarkali suits & party-wear lehengas",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T06:59:17.832017"
+    },
+    {
+      "product": "clothing_retail:Maternity & nursing wear (Mumbai D2C brands)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T06:59:41.003411"
+    },
+    {
+      "product": "clothing_retail:Men's bandhgala kurtas (festive formal wear)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:00:05.268469"
+    },
+    {
+      "product": "clothing_retail:Sequin & mirror-work blouses",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:00:29.416126"
+    },
+    {
+      "product": "clothing_retail:Diwali special sarees \u2014 net & georgette",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:00:53.362260"
+    },
+    {
+      "product": "clothing_retail:Garba costume sets \u2014 chaniya choli & mojari (Navratri peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:01:17.860481"
+    },
+    {
+      "product": "clothing_retail:Kutch mirror-work dupattas",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:01:41.092881"
+    },
+    {
+      "product": "clothing_retail:Single-colour Bandhej sarees \u2014 Navratri",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:02:05.722663"
+    },
+    {
+      "product": "clothing_retail:Traditional Gujarati ghagra-choli",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:02:29.367643"
+    },
+    {
+      "product": "clothing_retail:White Navratri special kurta sets (men)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:02:53.578909"
+    },
+    {
+      "product": "clothing_retail:Festival edition lehengas (post-Navratri wedding season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:03:16.917380"
+    },
+    {
+      "product": "clothing_retail:Banarasi silk sarees with zari brocade (Varanasi GI \u2014 bridal season peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:03:40.249394"
+    },
+    {
+      "product": "clothing_retail:Lucknowi chikankari kurta sets (hand-embroidered)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:04:03.259660"
+    },
+    {
+      "product": "clothing_retail:Chikankari palazzo-suit sets (Lucknow atelier belt)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:04:26.339627"
+    },
+    {
+      "product": "clothing_retail:Zardosi work lehengas & blouses (Lucknow bridal)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:04:50.420043"
+    },
+    {
+      "product": "clothing_retail:Banarasi brocade dupattas",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:05:14.522024"
+    },
+    {
+      "product": "clothing_retail:Georgette chikankari party-wear tops (Eid peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:05:38.809798"
+    },
+    {
+      "product": "clothing_retail:Banarasi silk shawls (winter wedding season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:06:02.401554"
+    },
+    {
+      "product": "clothing_retail:Phulkari embroidered dupatta (Punjab GI \u2014 Lohri & wedding season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:06:26.440883"
+    },
+    {
+      "product": "clothing_retail:Patiala salwar-suit sets (Amazon IN Top-50 women's ethnic)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:06:49.497380"
+    },
+    {
+      "product": "clothing_retail:Amritsari jutti / mojari (hand-stitched leather, Amritsar artisans)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:07:12.837919"
+    },
+    {
+      "product": "clothing_retail:Bridal Phulkari lehenga sets (wedding season Oct\u2013Feb)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:07:36.634880"
+    },
+    {
+      "product": "clothing_retail:Men's kurta-pajama with Phulkari pocket square",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:08:01.417957"
+    },
+    {
+      "product": "clothing_retail:Rajasthani ghagra-choli sets with mirror work (Diwali peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:08:25.266259"
+    },
+    {
+      "product": "clothing_retail:Bandhej sarees & suits (Navratri demand)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:08:49.763048"
+    },
+    {
+      "product": "clothing_retail:Gota patti embroidered lehengas (Jaipur \u2014 wedding staple)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:09:14.197696"
+    },
+    {
+      "product": "clothing_retail:Men's Jodhpuri breeches & sherwani sets (wedding season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:09:38.079366"
+    },
+    {
+      "product": "clothing_retail:Jaipuri quilted kaftans",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:10:02.261290"
+    },
+    {
+      "product": "clothing_retail:Anarkali suits with Rajasthani block-print",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:10:25.824847"
+    },
+    {
+      "product": "clothing_retail:Tant cotton sarees (Shantipur/Phulia \u2014 Durga Puja wardrobe essential)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:10:50.522285"
+    },
+    {
+      "product": "clothing_retail:Baluchari silk sarees (Bishnupur GI \u2014 Durga Puja luxury wear)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:11:14.902884"
+    },
+    {
+      "product": "clothing_retail:Jamdani muslin sarees (UNESCO heritage \u2014 Durga Puja)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:11:38.698071"
+    },
+    {
+      "product": "clothing_retail:Kantha stitch cotton sarees & dupattas (Durga Puja)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:12:02.928355"
+    },
+    {
+      "product": "clothing_retail:Dhuti-panjabi sets (men's traditional Puja wear)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:12:26.000371"
+    },
+    {
+      "product": "clothing_retail:Dhakai cotton sarees (Poila Boishakh \u2014 Bengali New Year Apr)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:12:49.779420"
+    },
+    {
+      "product": "clothing_retail:New collection designer sarees launch (Poila Boishakh fashion)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:13:13.109387"
+    },
+    {
+      "product": "clothing_retail:Kerala kasavu saree (GI \u2014 Onam single biggest saree event India)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:13:36.768778"
+    },
+    {
+      "product": "clothing_retail:Kerala mundum neriyathum \u2014 women's traditional set (Onam)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:14:00.782283"
+    },
+    {
+      "product": "clothing_retail:Men's off-white cotton mundu with gold border (Onam)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:14:25.421526"
+    },
+    {
+      "product": "clothing_retail:Kannur handloom cotton sarees (Onam collection)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:14:48.456305"
+    },
+    {
+      "product": "clothing_retail:Kasavu-worked cotton dress material (Onam launch)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:15:13.242352"
+    },
+    {
+      "product": "clothing_retail:Vishu special kasavu set (Kerala New Year gifting Apr)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:15:37.446226"
+    },
+    {
+      "product": "clothing_retail:Hyderabadi embroidery kurta sets (Bathukamma/Dussehra)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:16:01.065595"
+    },
+    {
+      "product": "clothing_retail:Ikat print co-ord sets (Dussehra trending Myntra workwear)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:16:25.443508"
+    },
+    {
+      "product": "clothing_retail:Hyderabadi sherwani with Zardozi (Eid \u2014 large Muslim demographic)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:16:49.180698"
+    },
+    {
+      "product": "clothing_retail:Salwar suits with ikat motif block-print (Dussehra)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:17:12.913048"
+    },
+    {
+      "product": "clothing_retail:Men's Hyderabadi kurta-pajama sets (Dussehra)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:17:36.416332"
+    },
+    {
+      "product": "clothing_retail:Assam Bihu mekhela chador sets (Rongali Bihu Apr)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:18:00.283657"
+    },
+    {
+      "product": "clothing_retail:Kullu shawl (GI \u2014 winter onset, Diwali gifting Oct\u2013Nov)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:18:23.380816"
+    },
+    {
+      "product": "clothing_retail:Kashmiri pashmina shawls (GI \u2014 winter onset gifting Nov\u2013Jan)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:18:47.767953"
+    },
+    {
+      "product": "clothing_retail:Kashmiri kani shawls (GI \u2014 winter bridal gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:19:12.428827"
+    },
+    {
+      "product": "apparel_manufacturing:Export T-shirts & polo shirts (Mumbai-Thane corridor)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:19:37.379655"
+    },
+    {
+      "product": "apparel_manufacturing:Sportswear & compression tights",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:20:01.469971"
+    },
+    {
+      "product": "apparel_manufacturing:Swimwear & beachwear (Mumbai coastal \u2014 summer peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:20:25.095099"
+    },
+    {
+      "product": "apparel_manufacturing:Denim jeans & jeggings",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:20:49.908994"
+    },
+    {
+      "product": "apparel_manufacturing:Premium linen shirts (pre-festive dispatch)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:21:14.589407"
+    },
+    {
+      "product": "apparel_manufacturing:Formal trousers & blazers",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:21:39.453006"
+    },
+    {
+      "product": "apparel_manufacturing:Export cotton round-neck T-shirts (Tirupur \u2014 60% India knitwear)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:22:03.691921"
+    },
+    {
+      "product": "apparel_manufacturing:Polo shirts with 2-button placket (Tirupur export)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:22:28.522361"
+    },
+    {
+      "product": "apparel_manufacturing:Dry-fit sportswear & compression gym wear",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:22:53.388432"
+    },
+    {
+      "product": "apparel_manufacturing:Kids' cotton school uniforms (Tirupur \u2014 back-to-school June)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:23:17.359069"
+    },
+    {
+      "product": "apparel_manufacturing:Athleisure jogger-tee co-ord sets",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:23:41.188325"
+    },
+    {
+      "product": "apparel_manufacturing:Women's cotton nightwear sets",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:24:04.482085"
+    },
+    {
+      "product": "apparel_manufacturing:Sublimation-printed graphic tees (domestic market)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:24:29.087993"
+    },
+    {
+      "product": "apparel_manufacturing:Bengaluru cut-and-sew garment exports (H&M, GAP supply chain)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:24:53.919484"
+    },
+    {
+      "product": "apparel_manufacturing:Women's blouses & tailored tops (Bengaluru export units)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:25:17.919529"
+    },
+    {
+      "product": "apparel_manufacturing:Premium co-ord sets for D2C brands (pre-Navratri dispatch)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:25:42.607838"
+    },
+    {
+      "product": "apparel_manufacturing:Activewear sets (Nike, Decathlon BLR suppliers)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:26:07.356635"
+    },
+    {
+      "product": "leather_goods_manufacturing:Structured leather tote bags (Dharavi leather cluster)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:26:30.450832"
+    },
+    {
+      "product": "leather_goods_manufacturing:Laptop bags & office backpacks (Kurla units)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:26:54.303928"
+    },
+    {
+      "product": "leather_goods_manufacturing:Handcrafted leather wallets \u2014 Diwali gifting",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:27:18.148009"
+    },
+    {
+      "product": "leather_goods_manufacturing:Crossbody sling bags",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:27:42.421559"
+    },
+    {
+      "product": "leather_goods_manufacturing:Leather passport holders & travel pouches",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:28:07.306545"
+    },
+    {
+      "product": "leather_goods_manufacturing:Genuine leather sandals (Dharavi artisans)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:28:31.025186"
+    },
+    {
+      "product": "leather_goods_manufacturing:Agra leather sandals & juttis (shoe-making capital)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:28:54.670857"
+    },
+    {
+      "product": "leather_goods_manufacturing:Kanpur tannery leather bags & wallets",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:29:19.169996"
+    },
+    {
+      "product": "leather_goods_manufacturing:Genuine leather office briefcases (Kanpur leather district)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:29:43.121052"
+    },
+    {
+      "product": "leather_goods_manufacturing:Leather-bound diaries & planners",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:30:08.015961"
+    },
+    {
+      "product": "leather_goods_manufacturing:Suede casual loafers (Agra export units)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:30:31.049194"
+    },
+    {
+      "product": "health_food_retail:Whey protein & mass gainer supplements (Mumbai gym culture)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:30:55.922275"
+    },
+    {
+      "product": "health_food_retail:Greek yogurt parfait combos",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:31:18.966331"
+    },
+    {
+      "product": "health_food_retail:Organic ashwagandha capsules",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:31:43.914489"
+    },
+    {
+      "product": "health_food_retail:Plant-based protein bars",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:32:07.143959"
+    },
+    {
+      "product": "health_food_retail:Makhana snack packs",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:32:30.842214"
+    },
+    {
+      "product": "health_food_retail:Thandai mix (Mathura \u2014 Holi special drink, March)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:32:55.725251"
+    },
+    {
+      "product": "health_food_retail:Mathura peda gift boxes (Diwali mithai gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:33:20.344914"
+    },
+    {
+      "product": "health_food_retail:Petha candy (Agra GI \u2014 peaks Holi & tourist trade year-round)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:33:43.608867"
+    },
+    {
+      "product": "health_food_retail:Organic gur (jaggery) from Muzaffarnagar \u2014 winter cane harvest",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:34:08.442994"
+    },
+    {
+      "product": "health_food_retail:Chyawanprash (Dabur Ghaziabad plant \u2014 winter immunity peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:34:32.826857"
+    },
+    {
+      "product": "health_food_retail:Moringa powder & capsules (Salem \u2014 world's largest producer, Pongal health)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:34:57.790312"
+    },
+    {
+      "product": "health_food_retail:Organic turmeric powder (Erode \u2014 Yellow City, post-Pongal health)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:35:20.891232"
+    },
+    {
+      "product": "health_food_retail:Millet-based health snacks \u2014 ragi & kambu (post-Pongal wellness)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:35:44.668377"
+    }
+  ],
+  "results": {}
+}

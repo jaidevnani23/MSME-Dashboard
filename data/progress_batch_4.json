@@ -1,0 +1,468 @@
+{
+  "batch": 4,
+  "started": "2026-05-12T09:05:33.699892",
+  "completed_products": [],
+  "failed_products": [
+    {
+      "product": "handicrafts_and_religious_articles:Onam pookalam kit (artificial flower set \u2014 porch decoration)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:05:53.824390"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Elephant figural brass lamps \u2014 nila vilakku (Onam)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:06:17.955079"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Bamboo Onam gift hampers (spices + kasavu saree + oil box)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:06:42.420372"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Aranmula Kannadi metal mirror (GI \u2014 Onam gifting, Chingam month)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:07:05.539034"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Bidriware silver-inlaid vases & trays (Bidar GI \u2014 Dussehra gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:07:29.074049"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Nirmal painted wooden toys (GI \u2014 Adilabad, Dussehra gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:07:53.110898"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Cheriyal scroll painting (Warangal folk art \u2014 Dussehra)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:08:17.435307"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Pembarthi brass repouss\u00e9 work (Dussehra d\u00e9cor gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:08:41.056693"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Konark stone carvings \u2014 Sun Temple motifs (Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:09:04.937346"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Chamba rumal (GI embroidered handkerchief \u2014 winter gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:09:29.214331"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Madhubani paintings (GI \u2014 Diwali gifting peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:09:52.361376"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Applique khatwa work (GI \u2014 Diwali festive d\u00e9cor)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:10:17.108437"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Sujini embroidery quilts (GI \u2014 winter festive Bihar)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:10:41.080070"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Chhath Puja soop (bamboo basket) ritual sets \u2014 Oct/Nov peak",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:11:04.608401"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Sikki grass craft products (GI Bihar \u2014 Chhath Puja gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:11:28.584440"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Kondapalli Bommallu wooden toys (GI \u2014 Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:11:53.111675"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Bastar Dhokra metal craft (GI \u2014 Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:12:16.662296"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Bastar wooden craft sculptures (GI \u2014 Diwali home d\u00e9cor)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:12:40.829265"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Bastar iron craft wall art (GI \u2014 Dussehra/Diwali)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:13:03.968564"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Kashmiri papier-m\u00e2ch\u00e9 handicrafts (GI \u2014 Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:13:27.394568"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Hand-knotted wool carpets (Bhadohi/Mirzapur \u2014 Carpet City of India)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:13:50.546898"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Machine-made polyester area rugs (Diwali home refresh)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:14:14.829251"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Tufted rugs with floral/geometric patterns",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:14:38.286957"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Prayer mats \u2014 namaz chadar (Varanasi \u2014 Eid peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:15:02.413217"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Dhurrie flat-weave rugs (Agra artisans)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:15:27.148631"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Bhavani Jamakkalam handloom durrie (GI \u2014 Pongal gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:15:50.567529"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Navalgund durries (GI Karnataka \u2014 Dasara home refresh)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:16:14.139508"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Jaipur hand-woven wool dhurrie rugs (Diwali home refresh)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:16:38.116400"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Embroidered Rajasthani mirror-work cushion covers",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:17:01.545687"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Jaipuri razai quilt (block-print cotton \u2014 winter bedding peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:17:24.642984"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Handmade kilim-style area rugs",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:17:48.494279"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Alappuzha coir doormat (GI \u2014 Onam home d\u00e9cor peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:18:12.749348"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Coir yoga mat (eco-friendly \u2014 New Year wellness market)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:18:36.158006"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Woven coir storage baskets (Onam home organising)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:18:59.550754"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Natural coir bed mattress (Alappuzha factory \u2014 year-round)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:19:23.198803"
+    },
+    {
+      "product": "carpets_and_rugs_retail:Kashmiri carpet \u2014 hand-knotted silk (GI \u2014 winter luxury market)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:19:46.631593"
+    },
+    {
+      "product": "cotton_knit_fabric_manufacturing:Interlock cotton fabric (Tirupur / Erode mills)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:20:10.831540"
+    },
+    {
+      "product": "cotton_knit_fabric_manufacturing:Single jersey cotton fabric (peak mill supply pre-festive)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:20:34.609702"
+    },
+    {
+      "product": "cotton_knit_fabric_manufacturing:Organic cotton GOTS-certified fabric (export peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:20:57.899564"
+    },
+    {
+      "product": "cotton_knit_fabric_manufacturing:Bamboo-cotton blend knit fabric",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:21:22.426553"
+    },
+    {
+      "product": "footwear_retail:PU leather school shoes (Ambur cluster \u2014 back-to-school)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:21:47.000381"
+    },
+    {
+      "product": "footwear_retail:Chennai leather formal shoes \u2014 Ambur/Vellore tanneries",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:22:10.679239"
+    },
+    {
+      "product": "footwear_retail:Women's heeled leather sandals (pre-summer clearance)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:22:34.665981"
+    },
+    {
+      "product": "jewellery_retail:Temple Jewellery of Nagercoil (GI \u2014 Diwali bridal season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:22:57.756406"
+    },
+    {
+      "product": "jewellery_retail:Silver filigree of Karimnagar (GI \u2014 Dussehra jewellery gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:23:21.204997"
+    },
+    {
+      "product": "hosiery_and_knitwear_manufacturing:Men's cotton round-neck T-shirts (Ludhiana hosiery \u2014 summer dispatch)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:23:45.324753"
+    },
+    {
+      "product": "hosiery_and_knitwear_manufacturing:Thermal innerwear sets (Ludhiana \u2014 pre-winter dispatch Sep\u2013Oct)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:24:08.611634"
+    },
+    {
+      "product": "hosiery_and_knitwear_manufacturing:Sports socks & ankle socks in 6-pack bundles",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:24:33.308299"
+    },
+    {
+      "product": "hosiery_and_knitwear_manufacturing:Women's leggings & tights",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:24:57.732472"
+    },
+    {
+      "product": "hosiery_and_knitwear_manufacturing:Kids' ribbed undershirt & briefs set",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:25:22.238925"
+    },
+    {
+      "product": "hosiery_and_knitwear_manufacturing:Seamless bra packs (Ludhiana lingerie cluster)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:25:45.351694"
+    },
+    {
+      "product": "woollen_knitwear_manufacturing:Ludhiana acrylic sweaters \u2014 round-neck & V-neck (India's #1 source)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:26:09.928303"
+    },
+    {
+      "product": "woollen_knitwear_manufacturing:Men's woollen half-zip pullovers",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:26:34.210670"
+    },
+    {
+      "product": "woollen_knitwear_manufacturing:Turtleneck cardigans \u2014 women (trending Sep\u2013Nov)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:26:57.341574"
+    },
+    {
+      "product": "woollen_knitwear_manufacturing:Kids' school sweaters with zipper (winter school uniform)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:27:21.402990"
+    },
+    {
+      "product": "woollen_knitwear_manufacturing:Woollen Patiala caps & beanies",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:27:45.912058"
+    },
+    {
+      "product": "woollen_knitwear_manufacturing:Matching muffler-glove-cap gift sets (Meesho top-seller)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:28:09.384335"
+    },
+    {
+      "product": "woollen_knitwear_manufacturing:Phulkari-embroidered woollen shawls",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:28:34.179418"
+    },
+    {
+      "product": "woollen_knitwear_manufacturing:Himachal woollen cap & muffler sets (winter onset Oct)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:28:58.606388"
+    },
+    {
+      "product": "woollen_fabric_manufacturing:Acrylic-blend sweater knit fabric (Ludhiana mills \u2014 B2B pre-winter)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:29:22.276438"
+    },
+    {
+      "product": "woollen_fabric_manufacturing:Merino wool blend jersey (premium garment supply)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:29:46.566433"
+    },
+    {
+      "product": "handicrafts_and_home_d\u00e9cor:Jaipur blue pottery mugs, plates & vases (GI \u2014 Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:30:09.646349"
+    },
+    {
+      "product": "handicrafts_and_home_d\u00e9cor:Jodhpur sheesham wood furniture & side tables (Diwali home d\u00e9cor)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:30:34.197337"
+    },
+    {
+      "product": "handicrafts_and_home_d\u00e9cor:Marble Ganesh & Laxmi idols (Makrana white marble \u2014 Diwali puja)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:30:57.342752"
+    },
+    {
+      "product": "handicrafts_and_home_d\u00e9cor:Jodhpur bone inlay decorative trays",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:31:20.695974"
+    },
+    {
+      "product": "handicrafts_and_home_d\u00e9cor:Rajasthani embroidered table runners & napkins \u2014 wedding trousseau",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:31:44.720706"
+    },
+    {
+      "product": "handicrafts_and_home_d\u00e9cor:Papier-m\u00e2ch\u00e9 decorative bowls (Jaipur artisans)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:32:09.400094"
+    },
+    {
+      "product": "handicrafts_and_home_d\u00e9cor:Camel leather cushion covers (Jodhpur artisans)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:32:32.876229"
+    },
+    {
+      "product": "sweets_and_confectionery_retail:Rajasthani ghewar (Jaipur GI \u2014 Teej & Raksha Bandhan peak Aug)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:32:56.503267"
+    },
+    {
+      "product": "sweets_and_confectionery_retail:Besan ladoo & churma (Diwali mithai)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:33:20.039101"
+    },
+    {
+      "product": "sweets_and_confectionery_retail:Bikaner namkeen & bhujia (GI snack \u2014 Diwali snacking peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:33:43.079562"
+    },
+    {
+      "product": "sweets_and_confectionery_retail:Mawa kachori & malpua gift boxes (Makar Sankranti Jan)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:34:07.265652"
+    },
+    {
+      "product": "sweets_and_confectionery_retail:Halwai-style dry fruit barfi sets (Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:34:32.027182"
+    },
+    {
+      "product": "sweets_and_confectionery_retail:Tirupati ladoo prasad packs (GI \u2014 peak pilgrimage Brahmotsavam Mar)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:34:55.497548"
+    },
+    {
+      "product": "sweets_and_confectionery_retail:Christmas plum cake & Christmas hampers (Goa \u2014 Dec peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:35:20.049236"
+    },
+    {
+      "product": "gifting_and_cultural_retail:Bankura horse terracotta figurines (GI \u2014 Durga Puja gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:35:43.124704"
+    },
+    {
+      "product": "gifting_and_cultural_retail:Kalighat painting art prints (Durga Puja cultural gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:36:07.213018"
+    },
+    {
+      "product": "gifting_and_cultural_retail:Dokra brass figurines (tribal metal craft \u2014 Durga Puja)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:36:31.764703"
+    },
+    {
+      "product": "gifting_and_cultural_retail:Shantiniketan leather bag (hand-painted Batik, Bolpur)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:36:54.852200"
+    },
+    {
+      "product": "gifting_and_cultural_retail:Bamboo craft decorative items (Poila Boishakh)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:37:18.864118"
+    },
+    {
+      "product": "gifting_and_cultural_retail:Bishnupur silk stole & wall art (Durga Puja)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:37:43.302190"
+    },
+    {
+      "product": "gifting_and_cultural_retail:Nakshi Kantha embroidered quilt (GI \u2014 Durga Puja gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:38:07.299675"
+    },
+    {
+      "product": "tea_and_coffee_wholesale:Darjeeling First Flush tea (spring harvest Mar\u2013Apr \u2014 world's finest)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:38:31.917060"
+    },
+    {
+      "product": "tea_and_coffee_wholesale:Darjeeling Second Flush muscatel tea (May\u2013Jun harvest)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:38:54.980132"
+    },
+    {
+      "product": "tea_and_coffee_wholesale:Darjeeling whole-leaf TGFOP1 tea boxes (Diwali gourmet gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:39:19.587434"
+    },
+    {
+      "product": "tea_and_coffee_wholesale:Darjeeling white tea (premium wellness \u2014 gifting season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:39:42.855459"
+    },
+    {
+      "product": "tea_and_coffee_wholesale:Dooars CTC breakfast tea (mass market \u2014 monsoon drinking season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:40:07.094592"
+    },
+    {
+      "product": "tea_and_coffee_wholesale:Assam orthodox CTC tea (post-first-flush harvest Mar\u2013Apr)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:40:31.321559"
+    },
+    {
+      "product": "general_retail:Gaming headsets & mechanical keyboards (Diwali tech gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:40:54.699383"
+    },
+    {
+      "product": "general_retail:Smart home speakers & IoT switches (Diwali tech gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:41:19.415395"
+    },
+    {
+      "product": "general_retail:Noise-cancelling earbuds (Diwali peak Hyderabad)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:41:42.904667"
+    },
+    {
+      "product": "general_retail:Ergonomic laptop stands & desk accessories (New Year WFH setup)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:42:07.866997"
+    }
+  ],
+  "results": {}
+}

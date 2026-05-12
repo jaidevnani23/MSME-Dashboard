@@ -1,0 +1,31 @@
+{
+  "updated": "2026-05-12",
+  "total_products": 0,
+  "products": {},
+  "batches": {
+    "batch_1": {
+      "completed": "2026-05-12T07:35:44.669183",
+      "range": "0-94",
+      "count": 94,
+      "failed": 94
+    },
+    "batch_2": {
+      "completed": "2026-05-12T08:18:13.801640",
+      "range": "94-188",
+      "count": 94,
+      "failed": 94
+    },
+    "batch_3": {
+      "completed": "2026-05-12T09:00:33.222344",
+      "range": "188-282",
+      "count": 94,
+      "failed": 94
+    },
+    "batch_4": {
+      "completed": "2026-05-12T09:42:07.868017",
+      "range": "282-374",
+      "count": 92,
+      "failed": 92
+    }
+  }
+}

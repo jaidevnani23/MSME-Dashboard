@@ -1,0 +1,478 @@
+{
+  "batch": 3,
+  "started": "2026-05-12T08:23:14.231638",
+  "completed_products": [],
+  "failed_products": [
+    {
+      "product": "fabric_retail:Ilkal cotton-silk sarees (North Karnataka GI)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:23:34.368009"
+    },
+    {
+      "product": "fabric_retail:Kasuti embroidered silk dupattas (Ugadi gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:23:57.412079"
+    },
+    {
+      "product": "fabric_retail:Khun fabric (Dharwad weave \u2014 Dasara)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:24:21.757361"
+    },
+    {
+      "product": "fabric_retail:Mysore silk dhoti sets (traditional \u2014 Dasara men's wear)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:24:45.186637"
+    },
+    {
+      "product": "fabric_retail:Sanganer hand-block print cotton fabric (Jaipur \u2014 Diwali fashion)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:25:09.117259"
+    },
+    {
+      "product": "fabric_retail:Bagru natural-dye block-print dress material",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:25:32.947434"
+    },
+    {
+      "product": "fabric_retail:Bandhani georgette sarees (Jodhpur/Barmer \u2014 Navratri peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:25:56.189267"
+    },
+    {
+      "product": "fabric_retail:Leheriya tie-dye dupattas & sarees (Navratri colour play)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:26:19.905497"
+    },
+    {
+      "product": "fabric_retail:Kota Doria sarees (GI \u2014 ultra-light weave, Diwali & wedding)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:26:42.945294"
+    },
+    {
+      "product": "fabric_retail:Dabu mud-resist print fabric",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:27:05.983362"
+    },
+    {
+      "product": "fabric_retail:Ajrak block-print fabric (Rajasthan-Gujarat border craft)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:27:30.203026"
+    },
+    {
+      "product": "fabric_retail:Tant cotton fabric by the metre (Shantipur mill \u2014 Puja season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:27:53.325260"
+    },
+    {
+      "product": "fabric_retail:Kantha-embroidered fabric panels (Durga Puja gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:28:16.562401"
+    },
+    {
+      "product": "fabric_retail:Matka silk fabric (Malda \u2014 Durga Puja occasion)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:28:39.780992"
+    },
+    {
+      "product": "fabric_retail:Pochampally ikat silk sarees (GI \u2014 Bathukamma Dussehra peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:29:03.705961"
+    },
+    {
+      "product": "fabric_retail:Siddipet gollabama cotton sarees (Bathukamma festival)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:29:27.678422"
+    },
+    {
+      "product": "fabric_retail:Gadwal silk sarees with zari (Dussehra)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:29:52.372530"
+    },
+    {
+      "product": "fabric_retail:Narayanpet silk-cotton sarees (Ugadi gifting Mar)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:30:17.070387"
+    },
+    {
+      "product": "fabric_retail:Ikat fabric by the metre (B2B fashion designers \u2014 festive season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:30:41.946220"
+    },
+    {
+      "product": "fabric_retail:Muga silk sarees (GI \u2014 Bihu festive peak, golden silk of Assam)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:31:05.264071"
+    },
+    {
+      "product": "fabric_retail:Assam silk gamosa (GI cotton weave \u2014 Diwali/gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:31:29.950114"
+    },
+    {
+      "product": "fabric_retail:Orissa ikat handloom sarees (GI \u2014 Dussehra/Diwali peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:31:53.675029"
+    },
+    {
+      "product": "fabric_retail:Kotpad handloom fabric (GI \u2014 tribal natural dye, Diwali)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:32:16.707504"
+    },
+    {
+      "product": "fabric_retail:Sambalpuri ikat sarees (GI Odisha \u2014 Dussehra/Nuakhai)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:32:40.118414"
+    },
+    {
+      "product": "fabric_retail:Chanderi sarees (GI \u2014 Diwali & wedding season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:33:03.825091"
+    },
+    {
+      "product": "fabric_retail:Maheshwari silk-cotton sarees (GI \u2014 Diwali peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:33:27.150211"
+    },
+    {
+      "product": "fabric_retail:Bagh hand-block print fabric (GI \u2014 Diwali festive fashion)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:33:51.054972"
+    },
+    {
+      "product": "fabric_retail:Srikalahasti Kalamkari hand-painted sarees (GI \u2014 Diwali)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:34:14.255661"
+    },
+    {
+      "product": "fabric_retail:Venkatagiri cotton sarees (GI \u2014 Diwali & wedding season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:34:38.164206"
+    },
+    {
+      "product": "fabric_retail:Mangalagiri cotton sarees (GI \u2014 Dussehra/Diwali)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:35:01.695078"
+    },
+    {
+      "product": "utensils_and_home_goods_retail:Solapur terry towel sets (GI product \u2014 Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:35:25.314632"
+    },
+    {
+      "product": "synthetic_fabric_manufacturing:Rayon georgette saree fabric (Surat \u2014 pre-Navratri dispatch)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:35:49.532361"
+    },
+    {
+      "product": "synthetic_fabric_manufacturing:Polyester chiffon dupatta fabric (Surat powerloom)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:36:13.351673"
+    },
+    {
+      "product": "synthetic_fabric_manufacturing:Viscose-modal blend kurta fabric",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:36:37.387215"
+    },
+    {
+      "product": "synthetic_fabric_manufacturing:Nylon net for lehengas & bridal wear (Surat)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:37:01.548503"
+    },
+    {
+      "product": "synthetic_fabric_manufacturing:Jacquard weave fabric (Surat powerloom \u2014 pre-festive dispatch)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:37:25.482005"
+    },
+    {
+      "product": "synthetic_fabric_manufacturing:Organza & tissue saree fabric",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:37:48.626508"
+    },
+    {
+      "product": "wholesale_clothing:Chaniya choli sets (Navratri Garba \u2014 Ahmedabad peak Sep\u2013Oct)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:38:13.411652"
+    },
+    {
+      "product": "wholesale_clothing:Bandhani georgette sarees (Jamnagar Bandhani belt)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:38:38.188635"
+    },
+    {
+      "product": "wholesale_clothing:Wholesale embroidered blouses & dupattas",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:39:02.680086"
+    },
+    {
+      "product": "wholesale_clothing:Jari & zardosi work lehengas (Surat wholesale)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:39:27.574282"
+    },
+    {
+      "product": "wholesale_clothing:Kutch embroidery dress material",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:39:50.912754"
+    },
+    {
+      "product": "wholesale_clothing:Patola silk sarees (Patan \u2014 UNESCO heritage weave)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:40:14.596934"
+    },
+    {
+      "product": "utensils_and_cookware_retail:Ceramic floor tiles (Morbi \u2014 70% of India output)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:40:39.520004"
+    },
+    {
+      "product": "utensils_and_cookware_retail:Sanitaryware & bathroom fittings (Morbi cluster)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:41:03.038778"
+    },
+    {
+      "product": "utensils_and_cookware_retail:Diamond-finish cookware sets \u2014 Diwali kitchen gifting",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:41:27.020172"
+    },
+    {
+      "product": "utensils_and_cookware_retail:Aluminium pressure cookers (Rajkot engineering)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:41:51.916130"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Navratri Bandhani-matched jhumka sets (Ahmedabad artisans)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:42:15.123679"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Kundan Meenakari maang tikka (Ahmedabad)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:42:38.491494"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Lac bangle sets (Rajkot \u2014 Navratri staple)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:43:02.064049"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Temple jewellery sets (Vadodara craftsmen)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:43:25.802714"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Gold-plated choker necklaces \u2014 wedding season",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:43:49.987753"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Oxidised tribal jewellery from Kutch (Navratri gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:44:13.288937"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Firozabad glass bead necklaces & chokers",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:44:37.864668"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Firozabad glass bangle sets (\u20b999 packs \u2014 Meesho top seller)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:45:01.539880"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Jhumka earrings with lac inlay (Lucknow lacwork)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:45:25.036982"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Kundan polki sets (Lucknow bridal \u2014 wedding season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:45:48.991684"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Payal / anklets with ghungroo (UP artisan belt)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:46:12.998975"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Kundan polki bridal set with meenakari (Jaipur \u2014 gem capital)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:46:36.898756"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Silver oxidised earrings with embedded gems (Jaipur silversmith belt)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:47:00.851679"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Lac bangle sets (Jaipur lac artisans \u2014 Navratri top-seller)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:47:23.976948"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Tourmaline, garnet & moonstone rings (Jaipur lapidary)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:47:47.327093"
+    },
+    {
+      "product": "imitation_jewellery_manufacturing:Gold-polished Jadau necklace sets (wedding season Nov\u2013Feb)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:48:10.759349"
+    },
+    {
+      "product": "wholesale_food_and_spices:Groundnut oil (Rajkot \u2014 Saurashtra peanut belt, Rabi harvest)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:48:34.010069"
+    },
+    {
+      "product": "wholesale_food_and_spices:Sesame seeds & til oil (Mehsana)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:48:57.691941"
+    },
+    {
+      "product": "wholesale_food_and_spices:Fenugreek methi (Unjha APMC \u2014 India's largest spice market)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:49:21.845604"
+    },
+    {
+      "product": "wholesale_food_and_spices:Jeera & cumin (Unjha \u2014 post-harvest peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:49:45.571034"
+    },
+    {
+      "product": "wholesale_food_and_spices:Castor oil (industrial + pharma grade)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:50:09.977525"
+    },
+    {
+      "product": "wholesale_food_and_spices:Isabgol / psyllium husk (Gujarat primary producer)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:50:34.875600"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Moradabad brass diyas & puja thali sets (Diwali \u2014 Pital Nagari)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:50:59.271874"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Moradabad brassware flower vases & candle stands",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:51:23.883322"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Agra marble inlay Taj Mahal replicas (Diwali tourist gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:51:47.877656"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Saharanpur carved wooden photo frames & trays",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:52:12.737040"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Firozabad glass bangles & decorative items (Navratri)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:52:36.401288"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Kannauj ittar (attar) perfume bottles \u2014 Diwali gifting",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:53:00.528670"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Varanasi silk wall hangings",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:53:24.594202"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Swamimalai bronze icons \u2014 Navratri / Diwali ritual gifting",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:53:48.108940"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Thanjavur paintings & art plates (GI \u2014 Pongal gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:54:11.318648"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Channapatna toys & dolls (GI \u2014 Dasara children's gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:54:34.439962"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Mysore agarbathi / incense sticks (GI \u2014 Dasara/Diwali ritual)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:54:57.948217"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Mysore rosewood inlay decorative boxes (GI \u2014 Dasara gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:55:21.983968"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Karnataka bronzeware figurines (GI \u2014 Dasara religious gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:55:45.003890"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Ganjifa cards of Mysore (GI \u2014 collector's edition, Dasara)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:56:09.833008"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Amritsar steel dastarkhwan langar thali sets (Baisakhi peak Apr)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:56:34.055349"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Brass Sikh khanda wall art (Baisakhi gifting Apr)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:56:58.512013"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Rumala sahib (decorative cloth \u2014 Gurpurab peak Nov)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:57:21.874731"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Clay Durga idols (Kumartuli Kolkata \u2014 Durga Puja peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:57:46.497896"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Dhunuchi brass incense burner (Durga Puja dance ritual)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:58:10.793642"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Lokkhi saaj \u2014 Lakshmi Puja tray set (Oct post-Durga Puja)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:58:35.162907"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Terracotta Lakshmi foot-prints \u2014 Alpona craft (Diwali)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:58:58.813130"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Bamboo & jute return gift baskets (Durga Puja)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:59:23.095848"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Kerala Ashtamangalya puja set (brass \u2014 Onam)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:59:46.455603"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Guruvayur Krishna idol (brass, Thrissur \u2014 Onam gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:00:09.874406"
+    },
+    {
+      "product": "handicrafts_and_religious_articles:Kathakali mask (Thrissur artisans \u2014 Onam cultural gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T09:00:33.221315"
+    }
+  ],
+  "results": {}
+}

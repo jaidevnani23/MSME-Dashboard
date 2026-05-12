@@ -1,0 +1,478 @@
+{
+  "batch": 2,
+  "started": "2026-05-12T07:40:45.090899",
+  "completed_products": [],
+  "failed_products": [
+    {
+      "product": "health_food_retail:Filter coffee powder (Coimbatore / Nilgiris blend)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:41:05.212384"
+    },
+    {
+      "product": "health_food_retail:Tamarind paste & sambar powder (Diwali festive cooking)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:41:28.894080"
+    },
+    {
+      "product": "health_food_retail:Jackfruit chips & banana wafers (summer harvest peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:41:52.839587"
+    },
+    {
+      "product": "health_food_retail:Organic Coorg honey (GI-certified \u2014 Diwali gift hampers)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:42:16.743020"
+    },
+    {
+      "product": "health_food_retail:Coorg pepper & cardamom (spice estate boxes \u2014 pre-festive)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:42:40.526293"
+    },
+    {
+      "product": "health_food_retail:Karnataka jackfruit chips & dried mango (summer produce)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:43:05.037735"
+    },
+    {
+      "product": "health_food_retail:Ragi malt & health mixes (Bengaluru D2C \u2014 New Year fitness)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:43:29.144288"
+    },
+    {
+      "product": "health_food_retail:Ashwagandha latte mix (New Year wellness peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:43:53.102298"
+    },
+    {
+      "product": "health_food_retail:Multiflora Punjab honey (pre-winter gifting peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:44:17.924268"
+    },
+    {
+      "product": "health_food_retail:Amritsar walnuts & mixed dry fruit boxes \u2014 winter onset gifting",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:44:41.141956"
+    },
+    {
+      "product": "health_food_retail:Makki di atta (corn flour) \u2014 winter comfort food (Lohri peak Jan)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:45:04.723677"
+    },
+    {
+      "product": "health_food_retail:Sarson da saag ready-to-cook kit (winter dish \u2014 Lohri Jan peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:45:27.790807"
+    },
+    {
+      "product": "health_food_retail:Organic desi ghee (Anand cooperative \u2014 winter nutrition)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:45:52.063239"
+    },
+    {
+      "product": "health_food_retail:Pinni (traditional energy ladoo) \u2014 Lohri winter sweet Jan",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:46:15.772842"
+    },
+    {
+      "product": "health_food_retail:Holi gulal powder packs (Rajasthan \u2014 origin of Holi colours)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:46:38.833873"
+    },
+    {
+      "product": "health_food_retail:Sundarbans honey (mangrove monofloral \u2014 winter harvest peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:47:03.024581"
+    },
+    {
+      "product": "health_food_retail:Patali gur (date palm jaggery, Nadia \u2014 winter harvest Nov\u2013Feb)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:47:27.322054"
+    },
+    {
+      "product": "health_food_retail:Bengal Gobindobhog rice (GI \u2014 Puja ritual cooking)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:47:51.930395"
+    },
+    {
+      "product": "health_food_retail:Mishti doi (sweet curd) mix \u2014 winter festive season",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:48:16.119387"
+    },
+    {
+      "product": "health_food_retail:Darjeeling tea health assortment boxes (Puja gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:48:40.095997"
+    },
+    {
+      "product": "health_food_retail:Kottakkal Arya Vaidya Sala products (GI Ayurveda \u2014 New Year health)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:49:04.452763"
+    },
+    {
+      "product": "health_food_retail:Brahmi & Amla Ayurvedic hair masks",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:49:28.282574"
+    },
+    {
+      "product": "health_food_retail:Triphala churna (Thrissur Ayurvedic brands)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:49:52.454564"
+    },
+    {
+      "product": "health_food_retail:Murivenna pain relief oil (Onam health gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:50:16.276647"
+    },
+    {
+      "product": "health_food_retail:Ashwagandha & Shatavari capsule packs",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:50:40.496854"
+    },
+    {
+      "product": "health_food_retail:Hyderabad haleem-in-a-box (Ramadan/Eid peak \u2014 Apr typically)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:51:05.291706"
+    },
+    {
+      "product": "health_food_retail:Nizamabad turmeric (GI \u2014 bright yellow, post-harvest peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:51:29.166285"
+    },
+    {
+      "product": "health_food_retail:Sona Masuri rice (Warangal GI \u2014 Amazon Premium Grocery)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:51:52.392475"
+    },
+    {
+      "product": "health_food_retail:Jowar & bajra millet health mix (tribal belt harvest)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:52:16.304699"
+    },
+    {
+      "product": "health_food_retail:Kashmiri walnut kernels (GI \u2014 autumn harvest Oct\u2013Nov)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:52:41.142446"
+    },
+    {
+      "product": "health_food_retail:Kashmiri dry fruit hampers \u2014 badam, akhrot, khumani (winter Dec)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:53:04.630644"
+    },
+    {
+      "product": "food_and_grocery_retail:Alphonso mango pulp (Ratnagiri GI) \u2014 summer harvest peak Apr\u2013Jun",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:53:28.279943"
+    },
+    {
+      "product": "food_and_grocery_retail:Alphonso mango ready-to-eat pulp cans (Devgad/Ratnagiri)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:53:52.477572"
+    },
+    {
+      "product": "food_and_grocery_retail:Puranpoli mix (Holi / Gudi Padwa festive \u2014 March)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:54:16.113185"
+    },
+    {
+      "product": "food_and_grocery_retail:Gudi Padwa special mithai hampers (Maharashtra New Year)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:54:40.087130"
+    },
+    {
+      "product": "food_and_grocery_retail:Malvani masala blends \u2014 festive cooking season",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:55:03.722379"
+    },
+    {
+      "product": "food_and_grocery_retail:Goda masala (Maharashtra signature spice blend)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:55:27.845885"
+    },
+    {
+      "product": "food_and_grocery_retail:Sol kadhi concentrate (Konkan coast \u2014 summer-monsoon cooling drink)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:55:51.412376"
+    },
+    {
+      "product": "food_and_grocery_retail:Kolhapuri chilli powder",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:56:14.476536"
+    },
+    {
+      "product": "food_and_grocery_retail:Nagpur orange gift boxes (GI Vidarbha oranges \u2014 winter harvest Nov)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:56:38.078910"
+    },
+    {
+      "product": "food_and_grocery_retail:Allahabad Surkha guava (GI \u2014 summer harvest Apr\u2013Jun)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:57:01.670985"
+    },
+    {
+      "product": "food_and_grocery_retail:Chikmagalur single-origin arabica coffee beans (Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:57:26.576803"
+    },
+    {
+      "product": "food_and_grocery_retail:Coorg robusta filter coffee blend (Diwali hampers)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:57:50.257691"
+    },
+    {
+      "product": "food_and_grocery_retail:Sleepy Owl cold brew concentrate (Valentine's gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:58:13.402397"
+    },
+    {
+      "product": "food_and_grocery_retail:Blue Tokai Attikan Estate coffee pods (Diwali gourmet)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:58:36.629709"
+    },
+    {
+      "product": "food_and_grocery_retail:Kofee Kong monsooned malabar (post-harvest season Mar\u2013Apr)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:58:59.648324"
+    },
+    {
+      "product": "food_and_grocery_retail:Karnataka cardamom chai blend (Diwali hampers)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:59:23.654183"
+    },
+    {
+      "product": "food_and_grocery_retail:Idukki cardamom pods (GI \u2014 Onam gift hamper peak Aug\u2013Sep)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T07:59:46.765633"
+    },
+    {
+      "product": "food_and_grocery_retail:Wayanad black pepper (Malabar pepper GI \u2014 post-harvest dispatch)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:00:09.982353"
+    },
+    {
+      "product": "food_and_grocery_retail:Kerala vanilla pods & vanilla extract (Idukki \u2014 GI)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:00:34.559922"
+    },
+    {
+      "product": "food_and_grocery_retail:Cinnamon quills (Kottayam \u2014 Onam spice hampers)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:00:58.389372"
+    },
+    {
+      "product": "food_and_grocery_retail:Kerala cold-pressed coconut oil (Onam home cooking staple)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:01:22.998928"
+    },
+    {
+      "product": "food_and_grocery_retail:Nutmeg & mace (Thrissur \u2014 Onam specialty)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:01:47.721969"
+    },
+    {
+      "product": "food_and_grocery_retail:Kerala Onam spice estate gift box (Onasadya cooking pack)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:02:12.443556"
+    },
+    {
+      "product": "food_and_grocery_retail:Alleppey Green Cardamom (GI \u2014 post-harvest export peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:02:36.548725"
+    },
+    {
+      "product": "food_and_grocery_retail:Kangra tea gift boxes (GI \u2014 Diwali / autumn harvest)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:02:59.632210"
+    },
+    {
+      "product": "food_and_grocery_retail:Goa cashew nuts & feni (Christmas/New Year gifting peak Dec)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:03:23.795988"
+    },
+    {
+      "product": "food_and_grocery_retail:Goa summer cashew feni cocktail kits (summer tourism peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:03:47.908336"
+    },
+    {
+      "product": "food_and_grocery_retail:Kashmiri saffron (GI \u2014 Diwali gifting, post-harvest Oct\u2013Nov)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:04:12.858419"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Niacinamide face serums (Diwali gifting \u2014 D2C Mumbai brands)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:04:36.144366"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:SPF 50 tinted sunscreen (summer demand peak Apr\u2013Jun)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:05:00.162660"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Vitamin C brightening kits (Diwali gifting sets)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:05:24.871659"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Luxury deo gift sets",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:05:49.618381"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Waterproof kajal & mascara (Navratri / festive season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:06:14.599433"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Hair growth oils (Ayurvedic Mumbai wellness startups)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:06:37.879404"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Turmeric & neem face packs (Pongal beauty gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:07:01.267392"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Coconut hair oil (summer peak care season Apr\u2013Jun)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:07:26.077822"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Natural henna powder (Madurai \u2014 Pongal/Pongal festival use)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:07:50.557774"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Kumkumadi tailam (Ayurvedic facial oil \u2014 Pongal gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:08:13.561513"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Mysore Sandal Soap (GI \u2014 Diwali gifting peak, KSSDL)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:08:38.156598"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Pure sandalwood body lotion (Mysore \u2014 Dasara gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:09:02.675206"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Vetiver & Neem face wash (summer skincare Apr\u2013Jun)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:09:26.322423"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Kumkumadi serum (Bengaluru wellness brands \u2014 New Year health)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:09:49.967454"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Brahmi hair oil (Dasara gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:10:14.233079"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Mysore sandalwood oil (GI manufactured \u2014 Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:10:38.533587"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Virgin coconut oil for hair & skin (summer care peak Apr\u2013Jun)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:11:02.636459"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Coconut milk shampoo & conditioner (summer hair care)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:11:27.594800"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Kera herbal hair oil (Onam beauty gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:11:52.424249"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Rosemary-coconut oil blend (summer hair care)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:12:16.443382"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Ayurvedic kumkumadi face serum (Diwali gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:12:40.362381"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Hyderabad pharma-grade vitamin C supplements (New Year health)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:13:04.535857"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Nutraceutical hair biotin gummies (Hyderabad pharma brands)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:13:28.035298"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Sunscreen SPF 50 PA++++ (dermatologist-backed \u2014 summer peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:13:52.757100"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Clinical skincare serums (Hyderabad derma brands)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:14:16.111381"
+    },
+    {
+      "product": "beauty_and_cosmetics_retail:Collagen supplements (pharma grade \u2014 New Year wellness)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:14:40.874204"
+    },
+    {
+      "product": "fabric_retail:Solapuri chaddar (GI-tagged cotton bed cover \u2014 Diwali home gifting)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:15:03.904076"
+    },
+    {
+      "product": "fabric_retail:Kanchipuram silk sarees (GI) \u2014 Pongal gifting (new saree tradition)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:15:27.313470"
+    },
+    {
+      "product": "fabric_retail:Coimbatore cotton Kovai Kora sarees \u2014 Pongal new saree tradition",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:15:50.514042"
+    },
+    {
+      "product": "fabric_retail:Madurai cotton sarees (Diwali)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:16:14.255288"
+    },
+    {
+      "product": "fabric_retail:Salem silk sarees (Pongal season)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:16:37.540000"
+    },
+    {
+      "product": "fabric_retail:Karur hand-block print fabric",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:17:00.708957"
+    },
+    {
+      "product": "fabric_retail:Handloom cotton sarees with temple border (Diwali)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:17:25.325405"
+    },
+    {
+      "product": "fabric_retail:Pure Mysore silk sarees (GI \u2014 Dasara festive peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:17:49.644501"
+    },
+    {
+      "product": "fabric_retail:Mysore crepe & georgette silk sarees (Dasara peak)",
+      "error": "API fetch failed",
+      "timestamp": "2026-05-12T08:18:13.800636"
+    }
+  ],
+  "results": {}
+}

@@ -1,18 +1,39 @@
 #!/usr/bin/env python3
 """
-patch_demand_products.py — Product-Level Google Trends → India Logistics Dashboard
-====================================================================================
-Fetches 12-month India search interest for individual products within each category,
-normalises to 0–4, then writes results to data/demand_products.json.
+patch_demand_products_multiday.py — Safe Multi-Day Product Demand Fetching
+===========================================================================
+Fetches Google Trends data for 374 products across multiple days with intelligent
+rate limiting, progress tracking, resume capability, and batch management.
 
-The dashboard reads data/demand_products.json at page load — commit + push this file
-to trigger an automatic redeploy with fresh product-level demand scores.
+STRATEGY: Spreads 374 products over 4 days (93-94 products/day) with safe delays
+to avoid IP blocks and rate limits from Google Trends' unofficial API.
 
 Usage:
     pip install pytrends --break-system-packages
-    python patch_demand_products.py                  # writes data/demand_products.json
-    python patch_demand_products.py --dry-run        # prints JSON without writing
-    python patch_demand_products.py --sample 5       # sample 5 products per category
+    
+    # Run daily batches
+    python patch_demand_products_multiday.py --batch 1    # Day 1: Products 0-93
+    python patch_demand_products_multiday.py --batch 2    # Day 2: Products 94-187
+    python patch_demand_products_multiday.py --batch 3    # Day 3: Products 188-280
+    python patch_demand_products_multiday.py --batch 4    # Day 4: Products 281-374
+    
+    # Or specify custom range
+    python patch_demand_products_multiday.py --start 0 --end 50
+    
+    # Test with dry-run
+    python patch_demand_products_multiday.py --batch 1 --dry-run
+    
+    # Resume from failure
+    python patch_demand_products_multiday.py --batch 2 --resume
+
+Features:
+- ✅ Batch processing (4 days for 374 products)
+- ✅ Progress tracking with JSON checkpoint files
+- ✅ Resume capability after failures or IP blocks
+- ✅ Intelligent rate limiting (3-5 seconds between products)
+- ✅ Error handling and retry logic
+- ✅ Estimated completion time
+- ✅ Daily summaries and change reports
 
 Requirements: Python 3.8+, pytrends
 """
@@ -23,7 +44,9 @@ import pathlib
 import sys
 import time
 import datetime
+import random
 from datetime import datetime as dt
+from typing import Dict, List, Tuple, Optional
 
 try:
     from pytrends.request import TrendReq
@@ -33,8 +56,19 @@ except ImportError:
     )
 
 
-# ── Product-to-search-term mapping ───────────────────────────────────────────
-# Maps product names/patterns to their best search terms for Google Trends
+# ── Configuration ─────────────────────────────────────────────────────────────
+PRODUCTS_PER_BATCH = 94  # 374 ÷ 4 = 93.5, so use 94 for even distribution
+MIN_DELAY_SECONDS = 3.0  # Minimum delay between products
+MAX_DELAY_SECONDS = 5.0  # Maximum delay between products
+RETRY_ATTEMPTS = 2       # Number of retries per product
+RETRY_DELAY = 10.0       # Delay before retry (seconds)
+
+MONTH_NAMES = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+]
+
+# ── Product-to-search-term mapping (same as original) ────────────────────────
 PRODUCT_SEARCH_TERMS = {
     # Clothing & Apparel
     "saree": ["saree online", "designer saree", "silk saree"],
@@ -49,6 +83,13 @@ PRODUCT_SEARCH_TERMS = {
     "phulkari": ["phulkari dupatta", "punjabi phulkari"],
     "chikankari": ["chikankari suit", "lucknowi chikankari"],
     "pashmina": ["pashmina shawl", "kashmiri pashmina"],
+    "tant": ["tant saree", "tant cotton"],
+    "baluchari": ["baluchari saree", "bishnupur silk"],
+    "jamdani": ["jamdani saree", "jamdani muslin"],
+    "kasavu": ["kasavu saree", "kerala kasavu"],
+    "dhuti": ["dhoti", "dhuti panjabi"],
+    "mundu": ["mundu", "kerala mundu"],
+    "mekhela": ["mekhela chador", "assam silk"],
     
     # Fabrics
     "fabric": ["fabric wholesale", "cotton fabric", "silk fabric"],
@@ -57,6 +98,12 @@ PRODUCT_SEARCH_TERMS = {
     "cotton": ["cotton fabric", "organic cotton"],
     "silk": ["silk fabric", "pure silk"],
     "synthetic": ["synthetic fabric", "polyester fabric"],
+    "rayon": ["rayon fabric", "viscose rayon"],
+    "kanchipuram": ["kanchipuram silk", "kanjivaram saree"],
+    "mysore silk": ["mysore silk", "karnataka silk"],
+    "pochampally": ["pochampally ikat", "pochampally saree"],
+    "chanderi": ["chanderi saree", "chanderi fabric"],
+    "maheshwari": ["maheshwari saree", "maheshwari silk"],
     
     # Apparel Manufacturing
     "t-shirt": ["t shirt export", "cotton t-shirt", "graphic tees"],
@@ -75,6 +122,9 @@ PRODUCT_SEARCH_TERMS = {
     "honey": ["organic honey", "raw honey"],
     "cardamom": ["cardamom", "elaichi"],
     "turmeric": ["turmeric powder", "haldi"],
+    "guava": ["guava", "amrud"],
+    "orange": ["nagpur orange", "orange"],
+    "jaggery": ["jaggery", "gur"],
     
     # Handicrafts & Crafts
     "handicrafts": ["indian handicrafts", "handmade crafts"],
@@ -83,6 +133,8 @@ PRODUCT_SEARCH_TERMS = {
     "carpet": ["hand knotted carpet", "wool carpet"],
     "dhurrie": ["cotton dhurrie", "handloom rug"],
     "wooden": ["wooden handicrafts", "carved wood"],
+    "terracotta": ["terracotta", "clay craft"],
+    "marble": ["marble handicraft", "marble statue"],
     
     # Beauty & Cosmetics
     "cosmetics": ["cosmetics online", "makeup products"],
@@ -92,21 +144,66 @@ PRODUCT_SEARCH_TERMS = {
     "leather bag": ["leather bag", "handbag"],
     "footwear": ["footwear online", "leather shoes"],
     "sandal": ["sandals", "ethnic footwear"],
+    "serum": ["face serum", "vitamin c serum"],
+    "sunscreen": ["sunscreen spf", "sunblock"],
     
     # Home & Utensils
     "tiles": ["ceramic tiles", "floor tiles"],
     "cookware": ["cookware set", "non stick cookware"],
     "utensils": ["kitchen utensils", "stainless steel"],
+    "towel": ["bath towel", "terry towel"],
 }
 
-MONTH_NAMES = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-]
+
+# ── Dashboard Products Extraction ────────────────────────────────────────────
+def load_products_from_dashboard(html_path: str) -> List[Tuple[str, str, str]]:
+    """
+    Extract all products from the dashboard HTML file.
+    Returns: List of (category_id, product_name, state) tuples
+    """
+    try:
+        with open(html_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Find the PRODUCTS_BY_CAT object
+        start = content.find('const PRODUCTS_BY_CAT = {')
+        if start == -1:
+            raise ValueError("Could not find PRODUCTS_BY_CAT in dashboard HTML")
+        
+        # Extract the JSON object (find matching closing brace)
+        brace_count = 0
+        json_start = start + len('const PRODUCTS_BY_CAT = ')
+        json_end = json_start
+        
+        for i, char in enumerate(content[json_start:], start=json_start):
+            if char == '{':
+                brace_count += 1
+            elif char == '}':
+                brace_count -= 1
+                if brace_count == 0:
+                    json_end = i + 1
+                    break
+        
+        json_str = content[json_start:json_end]
+        products_data = json.loads(json_str)
+        
+        # Convert to flat list
+        products = []
+        for category, items in products_data.items():
+            # Convert category name to ID (lowercase, replace spaces with underscores)
+            cat_id = category.lower().replace(' ', '_').replace('&', 'and')
+            for item in items:
+                products.append((cat_id, item['Product'], item.get('State', 'Unknown')))
+        
+        return products
+        
+    except Exception as e:
+        print(f"❌ Error loading products from dashboard: {e}")
+        sys.exit(1)
 
 
-# ── Extract search terms from product name ───────────────────────────────────
-def extract_search_terms(product_name: str) -> list:
+# ── Search Term Extraction ───────────────────────────────────────────────────
+def extract_search_terms(product_name: str) -> List[str]:
     """
     Extract relevant search terms for a product based on its name.
     Returns a list of 1-3 search terms optimized for Google Trends.
@@ -125,9 +222,8 @@ def extract_search_terms(product_name: str) -> list:
         return matched_terms[:3]  # Limit to 3 terms
     
     # Fallback: extract key product words
-    # Remove common filler words and brackets content
     words = product_name.split()
-    stop_words = {"the", "a", "an", "and", "or", "of", "for", "with", "in", "&", "—", "-"}
+    stop_words = {"the", "a", "an", "and", "or", "of", "for", "with", "in", "&", "—", "-", "set", "sets"}
     key_words = []
     
     for word in words:
@@ -148,26 +244,33 @@ def extract_search_terms(product_name: str) -> list:
     return [" ".join(words[:2]).lower()]
 
 
-# ── Trend fetching ────────────────────────────────────────────────────────────
-def fetch_interest(pytrends: TrendReq, terms: list, timeframe: str, geo: str) -> list:
+# ── Trend Fetching ───────────────────────────────────────────────────────────
+def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str, 
+                   geo: str, retry_count: int = 0) -> Optional[List[float]]:
     """
     Returns a 12-element list of normalised monthly interest (0.0–1.0).
     Averages across all provided terms using chunked requests (max 5 per call).
+    Returns None on failure after retries.
     """
     all_monthly = []
-
     chunk_size = 5
+    
     for i in range(0, len(terms), chunk_size):
         chunk = terms[i: i + chunk_size]
         try:
             pytrends.build_payload(chunk, timeframe=timeframe, geo=geo)
             df = pytrends.interest_over_time()
         except Exception as exc:
-            print(f"    ⚠  Trends API error for {chunk}: {exc}")
-            continue
+            if retry_count < RETRY_ATTEMPTS:
+                print(f"      ⚠️  API error, retrying in {RETRY_DELAY}s... ({exc})")
+                time.sleep(RETRY_DELAY)
+                return fetch_interest(pytrends, terms, timeframe, geo, retry_count + 1)
+            else:
+                print(f"      ❌ Failed after {RETRY_ATTEMPTS} retries: {exc}")
+                return None
 
         if df.empty:
-            print(f"    ⚠  No data returned for {chunk}")
+            print(f"      ⚠️  No data returned for terms: {chunk}")
             continue
 
         if "isPartial" in df.columns:
@@ -193,16 +296,15 @@ def fetch_interest(pytrends: TrendReq, terms: list, timeframe: str, geo: str) ->
         time.sleep(1.2)
 
     if not all_monthly:
-        return [0.0] * 12
+        return None
 
     averaged = [sum(col) / len(col) for col in zip(*all_monthly)]
     return averaged
 
 
-def normalise_to_demand(values: list) -> list:
+def normalise_to_demand(values: List[float]) -> List[int]:
     """
     Maps a 0.0–1.0 float list to integer demand scores 0–4.
-    Bucket boundaries mirror the manual scoring used in the dashboard.
     """
     def bucket(v: float) -> int:
         if v >= 0.85: return 4
@@ -214,14 +316,87 @@ def normalise_to_demand(values: list) -> list:
     return [bucket(v) for v in values]
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+# ── Progress Tracking ────────────────────────────────────────────────────────
+class ProgressTracker:
+    """Tracks progress and allows resume capability"""
+    
+    def __init__(self, batch_num: int):
+        self.batch_num = batch_num
+        self.checkpoint_file = pathlib.Path(f"data/progress_batch_{batch_num}.json")
+        self.data = self._load()
+    
+    def _load(self) -> Dict:
+        """Load existing progress or create new"""
+        if self.checkpoint_file.exists():
+            try:
+                with open(self.checkpoint_file, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        
+        return {
+            "batch": self.batch_num,
+            "started": datetime.datetime.now().isoformat(),
+            "completed_products": [],
+            "failed_products": [],
+            "results": {}
+        }
+    
+    def save(self):
+        """Save progress to checkpoint file"""
+        self.checkpoint_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(self.checkpoint_file, 'w') as f:
+            json.dump(self.data, f, indent=2)
+    
+    def is_completed(self, product_key: str) -> bool:
+        """Check if product already processed"""
+        return product_key in self.data["completed_products"]
+    
+    def mark_completed(self, product_key: str, result: Dict):
+        """Mark product as completed with results"""
+        if product_key not in self.data["completed_products"]:
+            self.data["completed_products"].append(product_key)
+        self.data["results"][product_key] = result
+        self.save()
+    
+    def mark_failed(self, product_key: str, error: str):
+        """Mark product as failed"""
+        self.data["failed_products"].append({
+            "product": product_key,
+            "error": error,
+            "timestamp": datetime.datetime.now().isoformat()
+        })
+        self.save()
+    
+    def get_completion_rate(self, total: int) -> float:
+        """Get completion percentage"""
+        return (len(self.data["completed_products"]) / total * 100) if total > 0 else 0
+
+
+# ── Main Execution ───────────────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(
-        description="Fetch Google Trends product-level demand data"
+        description="Fetch Google Trends product-level demand data in safe batches"
+    )
+    parser.add_argument(
+        "--batch", type=int, choices=[1, 2, 3, 4],
+        help="Batch number (1-4) for pre-defined ranges",
+    )
+    parser.add_argument(
+        "--start", type=int,
+        help="Custom start index (overrides --batch)",
+    )
+    parser.add_argument(
+        "--end", type=int,
+        help="Custom end index (overrides --batch)",
     )
     parser.add_argument(
         "--dry-run", action="store_true",
         help="Print the new demand arrays without writing to disk",
+    )
+    parser.add_argument(
+        "--resume", action="store_true",
+        help="Resume from checkpoint (skip already completed products)",
     )
     parser.add_argument(
         "--timeframe", default="today 12-m",
@@ -232,108 +407,118 @@ def main():
         help="Google Trends geo code (default: IN for India)",
     )
     parser.add_argument(
-        "--sample", type=int, default=None,
-        help="Sample N products per category for testing (default: all)",
+        "--dashboard", default="india_logistics_dashboard_v24.html",
+        help="Path to dashboard HTML file",
     )
     args = parser.parse_args()
-
-    # Load dashboard product structure from the HTML file
-    # In production, you'd extract this from the actual dashboard
-    # For now, we'll create a simplified structure based on the categories
     
-    PRODUCT_GROUPS = {
-        "clothing": [
-            "Oversized graphic tees",
-            "Anarkali suits & party-wear lehengas",
-            "Men's bandhgala kurtas",
-            "Diwali special sarees",
-            "Chaniya choli sets",
-            "Banarasi silk sarees",
-            "Phulkari embroidered dupatta",
-        ],
-        "apparel_mfg": [
-            "Export T-shirts & polo shirts",
-            "Sportswear & compression tights",
-            "Kids' cotton school uniforms",
-            "Ludhiana acrylic sweaters",
-        ],
-        "fabric": [
-            "Rayon georgette saree fabric",
-            "Cotton knit fabric",
-            "Silk sarees",
-            "Synthetic fabric",
-        ],
-        "food": [
-            "Alphonso mango pulp",
-            "Chikmagalur arabica coffee beans",
-            "Darjeeling tea",
-            "Dry fruits wholesale",
-            "Cardamom pods",
-            "Turmeric powder",
-        ],
-        "crafts": [
-            "Moradabad brass diyas",
-            "Jaipur blue pottery",
-            "Hand-knotted wool carpets",
-            "Handicrafts wholesale",
-        ],
-        "beauty": [
-            "Imitation jewellery",
-            "Leather bags",
-            "Cosmetics wholesale",
-            "Footwear retail",
-            "Mysore Sandal Soap",
-        ],
-        "home": [
-            "Ceramic floor tiles",
-            "Cookware sets",
-            "Kitchen utensils",
-        ],
-    }
-
-    # ── Load existing product demand if available ──
+    # Determine range
+    if args.start is not None and args.end is not None:
+        start_idx = args.start
+        end_idx = args.end
+        batch_num = 0  # Custom range
+    elif args.batch:
+        batch_num = args.batch
+        start_idx = (batch_num - 1) * PRODUCTS_PER_BATCH
+        end_idx = min(start_idx + PRODUCTS_PER_BATCH, 374)
+    else:
+        print("❌ Error: Specify either --batch or both --start and --end")
+        sys.exit(1)
+    
+    # Load products from dashboard
+    print(f"\n{'─'*70}")
+    print(f"  India Logistics Dashboard — Multi-Day Product Demand Patcher")
+    print(f"{'─'*70}")
+    print(f"  Loading products from dashboard...")
+    
+    dashboard_path = args.dashboard
+    if not pathlib.Path(dashboard_path).exists():
+        # Try in uploads folder
+        dashboard_path = f"/mnt/user-data/uploads/{dashboard_path}"
+    
+    all_products = load_products_from_dashboard(dashboard_path)
+    total_products = len(all_products)
+    
+    print(f"  ✅ Loaded {total_products} products from dashboard")
+    
+    # Select batch
+    batch_products = all_products[start_idx:end_idx]
+    batch_size = len(batch_products)
+    
+    print(f"\n  📦 Batch Configuration:")
+    if batch_num > 0:
+        print(f"     Batch Number : {batch_num} of 4")
+    print(f"     Range        : Products {start_idx} to {end_idx-1}")
+    print(f"     Count        : {batch_size} products")
+    print(f"     Timeframe    : {args.timeframe}")
+    print(f"     Geo          : {args.geo}")
+    
+    # Estimate time
+    avg_delay = (MIN_DELAY_SECONDS + MAX_DELAY_SECONDS) / 2
+    estimated_minutes = (batch_size * avg_delay) / 60
+    print(f"     Est. Time    : {estimated_minutes:.1f} minutes ({estimated_minutes/60:.1f} hours)")
+    
+    # Load progress tracker
+    tracker = ProgressTracker(batch_num if batch_num > 0 else 0)
+    
+    if args.resume and tracker.data["completed_products"]:
+        print(f"\n  🔄 Resume Mode:")
+        completion = tracker.get_completion_rate(batch_size)
+        print(f"     Already completed: {len(tracker.data['completed_products'])} products ({completion:.1f}%)")
+        print(f"     Failed: {len(tracker.data['failed_products'])} products")
+    
+    print(f"{'─'*70}\n")
+    
+    # Load existing demand data
     out_path = pathlib.Path("data") / "demand_products.json"
     try:
         existing = json.loads(out_path.read_text(encoding="utf-8"))
         product_map = existing.get("products", {})
     except Exception:
         product_map = {}
-
-    # ── Init pytrends ──
+    
+    # Init pytrends
     pytrends = TrendReq(hl="en-IN", tz=330, retries=3, backoff_factor=1.5)
-
-    print(f"\n{'─'*70}")
-    print(f"  India Logistics Dashboard — Product-Level Demand Patcher")
-    print(f"  Timeframe : {args.timeframe}  |  Geo : {args.geo}")
-    print(f"  Output    : {out_path}")
-    if args.sample:
-        print(f"  Sample    : {args.sample} products per category")
-    print(f"{'─'*70}\n")
-
+    
+    # Process products
     results = {}
-    total_products = 0
-
-    for group_id, products in PRODUCT_GROUPS.items():
-        print(f"  [{group_id}]")
+    processed_count = 0
+    skipped_count = 0
+    failed_count = 0
+    
+    start_time = time.time()
+    
+    for idx, (cat_id, product_name, state) in enumerate(batch_products, start=start_idx):
+        product_key = f"{cat_id}:{product_name}"
         
-        # Sample if requested
-        if args.sample:
-            products = products[:args.sample]
+        # Skip if already completed (resume mode)
+        if args.resume and tracker.is_completed(product_key):
+            skipped_count += 1
+            continue
         
-        for product_name in products:
-            total_products += 1
-            
-            # Generate search terms
-            search_terms = extract_search_terms(product_name)
-            print(f"    → {product_name}")
-            print(f"      Terms: {', '.join(search_terms)}")
-            
-            # Get old demand if exists
-            product_key = f"{group_id}:{product_name}"
-            old_demand = product_map.get(product_key, {}).get("demand", [0] * 12)
-            
-            # Fetch new data
-            raw = fetch_interest(pytrends, search_terms, args.timeframe, args.geo)
+        processed_count += 1
+        progress = ((idx - start_idx + 1) / batch_size) * 100
+        
+        print(f"  [{idx+1}/{end_idx}] ({progress:.1f}%)")
+        print(f"    📦 {product_name}")
+        print(f"       Category: {cat_id} | State: {state}")
+        
+        # Generate search terms
+        search_terms = extract_search_terms(product_name)
+        print(f"       Terms: {', '.join(search_terms)}")
+        
+        # Get old demand if exists
+        old_demand = product_map.get(product_key, {}).get("demand", [0] * 12)
+        
+        # Fetch new data
+        raw = fetch_interest(pytrends, search_terms, args.timeframe, args.geo)
+        
+        if raw is None:
+            print(f"       ❌ Failed to fetch data")
+            failed_count += 1
+            tracker.mark_failed(product_key, "API fetch failed")
+            new_demand = old_demand  # Keep old data on failure
+        else:
             new_demand = normalise_to_demand(raw)
             
             # Show changes
@@ -341,77 +526,124 @@ def main():
             for mi, (old, new) in enumerate(zip(old_demand, new_demand)):
                 if old != new:
                     arrow = "↑" if new > old else "↓"
-                    diff_parts.append(f"{MONTH_NAMES[mi]}: {old}→{new}{arrow}")
+                    diff_parts.append(f"{MONTH_NAMES[mi]}:{old}→{new}{arrow}")
             
             if diff_parts:
-                print(f"      Changes: {', '.join(diff_parts)}")
+                print(f"       📊 Changes: {', '.join(diff_parts)}")
             else:
-                print(f"      No changes")
+                print(f"       ✓ No changes")
             
-            print(f"      Demand: {new_demand}")
+            print(f"       Demand: {new_demand}")
             
-            # Store results
-            if group_id not in results:
-                results[group_id] = {}
-            
-            results[group_id][product_name] = {
+            # Track result
+            result = {
                 "old": old_demand,
                 "new": new_demand,
                 "terms": search_terms,
+                "category": cat_id,
+                "state": state,
             }
-            
-            # Rate limiting
-            time.sleep(2.0)
+            tracker.mark_completed(product_key, result)
+        
+        # Calculate ETA
+        elapsed = time.time() - start_time
+        if processed_count > 0:
+            avg_time_per_product = elapsed / processed_count
+            remaining = batch_size - (idx - start_idx + 1) + skipped_count
+            eta_seconds = avg_time_per_product * remaining
+            eta_minutes = eta_seconds / 60
+            print(f"       ⏱️  ETA: {eta_minutes:.1f} min remaining")
         
         print()
-
-    # ── Dry run stops here ──
+        
+        # Smart delay: random jitter to avoid pattern detection
+        if idx < end_idx - 1:  # Don't delay after last product
+            delay = random.uniform(MIN_DELAY_SECONDS, MAX_DELAY_SECONDS)
+            time.sleep(delay)
+    
+    # ── Summary ──────────────────────────────────────────────────────────────
+    elapsed_total = time.time() - start_time
+    
+    print(f"{'─'*70}")
+    print(f"  Batch {batch_num if batch_num > 0 else 'Custom'} Summary")
+    print(f"{'─'*70}")
+    print(f"   Processed : {processed_count} products")
+    print(f"   Skipped   : {skipped_count} products (already completed)")
+    print(f"   Failed    : {failed_count} products")
+    print(f"   Time      : {elapsed_total/60:.1f} minutes")
+    print(f"   Avg/Product: {elapsed_total/max(processed_count,1):.1f} seconds")
+    
+    completion = tracker.get_completion_rate(batch_size)
+    print(f"   Progress  : {completion:.1f}% of batch complete")
+    print(f"{'─'*70}\n")
+    
+    # ── Write Results ────────────────────────────────────────────────────────
     if args.dry_run:
-        print(f"\n  [dry-run] Would write {total_products} products to {out_path}")
-        summary = {
-            "updated": datetime.date.today().isoformat(),
-            "total_products": total_products,
-            "products": {
-                f"{gid}:{pname}": {
-                    "demand": data["new"],
-                    "terms": data["terms"],
-                }
-                for gid, products in results.items()
-                for pname, data in products.items()
-            },
-        }
-        print(json.dumps(summary, indent=2))
-        print()
+        print(f"  [dry-run] Would merge {len(tracker.data['results'])} products into {out_path}")
         return
-
-    # ── Write demand_products.json ──
+    
+    # Merge with existing data
     out_path.parent.mkdir(parents=True, exist_ok=True)
-
-    output = {
-        "updated": datetime.date.today().isoformat(),
-        "total_products": total_products,
-        "products": {
-            f"{gid}:{pname}": {
-                "demand": data["new"],
-                "terms": data["terms"],
-                "group": gid,
-            }
-            for gid, products in results.items()
-            for pname, data in products.items()
-        },
-        "prev": {
-            f"{gid}:{pname}": data["old"]
-            for gid, products in results.items()
-            for pname, data in products.items()
-        },
+    
+    # Load current file
+    try:
+        current_data = json.loads(out_path.read_text(encoding="utf-8"))
+    except:
+        current_data = {
+            "updated": datetime.date.today().isoformat(),
+            "total_products": 0,
+            "products": {},
+            "batches": {}
+        }
+    
+    # Update with new results
+    for product_key, result in tracker.data["results"].items():
+        current_data["products"][product_key] = {
+            "demand": result["new"],
+            "terms": result["terms"],
+            "category": result["category"],
+            "state": result["state"],
+        }
+    
+    # Update metadata
+    current_data["updated"] = datetime.date.today().isoformat()
+    current_data["total_products"] = len(current_data["products"])
+    current_data["batches"][f"batch_{batch_num if batch_num > 0 else 'custom'}"] = {
+        "completed": datetime.datetime.now().isoformat(),
+        "range": f"{start_idx}-{end_idx}",
+        "count": processed_count,
+        "failed": failed_count,
     }
-
+    
+    # Write to file
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2)
+        json.dump(current_data, f, indent=2)
         f.write("\n")
-
-    print(f"\n  ✅  Done. {total_products} products written to {out_path}")
-    print(f"  Commit and push data/demand_products.json for Vercel to pick it up.\n")
+    
+    print(f"  ✅ Success! {len(current_data['products'])} total products in {out_path}")
+    print(f"  📊 Batch {batch_num if batch_num > 0 else 'Custom'} data merged successfully")
+    print()
+    
+    if failed_count > 0:
+        print(f"  ⚠️  {failed_count} products failed. Run again with --resume to retry.")
+        print(f"  Check data/progress_batch_{batch_num if batch_num > 0 else 0}.json for details")
+        print()
+    
+    # Next steps
+    remaining_batches = []
+    for b in range(1, 5):
+        batch_start = (b - 1) * PRODUCTS_PER_BATCH
+        if batch_start >= len(current_data["products"]):
+            remaining_batches.append(b)
+    
+    if remaining_batches:
+        print(f"  📅 Next Steps:")
+        print(f"     Run remaining batches: {', '.join(map(str, remaining_batches))}")
+        print(f"     Example: python patch_demand_products_multiday.py --batch {remaining_batches[0]}")
+    else:
+        print(f"  🎉 All batches complete! Commit and push data/demand_products.json")
+    
+    print()
 
 
 if __name__ == "__main__":

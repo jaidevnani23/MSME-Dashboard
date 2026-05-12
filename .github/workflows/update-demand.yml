@@ -1,40 +1,61 @@
 name: Update Demand Data
-
 on:
   schedule:
-    - cron: '0 2 * * 1'
-  workflow_dispatch:
+    - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
+  workflow_dispatch:      # Allow manual triggers
 
 jobs:
   update-demand:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0          # full history for rebase
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
+      
       - name: Install dependencies
         run: pip install pytrends pandas requests --break-system-packages
-
-      - name: Run demand patcher
-        run: python patch_demand.py
-
-      - name: Commit and push demand.json
+      
+      - name: Run demand patcher - Batch 1 (Products 0-93)
+        run: python patch_demand.py --batch 1
+      
+      - name: Wait between batches
+        run: sleep 300  # 5 minute break between batches
+      
+      - name: Run demand patcher - Batch 2 (Products 94-187)
+        run: python patch_demand.py --batch 2
+      
+      - name: Wait between batches
+        run: sleep 300
+      
+      - name: Run demand patcher - Batch 3 (Products 188-280)
+        run: python patch_demand.py --batch 3
+      
+      - name: Wait between batches
+        run: sleep 300
+      
+      - name: Run demand patcher - Batch 4 (Products 281-374)
+        run: python patch_demand.py --batch 4
+      
+      - name: Commit and push demand data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Stage the file
-          git add data/demand.json
+          # Stage the demand products file
+          git add data/demand_products.json
+          
+          # Also stage progress files if they exist
+          git add data/progress_batch_*.json 2>/dev/null || true
           
           # Check if there's anything to commit
           if git diff --staged --quiet; then
@@ -42,12 +63,19 @@ jobs:
             exit 0
           fi
           
-          git commit -m "chore: update demand scores [skip ci]"
+          # Commit with timestamp
+          git commit -m "chore: update demand data - $(date +%Y-%m-%d) [skip ci]"
           
-          # Push with retry — handles race conditions gracefully
+          # Push with retry logic to handle race conditions
           for i in 1 2 3; do
             echo "Push attempt $i..."
-            git pull --rebase origin main && git push && break
-            echo "Push failed, retrying..."
+            if git pull --rebase origin main && git push; then
+              echo "Successfully pushed changes"
+              exit 0
+            fi
+            echo "Push failed, retrying in 2 seconds..."
             sleep 2
           done
+          
+          echo "Failed to push after 3 attempts"
+          exit 1

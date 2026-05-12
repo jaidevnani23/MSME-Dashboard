@@ -453,6 +453,14 @@ def main():
     
     print(f"  ✅ Loaded {total_products} products from dashboard")
     
+    # Show sample search term mappings
+    print(f"\n  🔍 Search Term Strategy Examples:")
+    print(f"     • 'saree' → \"saree\", \"silk saree\"")
+    print(f"     • 't-shirt' → \"t shirt\", \"tshirt\"")
+    print(f"     • 'mango' → \"mango\", \"alphonso\"")
+    print(f"     • 'handicrafts' → \"handicrafts\", \"handmade\"")
+    print(f"     (Balanced terms - not too specific, not too broad)")
+    
     # Select batch
     batch_products = all_products[start_idx:end_idx]
     batch_size = len(batch_products)
@@ -511,13 +519,13 @@ def main():
         processed_count += 1
         progress = ((idx - start_idx + 1) / batch_size) * 100
         
-        print(f"  [{idx+1}/{end_idx}] ({progress:.1f}%)")
-        print(f"    📦 {product_name}")
-        print(f"       Category: {cat_id} | State: {state}")
+        print(f"\n  [{idx+1}/{end_idx}] ({progress:.1f}%) ──────────────────────────────────")
+        print(f"    📦 Product: {product_name}")
+        print(f"    📁 Category: {cat_id} | 📍 State: {state}")
         
         # Generate search terms
         search_terms = extract_search_terms(product_name)
-        print(f"       Terms: {', '.join(search_terms)}")
+        print(f"    🔍 Search Terms: {' + '.join([f'"{t}"' for t in search_terms])}")
         
         # Get old demand if exists
         old_demand = product_map.get(product_key, {}).get("demand", [0] * 12)
@@ -526,7 +534,7 @@ def main():
         raw = fetch_interest(pytrends, search_terms, args.timeframe, args.geo)
         
         if raw is None:
-            print(f"       ❌ Failed to fetch data")
+            print(f"    ❌ FAILED - No trends data returned")
             failed_count += 1
             tracker.mark_failed(product_key, "API fetch failed")
             new_demand = old_demand  # Keep old data on failure
@@ -541,11 +549,11 @@ def main():
                     diff_parts.append(f"{MONTH_NAMES[mi]}:{old}→{new}{arrow}")
             
             if diff_parts:
-                print(f"       📊 Changes: {', '.join(diff_parts)}")
+                print(f"    📊 Changes: {', '.join(diff_parts)}")
             else:
-                print(f"       ✓ No changes")
+                print(f"    ✅ No changes (stable demand)")
             
-            print(f"       Demand: {new_demand}")
+            print(f"    📈 Demand Array: {new_demand}")
             
             # Track result
             result = {
@@ -564,9 +572,7 @@ def main():
             remaining = batch_size - (idx - start_idx + 1) + skipped_count
             eta_seconds = avg_time_per_product * remaining
             eta_minutes = eta_seconds / 60
-            print(f"       ⏱️  ETA: {eta_minutes:.1f} min remaining")
-        
-        print()
+            print(f"    ⏱️  ETA: {eta_minutes:.1f} minutes remaining")
         
         # Smart delay: random jitter to avoid pattern detection
         if idx < end_idx - 1:  # Don't delay after last product

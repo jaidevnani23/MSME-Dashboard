@@ -1,4 +1,5 @@
 name: Update Demand Data
+
 on:
   schedule:
     - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
@@ -26,25 +27,29 @@ jobs:
         run: pip install pytrends pandas requests --break-system-packages
       
       - name: Run demand patcher - Batch 1 (Products 0-93)
-        run: python patch_demand.py --batch 1 --dashboard "vercel-app/index.html"
+        run: python patch_demand.py --batch 1 --dashboard "index.html"
+        continue-on-error: false
       
       - name: Wait between batches
         run: sleep 300  # 5 minute break between batches
       
       - name: Run demand patcher - Batch 2 (Products 94-187)
-        run: python patch_demand.py --batch 2 --dashboard "vercel-app/index.html"
+        run: python patch_demand.py --batch 2 --dashboard "index.html"
+        continue-on-error: false
       
       - name: Wait between batches
         run: sleep 300
       
       - name: Run demand patcher - Batch 3 (Products 188-280)
-        run: python patch_demand.py --batch 3 --dashboard "vercel-app/index.html"
+        run: python patch_demand.py --batch 3 --dashboard "index.html"
+        continue-on-error: false
       
       - name: Wait between batches
         run: sleep 300
       
       - name: Run demand patcher - Batch 4 (Products 281-374)
-        run: python patch_demand.py --batch 4 --dashboard "vercel-app/index.html"
+        run: python patch_demand.py --batch 4 --dashboard "index.html"
+        continue-on-error: false
       
       - name: Commit and push demand data
         run: |
@@ -57,6 +62,9 @@ jobs:
           # Also stage progress files if they exist
           git add data/progress_batch_*.json 2>/dev/null || true
           
+          # Stage index.html if modified
+          git add index.html 2>/dev/null || true
+          
           # Check if there's anything to commit
           if git diff --staged --quiet; then
             echo "No changes to commit"
@@ -64,7 +72,7 @@ jobs:
           fi
           
           # Commit with timestamp
-          git commit -m "chore: update demand data - $(date +%Y-%m-%d) [skip ci]"
+          git commit -m "chore: update demand data - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
           
           # Push with retry logic to handle race conditions
           for i in 1 2 3; do
@@ -73,9 +81,19 @@ jobs:
               echo "Successfully pushed changes"
               exit 0
             fi
-            echo "Push failed, retrying in 2 seconds..."
-            sleep 2
+            echo "Push failed, retrying in 5 seconds..."
+            sleep 5
           done
           
           echo "Failed to push after 3 attempts"
           exit 1
+      
+      - name: Upload workflow artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: demand-update-logs
+          path: |
+            data/progress_batch_*.json
+            *.log
+          retention-days: 7

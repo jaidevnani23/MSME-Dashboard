@@ -11,6 +11,7 @@ Usage:
     python patch_demand.py --resume --batch 2
     python patch_demand.py --status
     python patch_demand.py --batch 1 --dashboard index.html
+    python patch_demand.py --retry-failed
 """
 
 import argparse
@@ -469,8 +470,8 @@ def update_dashboard(dashboard_path: str, batch_number: int) -> bool:
         True if successful, False otherwise
     """
     try:
-        # Load the batch results
-        batch_file = OUTPUT_DIR / f"batch_{batch_number}_results.json"
+        # FIXED: Corrected filename format to match save_batch_results()
+        batch_file = OUTPUT_DIR / f"batch_{batch_number:02d}.json"
         if not batch_file.exists():
             print(f"⚠️  Batch {batch_number} results not found at {batch_file}")
             return False
@@ -543,6 +544,81 @@ def update_dashboard(dashboard_path: str, batch_number: int) -> bool:
         print(f"❌ Error updating dashboard: {e}")
         return False
 
+def retry_failed_products() -> bool:
+    """
+    Retry fetching data for previously failed products.
+    
+    Returns:
+        True if any products were retried, False otherwise
+    """
+    checkpoint = load_checkpoint()
+    failed_products = checkpoint.get('failed_products', [])
+    
+    if not failed_products:
+        print("✅ No failed products to retry")
+        return False
+    
+    print(f"\n{'='*70}")
+    print(f"🔄 RETRY FAILED PRODUCTS — {len(failed_products)} products")
+    print(f"{'='*70}\n")
+    
+    pytrends = init_pytrends()
+    results = []
+    still_failed = []
+    
+    for idx, product in enumerate(failed_products, 1):
+        print(f"[{idx}/{len(failed_products)}] {product}")
+        
+        # Extract search terms
+        search_terms = extract_search_terms(product)
+        print(f"  → Terms: {', '.join(search_terms)}")
+        
+        # Fetch trends
+        data = fetch_trends_for_product(pytrends, product, search_terms)
+        
+        if data:
+            results.append(data)
+        else:
+            still_failed.append(product)
+        
+        # Rate limiting delay
+        if idx < len(failed_products):
+            delay = random.uniform(MIN_DELAY_SECONDS, MAX_DELAY_SECONDS)
+            time.sleep(delay)
+    
+    # Save retry results to separate file
+    if results:
+        OUTPUT_DIR.mkdir(exist_ok=True)
+        retry_file = OUTPUT_DIR / f"batch_retry_{dt.now().strftime('%Y%m%d_%H%M%S')}.json"
+        
+        with open(retry_file, 'w') as f:
+            json.dump({
+                "batch_type": "retry",
+                "products_count": len(results),
+                "fetched_at": dt.now().isoformat(),
+                "results": results
+            }, f, indent=2)
+        
+        print(f"\n💾 Saved {len(results)} retry results to {retry_file}")
+    
+    # Update checkpoint - replace failed list with still_failed
+    checkpoint['failed_products'] = still_failed
+    save_checkpoint(checkpoint)
+    
+    # Summary
+    print(f"\n{'='*70}")
+    print(f"✅ Retry Complete")
+    print(f"{'='*70}")
+    print(f"  Recovered: {len(results)}/{len(failed_products)}")
+    print(f"  Still failed: {len(still_failed)}")
+    if still_failed:
+        print(f"  Still failed products: {', '.join(still_failed[:5])}")
+        if len(still_failed) > 5:
+            print(f"  ... and {len(still_failed) - 5} more")
+    print()
+    
+    return True
+
 def main():
     parser = argparse.ArgumentParser(
         description="Fetch Google Trends data for MSME products"
@@ -568,6 +644,11 @@ def main():
         type=str,
         help="Path to the dashboard HTML file to update with demand data"
     )
+    parser.add_argument(
+        "--retry-failed",
+        action="store_true",
+        help="Retry fetching data for previously failed products"
+    )
     
     args = parser.parse_args()
     
@@ -581,11 +662,22 @@ def main():
         print(f"  Failed products: {len(checkpoint['failed_products'])}")
         if checkpoint['last_updated']:
             print(f"  Last updated: {checkpoint['last_updated']}")
+        if checkpoint['failed_products']:
+            print(f"\n  Failed product list:")
+            for product in checkpoint['failed_products'][:10]:
+                print(f"    - {product}")
+            if len(checkpoint['failed_products']) > 10:
+                print(f"    ... and {len(checkpoint['failed_products']) - 10} more")
+        return
+    
+    # Retry failed products
+    if args.retry_failed:
+        retry_failed_products()
         return
     
     # Validate batch argument
     if not args.batch:
-        parser.error("--batch is required (use --status to check progress)")
+        parser.error("--batch is required (use --status to check progress or --retry-failed to retry)")
     
     # Check if batch already completed
     if args.batch in checkpoint['completed_batches'] and not args.resume:

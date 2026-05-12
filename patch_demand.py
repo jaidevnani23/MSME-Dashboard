@@ -10,6 +10,7 @@ Usage:
     python patch_demand.py --batch 1
     python patch_demand.py --resume --batch 2
     python patch_demand.py --status
+    python patch_demand.py --batch 1 --dashboard index.html
 """
 
 import argparse
@@ -456,6 +457,92 @@ def process_batch(
     
     return results, failed
 
+def update_dashboard(dashboard_path: str, batch_number: int) -> bool:
+    """
+    Update the dashboard HTML file with demand data from the specified batch.
+    
+    Args:
+        dashboard_path: Path to the HTML dashboard file
+        batch_number: Batch number to load data from
+        
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        # Load the batch results
+        batch_file = OUTPUT_DIR / f"batch_{batch_number}_results.json"
+        if not batch_file.exists():
+            print(f"⚠️  Batch {batch_number} results not found at {batch_file}")
+            return False
+            
+        with open(batch_file, 'r', encoding='utf-8') as f:
+            batch_data = json.load(f)
+        
+        # Read the dashboard HTML
+        dashboard_file = pathlib.Path(dashboard_path)
+        if not dashboard_file.exists():
+            print(f"⚠️  Dashboard file not found: {dashboard_path}")
+            return False
+            
+        with open(dashboard_file, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        
+        # Convert batch data to JavaScript format
+        js_data = json.dumps(batch_data, indent=2)
+        
+        # Look for a placeholder or existing data injection point
+        # Common patterns: const demandData = {...} or let demandData = {...}
+        # If found, replace it; otherwise, inject before </script> or </body>
+        
+        import re
+        
+        # Try to find existing demandData declaration
+        pattern = r'(const|let|var)\s+demandData\s*=\s*\{[^}]*\}(\s*;)?'
+        if re.search(pattern, html_content, re.DOTALL):
+            # Replace existing declaration
+            html_content = re.sub(
+                pattern,
+                f'const demandData = {js_data};',
+                html_content,
+                flags=re.DOTALL
+            )
+            print(f"✅ Updated existing demandData in {dashboard_path}")
+        else:
+            # Try to find a placeholder comment
+            placeholder_pattern = r'<!--\s*DEMAND_DATA_PLACEHOLDER\s*-->'
+            if re.search(placeholder_pattern, html_content):
+                replacement = f'<script>\nconst demandData = {js_data};\n</script>'
+                html_content = re.sub(placeholder_pattern, replacement, html_content)
+                print(f"✅ Injected demandData at placeholder in {dashboard_path}")
+            else:
+                # Inject before first </script> tag
+                script_pattern = r'</script>'
+                if re.search(script_pattern, html_content):
+                    injection = f'\nconst demandData = {js_data};\n'
+                    html_content = re.sub(script_pattern, f'{injection}</script>', html_content, count=1)
+                    print(f"✅ Injected demandData before </script> in {dashboard_path}")
+                else:
+                    # Last resort: inject before </body>
+                    body_pattern = r'</body>'
+                    if re.search(body_pattern, html_content):
+                        injection = f'\n<script>\nconst demandData = {js_data};\n</script>\n'
+                        html_content = re.sub(body_pattern, f'{injection}</body>', html_content, count=1)
+                        print(f"✅ Injected demandData before </body> in {dashboard_path}")
+                    else:
+                        print(f"⚠️  Could not find injection point in {dashboard_path}")
+                        return False
+        
+        # Write updated HTML back
+        with open(dashboard_file, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        
+        print(f"✅ Dashboard updated successfully: {dashboard_path}")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Error updating dashboard: {e}")
+        return False
+
 def main():
     parser = argparse.ArgumentParser(
         description="Fetch Google Trends data for MSME products"
@@ -475,6 +562,11 @@ def main():
         "--status",
         action="store_true",
         help="Show current progress status"
+    )
+    parser.add_argument(
+        "--dashboard",
+        type=str,
+        help="Path to the dashboard HTML file to update with demand data"
     )
     
     args = parser.parse_args()
@@ -533,6 +625,11 @@ def main():
         if len(failed) > 5:
             print(f"  ... and {len(failed) - 5} more")
     print()
+    
+    # Update dashboard if specified
+    if args.dashboard:
+        print(f"\n📊 Updating dashboard: {args.dashboard}")
+        update_dashboard(args.dashboard, args.batch)
 
 if __name__ == "__main__":
     main()

@@ -431,12 +431,31 @@ def main():
     print(f"{'─'*70}")
     print(f"  Loading products from dashboard...")
     
+    # Try multiple possible locations for the dashboard file
     dashboard_path = args.dashboard
-    if not pathlib.Path(dashboard_path).exists():
-        # Try in uploads folder
-        dashboard_path = f"/mnt/user-data/uploads/{dashboard_path}"
+    possible_paths = [
+        pathlib.Path(dashboard_path),                      # Direct path as provided
+        pathlib.Path("vercel-app") / "index.html",         # Common structure
+        pathlib.Path("india_logistics_dashboard_v24.html"), # Current dir
+        pathlib.Path(f"/mnt/user-data/uploads/{dashboard_path}"),  # Uploads folder (for local dev)
+    ]
     
-    all_products = load_products_from_dashboard(dashboard_path)
+    found_path = None
+    for path in possible_paths:
+        if path.exists():
+            found_path = str(path)
+            print(f"  ✅ Found dashboard at: {path}")
+            break
+    
+    if not found_path:
+        print(f"  ❌ Could not find dashboard HTML file. Tried:")
+        for path in possible_paths:
+            print(f"     - {path}")
+        print(f"\n  💡 Tip: Ensure the HTML file is in your repository")
+        print(f"  💡 Use --dashboard to specify the correct path")
+        sys.exit(1)
+    
+    all_products = load_products_from_dashboard(found_path)
     total_products = len(all_products)
     
     print(f"  ✅ Loaded {total_products} products from dashboard")

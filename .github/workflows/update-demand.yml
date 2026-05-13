@@ -1,10 +1,8 @@
 name: Update Demand Data
-
 on:
   schedule:
     - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
   workflow_dispatch:      # Allow manual triggers
-
 jobs:
   update-demand:
     runs-on: ubuntu-latest
@@ -24,7 +22,10 @@ jobs:
           python-version: '3.11'
       
       - name: Install dependencies
-        run: pip install pytrends pandas requests --break-system-packages
+        run: |
+          pip install --upgrade pip
+          pip install 'urllib3<2.0' pandas requests
+          pip install git+https://github.com/GeneralMills/pytrends.git
       
       - name: Run demand patcher - Batch 1 (Products 0-93)
         run: python patch_demand.py --batch 1 --dashboard "index.html"

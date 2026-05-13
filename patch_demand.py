@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
 """
-patch_demand.py — Safe Multi-Day Product Demand Fetching
-=========================================================
-Fetches Google Trends data for 374 products across multiple days with intelligent
+patch_demand.py — Safe Multi-Batch Product Demand Fetching
+===========================================================
+Fetches Google Trends data for 374 products across multiple batches with intelligent
 rate limiting, progress tracking, resume capability, and batch management.
 
-STRATEGY: Spreads 374 products over 4 days (93-94 products/day) with safe delays
-to avoid IP blocks and rate limits from Google Trends' unofficial API.
+STRATEGY: Spreads 374 products over 8 batches (50 products/batch, last batch has 24)
+with safe delays to avoid IP blocks and rate limits from Google Trends' unofficial API.
 
 Usage:
     pip install pytrends --break-system-packages
     
-    # Run daily batches
-    python patch_demand.py --batch 1    # Day 1: Products 0-93
-    python patch_demand.py --batch 2    # Day 2: Products 94-187
-    python patch_demand.py --batch 3    # Day 3: Products 188-280
-    python patch_demand.py --batch 4    # Day 4: Products 281-374
+    # Run batches
+    python patch_demand.py --batch 1    # Batch 1: Products 0-49
+    python patch_demand.py --batch 2    # Batch 2: Products 50-99
+    python patch_demand.py --batch 3    # Batch 3: Products 100-149
+    python patch_demand.py --batch 4    # Batch 4: Products 150-199
+    python patch_demand.py --batch 5    # Batch 5: Products 200-249
+    python patch_demand.py --batch 6    # Batch 6: Products 250-299
+    python patch_demand.py --batch 7    # Batch 7: Products 300-349
+    python patch_demand.py --batch 8    # Batch 8: Products 350-373
     
     # Or specify custom range
     python patch_demand.py --start 0 --end 50
@@ -27,10 +31,10 @@ Usage:
     python patch_demand.py --batch 2 --resume
 
 Features:
-- ✅ Batch processing (4 days for 374 products)
+- ✅ Batch processing (8 batches for 374 products, 50 products each)
 - ✅ Progress tracking with JSON checkpoint files
 - ✅ Resume capability after failures or IP blocks
-- ✅ Intelligent rate limiting (3-5 seconds between products)
+- ✅ Intelligent rate limiting (4-7 seconds between products)
 - ✅ Error handling and retry logic
 - ✅ Estimated completion time
 - ✅ Daily summaries and change reports
@@ -58,11 +62,13 @@ except ImportError:
 
 
 # ── Configuration ─────────────────────────────────────────────────────────────
-PRODUCTS_PER_BATCH = 94  # 374 ÷ 4 = 93.5, so use 94 for even distribution
-MIN_DELAY_SECONDS = 3.0  # Minimum delay between products
-MAX_DELAY_SECONDS = 5.0  # Maximum delay between products
-RETRY_ATTEMPTS = 2       # Number of retries per product
-RETRY_DELAY = 10.0       # Delay before retry (seconds)
+PRODUCTS_PER_BATCH = 50  # Reduced from 94 to 50 for safer rate limiting
+MIN_DELAY_SECONDS = 4.0  # Increased from 3.0 to 4.0 for safety
+MAX_DELAY_SECONDS = 7.0  # Increased from 5.0 to 7.0 for safety
+RETRY_ATTEMPTS = 3       # Increased from 2 to 3
+RETRY_DELAY = 15.0       # Increased from 10.0 to 15.0 seconds
+LONG_DELAY_EVERY = 10    # Add longer delay every N products
+LONG_DELAY_SECONDS = 20.0 # Extra delay every 10 products
 
 MONTH_NAMES = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -305,7 +311,8 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
         normalised = [v / mx for v in monthly_vals]
         all_monthly.append(normalised)
 
-        time.sleep(1.2)
+        # Delay between chunks within same product
+        time.sleep(1.5)
 
     if not all_monthly:
         return None
@@ -385,14 +392,20 @@ class ProgressTracker:
         return (len(self.data["completed_products"]) / total * 100) if total > 0 else 0
 
 
+# ── Calculate Total Batches ──────────────────────────────────────────────────
+def calculate_total_batches(total_products: int) -> int:
+    """Calculate total number of batches needed"""
+    return (total_products + PRODUCTS_PER_BATCH - 1) // PRODUCTS_PER_BATCH
+
+
 # ── Main Execution ───────────────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(
         description="Fetch Google Trends product-level demand data in safe batches"
     )
     parser.add_argument(
-        "--batch", type=int, choices=[1, 2, 3, 4],
-        help="Batch number (1-4) for pre-defined ranges",
+        "--batch", type=int,
+        help="Batch number (1-8 for 50 products per batch)",
     )
     parser.add_argument(
         "--start", type=int,
@@ -424,22 +437,9 @@ def main():
     )
     args = parser.parse_args()
     
-    # Determine range
-    if args.start is not None and args.end is not None:
-        start_idx = args.start
-        end_idx = args.end
-        batch_num = 0  # Custom range
-    elif args.batch:
-        batch_num = args.batch
-        start_idx = (batch_num - 1) * PRODUCTS_PER_BATCH
-        end_idx = min(start_idx + PRODUCTS_PER_BATCH, 374)
-    else:
-        print("❌ Error: Specify either --batch or both --start and --end")
-        sys.exit(1)
-    
-    # Load products from dashboard
+    # Load products from dashboard first to get total count
     print(f"\n{'─'*70}")
-    print(f"  India Logistics Dashboard — Multi-Day Product Demand Patcher")
+    print(f"  India Logistics Dashboard — Safe Multi-Batch Demand Patcher")
     print(f"{'─'*70}")
     print(f"  Loading products from dashboard...")
     
@@ -450,8 +450,26 @@ def main():
     
     all_products = load_products_from_dashboard(dashboard_path)
     total_products = len(all_products)
+    total_batches = calculate_total_batches(total_products)
     
     print(f"  ✅ Loaded {total_products} products from dashboard")
+    print(f"  📊 Total batches needed: {total_batches} (50 products per batch)")
+    
+    # Determine range
+    if args.start is not None and args.end is not None:
+        start_idx = args.start
+        end_idx = args.end
+        batch_num = 0  # Custom range
+    elif args.batch:
+        batch_num = args.batch
+        if batch_num > total_batches:
+            print(f"❌ Error: Batch {batch_num} exceeds total batches ({total_batches})")
+            sys.exit(1)
+        start_idx = (batch_num - 1) * PRODUCTS_PER_BATCH
+        end_idx = min(start_idx + PRODUCTS_PER_BATCH, total_products)
+    else:
+        print("❌ Error: Specify either --batch or both --start and --end")
+        sys.exit(1)
     
     # Show sample search term mappings
     print(f"\n  🔍 Search Term Strategy Examples:")
@@ -467,16 +485,20 @@ def main():
     
     print(f"\n  📦 Batch Configuration:")
     if batch_num > 0:
-        print(f"     Batch Number : {batch_num} of 4")
+        print(f"     Batch Number : {batch_num} of {total_batches}")
     print(f"     Range        : Products {start_idx} to {end_idx-1}")
     print(f"     Count        : {batch_size} products")
     print(f"     Timeframe    : {args.timeframe}")
     print(f"     Geo          : {args.geo}")
     
-    # Estimate time
+    # Estimate time with longer delays
     avg_delay = (MIN_DELAY_SECONDS + MAX_DELAY_SECONDS) / 2
-    estimated_minutes = (batch_size * avg_delay) / 60
+    # Add extra time for long delays every 10 products
+    extra_delays = (batch_size // LONG_DELAY_EVERY) * LONG_DELAY_SECONDS
+    total_time_seconds = (batch_size * avg_delay) + extra_delays
+    estimated_minutes = total_time_seconds / 60
     print(f"     Est. Time    : {estimated_minutes:.1f} minutes ({estimated_minutes/60:.1f} hours)")
+    print(f"     Safety       : 4-7s delay + 20s every 10 products")
     
     # Load progress tracker
     tracker = ProgressTracker(batch_num if batch_num > 0 else 0)
@@ -497,8 +519,8 @@ def main():
     except Exception:
         product_map = {}
     
-    # Init pytrends
-    pytrends = TrendReq(hl="en-IN", tz=330, retries=3, backoff_factor=1.5)
+    # Init pytrends with more conservative settings
+    pytrends = TrendReq(hl="en-IN", tz=330, retries=3, backoff_factor=2.0)
     
     # Process products
     results = {}
@@ -525,7 +547,6 @@ def main():
         
         # Generate search terms
         search_terms = extract_search_terms(product_name)
-        # Fixed f-string - using single quotes inside to avoid nesting issues
         terms_display = ' + '.join([f'"{t}"' for t in search_terms])
         print(f"    🔍 Search Terms: {terms_display}")
         
@@ -576,9 +597,16 @@ def main():
             eta_minutes = eta_seconds / 60
             print(f"    ⏱️  ETA: {eta_minutes:.1f} minutes remaining")
         
-        # Smart delay: random jitter to avoid pattern detection
+        # Smart delay with extra safety
         if idx < end_idx - 1:  # Don't delay after last product
+            # Regular delay with jitter
             delay = random.uniform(MIN_DELAY_SECONDS, MAX_DELAY_SECONDS)
+            
+            # Add longer delay every N products to avoid patterns
+            if (processed_count % LONG_DELAY_EVERY) == 0:
+                print(f"    ⏸️  Extra safety delay ({LONG_DELAY_SECONDS}s)...")
+                time.sleep(LONG_DELAY_SECONDS)
+            
             time.sleep(delay)
     
     # ── Summary ──────────────────────────────────────────────────────────────
@@ -650,18 +678,16 @@ def main():
         print()
     
     # Next steps
-    remaining_batches = []
-    for b in range(1, 5):
-        batch_start = (b - 1) * PRODUCTS_PER_BATCH
-        if batch_start >= len(current_data["products"]):
-            remaining_batches.append(b)
+    completed_batches = len([k for k in current_data.get("batches", {}).keys() if k.startswith("batch_")])
+    remaining = total_batches - completed_batches
     
-    if remaining_batches:
-        print(f"  📅 Next Steps:")
-        print(f"     Run remaining batches: {', '.join(map(str, remaining_batches))}")
-        print(f"     Example: python patch_demand.py --batch {remaining_batches[0]}")
+    if remaining > 0:
+        print(f"  📅 Progress: {completed_batches}/{total_batches} batches complete")
+        print(f"     {remaining} batches remaining")
+        if batch_num < total_batches:
+            print(f"     Next: python patch_demand.py --batch {batch_num + 1}")
     else:
-        print(f"  🎉 All batches complete! Commit and push data/demand_products.json")
+        print(f"  🎉 All {total_batches} batches complete! Commit and push data/demand_products.json")
     
     print()
 

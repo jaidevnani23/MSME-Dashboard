@@ -3,93 +3,106 @@ on:
   schedule:
     - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
   workflow_dispatch:
+
 jobs:
   update-demand:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    timeout-minutes: 480  # 8 hour timeout (increased for longer delays)
-    
+    timeout-minutes: 480  # 8 hours
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      
+
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install 'urllib3<2.0' pandas requests
           pip install git+https://github.com/GeneralMills/pytrends.git
-      
-      - name: Run all batches (1-11)
+
+      - name: Configure git
         run: |
-          echo "Starting demand data update for 374 products (11 batches @ 35 products/batch)"
-          
-          for batch in {1..11}; do
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: List batches
+        run: python patch_demand_ultra_safe.py --dashboard index.html --list-batches
+
+      - name: Run all batches (1-19)
+        run: |
+          echo "Starting demand data update — 374 products, 19 batches @ 20 products/batch"
+          TOTAL_BATCHES=19
+          FAILED_BATCHES=""
+
+          for batch in $(seq 1 $TOTAL_BATCHES); do
             echo ""
             echo "=========================================="
-            echo "Starting Batch $batch/11"
+            echo "  Batch $batch / $TOTAL_BATCHES"
             echo "=========================================="
-            
-            python patch_demand.py --batch $batch --dashboard "index.html" --resume
-            
-            # Intermediate commit after each batch
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
-            
-            if ! git diff --staged --quiet; then
-              git commit -m "chore: update demand data batch $batch/11 - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
-              git pull --rebase origin main && git push || echo "Push failed, will retry at end"
+
+            if python patch_demand_ultra_safe.py \
+                --batch "$batch" \
+                --dashboard index.html \
+                --resume; then
+              echo "Batch $batch succeeded"
+            else
+              echo "::warning::Batch $batch exited with a non-zero status"
+              FAILED_BATCHES="$FAILED_BATCHES $batch"
             fi
-            
-            # Wait 20 minutes between batches (except after last batch)
-            # Increased from 15 to 20 minutes for extra safety
-            if [ $batch -lt 11 ]; then
-              echo "Waiting 20 minutes before next batch..."
+
+            # Commit progress after every batch so partial work is never lost
+            git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
+            if ! git diff --staged --quiet; then
+              git commit -m "chore: demand data batch $batch/$TOTAL_BATCHES — $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+              for attempt in 1 2 3; do
+                git pull --rebase origin main && git push && break
+                echo "Push attempt $attempt failed, retrying in 5s…"
+                sleep 5
+              done
+            fi
+
+            # 20-minute cooldown between batches (skip after last one)
+            if [ "$batch" -lt "$TOTAL_BATCHES" ]; then
+              echo "Cooling down 20 minutes before next batch…"
               sleep 1200
             fi
           done
-          
-          echo ""
-          echo "=========================================="
-          echo "All batches completed!"
-          echo "=========================================="
-      
+
+          if [ -n "$FAILED_BATCHES" ]; then
+            echo "::warning::The following batches had errors:$FAILED_BATCHES"
+            echo "Partial data has been committed; re-run with --resume to fill gaps."
+          fi
+
       - name: Final commit and push
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
-          
+
           if git diff --staged --quiet; then
-            echo "No new changes to commit"
+            echo "No new changes — nothing to commit"
             exit 0
           fi
-          
-          git commit -m "chore: complete demand data update (all 11 batches) - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
-          
-          # Retry push up to 3 times
-          for i in 1 2 3; do
-            echo "Push attempt $i..."
-            if git pull --rebase origin main && git push; then
-              echo "Successfully pushed all changes"
-              exit 0
-            fi
-            echo "Push failed, retrying in 5 seconds..."
+
+          git commit -m "chore: complete demand data update (all 19 batches) — $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+
+          for attempt in 1 2 3; do
+            echo "Push attempt $attempt…"
+            git pull --rebase origin main && git push && exit 0
+            echo "Failed, retrying in 5s…"
             sleep 5
           done
-          
-          echo "Failed to push after 3 attempts"
+
+          echo "::error::Failed to push after 3 attempts"
           exit 1
-      
+
       - name: Upload artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -97,5 +110,5 @@ jobs:
           name: demand-update-logs
           path: |
             data/progress_batch_*.json
-            *.log
+            demand_fetcher.log
           retention-days: 7

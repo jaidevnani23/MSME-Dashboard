@@ -1,46 +1,15 @@
 #!/usr/bin/env python3
 """
-patch_demand.py — Safe Multi-Batch Product Demand Fetching
-===========================================================
-Fetches Google Trends data for 374 products across multiple batches with intelligent
-rate limiting, progress tracking, resume capability, and batch management.
+patch_demand.py — Ultra-Safe Product Demand Fetching with Aggressive Rate Limiting
+==================================================================================
+Fetches Google Trends data with extreme caution to avoid 429 errors and IP blocks.
 
-STRATEGY: Spreads 374 products over 8 batches (50 products/batch, last batch has 24)
-with safe delays to avoid IP blocks and rate limits from Google Trends' unofficial API.
+STRATEGY: 25 products per batch with long delays and exponential backoff
 
 Usage:
-    pip install pytrends --break-system-packages
-    
-    # Run batches
-    python patch_demand.py --batch 1    # Batch 1: Products 0-49
-    python patch_demand.py --batch 2    # Batch 2: Products 50-99
-    python patch_demand.py --batch 3    # Batch 3: Products 100-149
-    python patch_demand.py --batch 4    # Batch 4: Products 150-199
-    python patch_demand.py --batch 5    # Batch 5: Products 200-249
-    python patch_demand.py --batch 6    # Batch 6: Products 250-299
-    python patch_demand.py --batch 7    # Batch 7: Products 300-349
-    python patch_demand.py --batch 8    # Batch 8: Products 350-373
-    
-    # Or specify custom range
-    python patch_demand.py --start 0 --end 50
-    
-    # Test with dry-run
-    python patch_demand.py --batch 1 --dry-run
-    
-    # Resume from failure
-    python patch_demand.py --batch 2 --resume
-
-Features:
-- ✅ Batch processing (8 batches for 374 products, 50 products each)
-- ✅ Progress tracking with JSON checkpoint files
-- ✅ Resume capability after failures or IP blocks
-- ✅ Intelligent rate limiting (4-7 seconds between products)
-- ✅ Error handling and retry logic
-- ✅ Estimated completion time
-- ✅ Daily summaries and change reports
-- ✅ Balanced search terms for better data coverage
-
-Requirements: Python 3.8+, pytrends
+    python patch_demand.py --batch 1    # Products 0-24
+    python patch_demand.py --batch 2    # Products 25-49
+    etc.
 """
 
 import argparse
@@ -62,13 +31,15 @@ except ImportError:
 
 
 # ── Configuration ─────────────────────────────────────────────────────────────
-PRODUCTS_PER_BATCH = 50  # Reduced from 94 to 50 for safer rate limiting
-MIN_DELAY_SECONDS = 4.0  # Increased from 3.0 to 4.0 for safety
-MAX_DELAY_SECONDS = 7.0  # Increased from 5.0 to 7.0 for safety
-RETRY_ATTEMPTS = 3       # Increased from 2 to 3
-RETRY_DELAY = 15.0       # Increased from 10.0 to 15.0 seconds
-LONG_DELAY_EVERY = 10    # Add longer delay every N products
-LONG_DELAY_SECONDS = 20.0 # Extra delay every 10 products
+PRODUCTS_PER_BATCH = 25      # Reduced from 50 to 25 for ultra-safe operation
+MIN_DELAY_SECONDS = 8.0      # Increased from 4.0 to 8.0
+MAX_DELAY_SECONDS = 15.0     # Increased from 7.0 to 15.0
+RETRY_ATTEMPTS = 3
+RETRY_DELAY = 30.0           # Increased from 15.0 to 30.0 seconds
+LONG_DELAY_EVERY = 5         # Reduced from 10 to 5 (more frequent breaks)
+LONG_DELAY_SECONDS = 45.0    # Increased from 20.0 to 45.0 seconds
+EXPONENTIAL_BACKOFF = True   # Enable exponential backoff on errors
+MAX_REQUESTS_PER_MINUTE = 4  # Enforce strict rate limit
 
 MONTH_NAMES = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -162,6 +133,34 @@ PRODUCT_SEARCH_TERMS = {
 }
 
 
+# ── Rate Limiter ─────────────────────────────────────────────────────────────
+class RateLimiter:
+    """Enforces strict rate limiting to avoid 429 errors"""
+    
+    def __init__(self, max_per_minute: int):
+        self.max_per_minute = max_per_minute
+        self.request_times = []
+    
+    def wait_if_needed(self):
+        """Wait if we've hit the rate limit"""
+        now = time.time()
+        
+        # Remove requests older than 1 minute
+        self.request_times = [t for t in self.request_times if now - t < 60]
+        
+        # If we're at the limit, wait
+        if len(self.request_times) >= self.max_per_minute:
+            oldest = self.request_times[0]
+            wait_time = 60 - (now - oldest) + random.uniform(1, 5)  # Add jitter
+            if wait_time > 0:
+                print(f"    ⏳ Rate limit: waiting {wait_time:.1f}s...")
+                time.sleep(wait_time)
+                self.request_times = []  # Clear after waiting
+        
+        # Record this request
+        self.request_times.append(time.time())
+
+
 # ── Dashboard Products Extraction ────────────────────────────────────────────
 def load_products_from_dashboard(html_path: str) -> List[Tuple[str, str, str]]:
     """
@@ -227,7 +226,7 @@ def extract_search_terms(product_name: str) -> List[str]:
     
     # If we found matches, return them (limit to 2 for better data)
     if matched_terms:
-        return matched_terms[:2]  # Reduced from 3 to 2
+        return matched_terms[:2]
     
     # Fallback: extract clean key product words
     words = product_name.split()
@@ -264,7 +263,8 @@ def extract_search_terms(product_name: str) -> List[str]:
 
 # ── Trend Fetching ───────────────────────────────────────────────────────────
 def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str, 
-                   geo: str, retry_count: int = 0) -> Optional[List[float]]:
+                   geo: str, rate_limiter: RateLimiter, 
+                   retry_count: int = 0) -> Optional[List[float]]:
     """
     Returns a 12-element list of normalised monthly interest (0.0–1.0).
     Averages across all provided terms using chunked requests (max 5 per call).
@@ -275,17 +275,40 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
     
     for i in range(0, len(terms), chunk_size):
         chunk = terms[i: i + chunk_size]
+        
+        # Enforce rate limiting before each request
+        rate_limiter.wait_if_needed()
+        
         try:
             pytrends.build_payload(chunk, timeframe=timeframe, geo=geo)
             df = pytrends.interest_over_time()
         except Exception as exc:
-            if retry_count < RETRY_ATTEMPTS:
-                print(f"      ⚠️  API error, retrying in {RETRY_DELAY}s... ({exc})")
-                time.sleep(RETRY_DELAY)
-                return fetch_interest(pytrends, terms, timeframe, geo, retry_count + 1)
+            error_str = str(exc).lower()
+            
+            # Check if it's a 429 error
+            if '429' in error_str or 'too many' in error_str:
+                if retry_count < RETRY_ATTEMPTS:
+                    # Exponential backoff for 429 errors
+                    if EXPONENTIAL_BACKOFF:
+                        backoff_delay = RETRY_DELAY * (2 ** retry_count)
+                    else:
+                        backoff_delay = RETRY_DELAY
+                    
+                    print(f"      🚫 Rate limited (429), backing off {backoff_delay:.0f}s...")
+                    time.sleep(backoff_delay)
+                    return fetch_interest(pytrends, terms, timeframe, geo, rate_limiter, retry_count + 1)
+                else:
+                    print(f"      ❌ Rate limit exceeded after {RETRY_ATTEMPTS} retries")
+                    return None
             else:
-                print(f"      ❌ Failed after {RETRY_ATTEMPTS} retries: {exc}")
-                return None
+                # Other errors
+                if retry_count < RETRY_ATTEMPTS:
+                    print(f"      ⚠️  API error, retrying in {RETRY_DELAY}s... ({exc})")
+                    time.sleep(RETRY_DELAY)
+                    return fetch_interest(pytrends, terms, timeframe, geo, rate_limiter, retry_count + 1)
+                else:
+                    print(f"      ❌ Failed after {RETRY_ATTEMPTS} retries: {exc}")
+                    return None
 
         if df.empty:
             print(f"      ⚠️  No data returned for terms: {chunk}")
@@ -312,7 +335,7 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
         all_monthly.append(normalised)
 
         # Delay between chunks within same product
-        time.sleep(1.5)
+        time.sleep(2.0)
 
     if not all_monthly:
         return None
@@ -401,11 +424,11 @@ def calculate_total_batches(total_products: int) -> int:
 # ── Main Execution ───────────────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(
-        description="Fetch Google Trends product-level demand data in safe batches"
+        description="Fetch Google Trends product-level demand data with ultra-safe rate limiting"
     )
     parser.add_argument(
         "--batch", type=int,
-        help="Batch number (1-8 for 50 products per batch)",
+        help="Batch number (1-15 for 25 products per batch)",
     )
     parser.add_argument(
         "--start", type=int,
@@ -432,14 +455,14 @@ def main():
         help="Google Trends geo code (default: IN for India)",
     )
     parser.add_argument(
-        "--dashboard", default="india_logistics_dashboard_v24.html",
+        "--dashboard", default="index.html",
         help="Path to dashboard HTML file",
     )
     args = parser.parse_args()
     
     # Load products from dashboard first to get total count
     print(f"\n{'─'*70}")
-    print(f"  India Logistics Dashboard — Safe Multi-Batch Demand Patcher")
+    print(f"  India Logistics Dashboard — Ultra-Safe Demand Patcher")
     print(f"{'─'*70}")
     print(f"  Loading products from dashboard...")
     
@@ -453,7 +476,7 @@ def main():
     total_batches = calculate_total_batches(total_products)
     
     print(f"  ✅ Loaded {total_products} products from dashboard")
-    print(f"  📊 Total batches needed: {total_batches} (50 products per batch)")
+    print(f"  📊 Total batches needed: {total_batches} ({PRODUCTS_PER_BATCH} products per batch)")
     
     # Determine range
     if args.start is not None and args.end is not None:
@@ -477,7 +500,6 @@ def main():
     print(f"     • 't-shirt' → \"t shirt\", \"tshirt\"")
     print(f"     • 'mango' → \"mango\", \"alphonso\"")
     print(f"     • 'handicrafts' → \"handicrafts\", \"handmade\"")
-    print(f"     (Balanced terms - not too specific, not too broad)")
     
     # Select batch
     batch_products = all_products[start_idx:end_idx]
@@ -493,12 +515,11 @@ def main():
     
     # Estimate time with longer delays
     avg_delay = (MIN_DELAY_SECONDS + MAX_DELAY_SECONDS) / 2
-    # Add extra time for long delays every 10 products
     extra_delays = (batch_size // LONG_DELAY_EVERY) * LONG_DELAY_SECONDS
     total_time_seconds = (batch_size * avg_delay) + extra_delays
     estimated_minutes = total_time_seconds / 60
     print(f"     Est. Time    : {estimated_minutes:.1f} minutes ({estimated_minutes/60:.1f} hours)")
-    print(f"     Safety       : 4-7s delay + 20s every 10 products")
+    print(f"     Safety       : 8-15s delay + 45s every 5 products + rate limiter")
     
     # Load progress tracker
     tracker = ProgressTracker(batch_num if batch_num > 0 else 0)
@@ -519,8 +540,11 @@ def main():
     except Exception:
         product_map = {}
     
-    # Init pytrends with more conservative settings
-    pytrends = TrendReq(hl="en-IN", tz=330, retries=3, backoff_factor=2.0)
+    # Init pytrends with conservative settings
+    pytrends = TrendReq(hl="en-IN", tz=330, retries=2, backoff_factor=2.0)
+    
+    # Init rate limiter
+    rate_limiter = RateLimiter(MAX_REQUESTS_PER_MINUTE)
     
     # Process products
     results = {}
@@ -553,8 +577,8 @@ def main():
         # Get old demand if exists
         old_demand = product_map.get(product_key, {}).get("demand", [0] * 12)
         
-        # Fetch new data
-        raw = fetch_interest(pytrends, search_terms, args.timeframe, args.geo)
+        # Fetch new data with rate limiter
+        raw = fetch_interest(pytrends, search_terms, args.timeframe, args.geo, rate_limiter)
         
         if raw is None:
             print(f"    ❌ FAILED - No trends data returned")
@@ -604,7 +628,7 @@ def main():
             
             # Add longer delay every N products to avoid patterns
             if (processed_count % LONG_DELAY_EVERY) == 0:
-                print(f"    ⏸️  Extra safety delay ({LONG_DELAY_SECONDS}s)...")
+                print(f"    ⏸️  Extra safety break ({LONG_DELAY_SECONDS}s)...")
                 time.sleep(LONG_DELAY_SECONDS)
             
             time.sleep(delay)

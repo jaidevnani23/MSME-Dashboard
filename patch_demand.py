@@ -487,7 +487,7 @@ def main():
         print(f"  📁 Category: {cat_id} | 📍 State: {state}")
         
         search_terms = extract_search_terms(product_name)
-        print(f"  🔍 Search Terms: {' + '.join([f'\"{t}\"' for t in search_terms])}")
+       print(f"  🔍 Search Terms: {' + '.join([f'{chr(34)}{t}{chr(34)}' for t in search_terms])}")
         
         old_demand = product_map.get(product_key, {}).get("demand", [0] * 12)
         

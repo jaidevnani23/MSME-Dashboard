@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
-patch_demand_improved.py — Ultra-Safe Product Demand Fetching with Advanced Anti-Rate-Limiting
-==============================================================================================
-Fetches Google Trends data with sophisticated evasion techniques to avoid 429 errors.
+patch_demand.py — Maximum Stealth Product Demand Fetching
+=====================================================================
+Ultra-conservative approach to avoid 429 errors completely.
 
-KEY IMPROVEMENTS:
-- User agent rotation with fresh sessions
-- Request jitter and randomization
-- Smarter retry logic with circuit breaker
-- Session recycling to avoid fingerprinting
-- Better rate limiting with burst protection
+CRITICAL CHANGES:
+- Much longer initial delays before first request
+- Smaller batches (20 products)
+- Extreme delays (60-120s between requests)
+- Request warm-up period
+- Better session management
+- Optional proxy support
 """
 
 import argparse
@@ -22,140 +23,79 @@ import random
 from datetime import datetime as dt
 from typing import Dict, List, Tuple, Optional
 
-# Force unbuffered output for real-time logging in GitHub Actions
+# Force unbuffered output
 import functools
 print = functools.partial(print, flush=True)
 
 try:
     from pytrends.request import TrendReq
 except ImportError:
-    sys.exit(
-        "pytrends not found.  Run:  pip install pytrends --break-system-packages"
-    )
+    sys.exit("pytrends not found. Run: pip install pytrends --break-system-packages")
 
-# User-Agent rotation to avoid fingerprinting
+# ── ULTRA-CONSERVATIVE CONFIGURATION ─────────────────────────────────────────
+PRODUCTS_PER_BATCH = 20          # MUCH smaller batches
+MIN_DELAY_SECONDS = 60.0         # 1 minute minimum
+MAX_DELAY_SECONDS = 120.0        # 2 minutes maximum
+INITIAL_WARMUP_DELAY = 30.0      # Wait before first request
+RETRY_ATTEMPTS = 1               # Only 1 retry
+RETRY_DELAY = 300.0              # 5 minute backoff
+LONG_DELAY_EVERY = 3             # Break every 3 products
+LONG_DELAY_SECONDS = 300.0       # 5 minute breaks
+MAX_REQUESTS_PER_MINUTE = 1      # VERY conservative (1 per minute)
+SESSION_REFRESH_EVERY = 3        # New session every 3 products
+JITTER_FACTOR = 0.3
+CIRCUIT_BREAKER_THRESHOLD = 2
+COOL_DOWN_PERIOD = 600.0         # 10 minute cooldown
+
 USER_AGENTS = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
-    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
 ]
 
+MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-# ── Configuration ─────────────────────────────────────────────────────────────
-PRODUCTS_PER_BATCH = 35      # REDUCED for safety
-MIN_DELAY_SECONDS = 20.0     # INCREASED significantly
-MAX_DELAY_SECONDS = 40.0     # INCREASED significantly
-RETRY_ATTEMPTS = 2           # REDUCED (fewer retries = less detectable)
-RETRY_DELAY = 120.0          # INCREASED (longer backoff)
-LONG_DELAY_EVERY = 5         # More frequent breaks
-LONG_DELAY_SECONDS = 180.0   # MUCH longer breaks (3 minutes)
-EXPONENTIAL_BACKOFF = True   
-MAX_REQUESTS_PER_MINUTE = 2  # Conservative rate
-SESSION_REFRESH_EVERY = 6    # Recreate pytrends instance frequently
-JITTER_FACTOR = 0.4          # Add ±40% randomness to all delays
-CIRCUIT_BREAKER_THRESHOLD = 3  # Stop after this many consecutive 429s
-COOL_DOWN_PERIOD = 300.0     # 5 minute cooldown after circuit breaker
-
-MONTH_NAMES = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-]
-
-# ── Product-to-search-term mapping ───────────────────────────────────────────
+# ── Product-to-search-term mapping (same as before) ──────────────────────────
 PRODUCT_SEARCH_TERMS = {
-    # Clothing & Apparel
-    "saree": ["saree", "silk saree"],
-    "lehenga": ["lehenga", "bridal lehenga"],
-    "kurta": ["kurta", "kurti"],
-    "salwar": ["salwar suit", "salwar kameez"],
-    "ethnic wear": ["ethnic wear", "indian wear"],
-    "anarkali": ["anarkali", "anarkali suit"],
-    "bandhgala": ["bandhgala", "nehru jacket"],
-    "sherwani": ["sherwani", "wedding sherwani"],
-    "chaniya choli": ["chaniya choli", "ghagra choli"],
-    "phulkari": ["phulkari", "punjabi suit"],
-    "chikankari": ["chikankari", "lucknow embroidery"],
-    "pashmina": ["pashmina", "shawl"],
-    "tant": ["tant saree", "bengal cotton"],
-    "baluchari": ["baluchari saree", "silk saree"],
-    "jamdani": ["jamdani", "muslin saree"],
-    "kasavu": ["kasavu saree", "kerala saree"],
-    "dhuti": ["dhoti", "traditional wear"],
-    "mundu": ["mundu", "kerala dress"],
-    "mekhela": ["mekhela chador", "assamese dress"],
-    
-    # Fabrics
-    "fabric": ["fabric", "cotton fabric"],
-    "georgette": ["georgette", "georgette fabric"],
-    "chiffon": ["chiffon", "chiffon fabric"],
-    "cotton": ["cotton fabric", "cotton"],
-    "silk": ["silk fabric", "silk"],
-    "synthetic": ["synthetic fabric", "polyester"],
-    "rayon": ["rayon", "rayon fabric"],
-    "kanchipuram": ["kanchipuram silk", "kanjeevaram"],
-    "mysore silk": ["mysore silk", "silk saree"],
-    "pochampally": ["pochampally", "ikat"],
-    "chanderi": ["chanderi", "chanderi saree"],
-    "maheshwari": ["maheshwari", "handloom saree"],
-    
-    # Apparel Manufacturing
-    "t-shirt": ["t shirt", "tshirt"],
-    "polo": ["polo shirt", "polo tshirt"],
-    "sportswear": ["sportswear", "activewear"],
-    "school uniform": ["school uniform", "uniform"],
-    "knitwear": ["knitwear", "sweater"],
-    "sweater": ["sweater", "winter wear"],
-    
-    # Food & Grocery
-    "mango": ["mango", "alphonso"],
-    "spices": ["spices", "masala"],
-    "coffee": ["coffee", "coffee beans"],
-    "tea": ["tea", "chai"],
-    "dry fruits": ["dry fruits", "nuts"],
-    "honey": ["honey", "organic honey"],
-    "cardamom": ["cardamom", "elaichi"],
-    "turmeric": ["turmeric", "haldi"],
-    "guava": ["guava", "fruit"],
-    "orange": ["orange", "citrus"],
-    "jaggery": ["jaggery", "gur"],
-    
-    # Handicrafts & Crafts
-    "handicrafts": ["handicrafts", "handmade"],
-    "brass": ["brass", "brass items"],
-    "pottery": ["pottery", "ceramic"],
-    "carpet": ["carpet", "rug"],
-    "dhurrie": ["dhurrie", "rug"],
-    "wooden": ["wooden handicrafts", "wood craft"],
-    "terracotta": ["terracotta", "clay"],
-    "marble": ["marble", "marble craft"],
-    
-    # Beauty & Cosmetics
-    "cosmetics": ["cosmetics", "makeup"],
-    "skincare": ["skincare", "face cream"],
-    "jewellery": ["jewellery", "jewelry"],
-    "kundan": ["kundan", "polki"],
-    "leather bag": ["leather bag", "bag"],
-    "footwear": ["footwear", "shoes"],
-    "sandal": ["sandals", "footwear"],
-    "serum": ["serum", "face serum"],
-    "sunscreen": ["sunscreen", "sunblock"],
-    
-    # Home & Utensils
-    "tiles": ["tiles", "ceramic tiles"],
-    "cookware": ["cookware", "utensils"],
-    "utensils": ["utensils", "cookware"],
-    "towel": ["towel", "bath towel"],
+    "saree": ["saree"], "lehenga": ["lehenga"], "kurta": ["kurta"],
+    "salwar": ["salwar suit"], "ethnic wear": ["ethnic wear"],
+    "anarkali": ["anarkali"], "bandhgala": ["bandhgala"],
+    "sherwani": ["sherwani"], "chaniya choli": ["chaniya choli"],
+    "phulkari": ["phulkari"], "chikankari": ["chikankari"],
+    "pashmina": ["pashmina"], "tant": ["tant saree"],
+    "baluchari": ["baluchari saree"], "jamdani": ["jamdani"],
+    "kasavu": ["kasavu saree"], "dhuti": ["dhoti"],
+    "mundu": ["mundu"], "mekhela": ["mekhela chador"],
+    "fabric": ["fabric"], "georgette": ["georgette"],
+    "chiffon": ["chiffon"], "cotton": ["cotton fabric"],
+    "silk": ["silk fabric"], "synthetic": ["synthetic fabric"],
+    "rayon": ["rayon"], "kanchipuram": ["kanchipuram silk"],
+    "mysore silk": ["mysore silk"], "pochampally": ["pochampally"],
+    "chanderi": ["chanderi"], "maheshwari": ["maheshwari"],
+    "t-shirt": ["t shirt"], "polo": ["polo shirt"],
+    "sportswear": ["sportswear"], "school uniform": ["school uniform"],
+    "knitwear": ["knitwear"], "sweater": ["sweater"],
+    "mango": ["mango"], "spices": ["spices"], "coffee": ["coffee"],
+    "tea": ["tea"], "dry fruits": ["dry fruits"], "honey": ["honey"],
+    "cardamom": ["cardamom"], "turmeric": ["turmeric"],
+    "guava": ["guava"], "orange": ["orange"], "jaggery": ["jaggery"],
+    "handicrafts": ["handicrafts"], "brass": ["brass"],
+    "pottery": ["pottery"], "carpet": ["carpet"],
+    "dhurrie": ["dhurrie"], "wooden": ["wooden handicrafts"],
+    "terracotta": ["terracotta"], "marble": ["marble"],
+    "cosmetics": ["cosmetics"], "skincare": ["skincare"],
+    "jewellery": ["jewellery"], "kundan": ["kundan"],
+    "leather bag": ["leather bag"], "footwear": ["footwear"],
+    "sandal": ["sandals"], "serum": ["serum"], "sunscreen": ["sunscreen"],
+    "tiles": ["tiles"], "cookware": ["cookware"],
+    "utensils": ["utensils"], "towel": ["towel"],
+    "oversized": ["oversized"], "graphic": ["graphic tee"],
 }
 
 
-# ── Advanced Rate Limiter with Circuit Breaker ────────────────────────────────
 class AdvancedRateLimiter:
-    """Enforces strict rate limiting with circuit breaker and burst protection"""
+    """Ultra-conservative rate limiter"""
     
     def __init__(self, max_per_minute: int):
         self.max_per_minute = max_per_minute
@@ -163,14 +103,20 @@ class AdvancedRateLimiter:
         self.consecutive_429s = 0
         self.circuit_open = False
         self.circuit_opened_at = None
+        self.first_request = True
     
     def add_jitter(self, delay: float) -> float:
-        """Add random jitter to a delay to avoid detectable patterns"""
-        jitter = delay * JITTER_FACTOR * (random.random() * 2 - 1)  # ±JITTER_FACTOR
+        jitter = delay * JITTER_FACTOR * (random.random() * 2 - 1)
         return max(1.0, delay + jitter)
     
     def wait_if_needed(self):
-        """Wait if we've hit the rate limit"""
+        # First request gets extra warm-up time
+        if self.first_request:
+            warmup = self.add_jitter(INITIAL_WARMUP_DELAY)
+            print(f"    🌡️  Warm-up delay: {warmup:.0f}s (helps avoid detection)...")
+            time.sleep(warmup)
+            self.first_request = False
+        
         # Check circuit breaker
         if self.circuit_open:
             elapsed = time.time() - self.circuit_opened_at
@@ -184,26 +130,20 @@ class AdvancedRateLimiter:
                 self.consecutive_429s = 0
         
         now = time.time()
-        
-        # Remove requests older than 1 minute
         self.request_times = [t for t in self.request_times if now - t < 60]
         
-        # If we're at the limit, wait
         if len(self.request_times) >= self.max_per_minute:
             oldest = self.request_times[0]
             base_wait = 60 - (now - oldest)
-            # Add extra buffer and jitter
-            wait_time = self.add_jitter(base_wait + random.uniform(5, 15))
+            wait_time = self.add_jitter(base_wait + random.uniform(10, 20))
             if wait_time > 0:
                 print(f"    ⏳ Rate limit: waiting {wait_time:.1f}s...")
                 time.sleep(wait_time)
                 self.request_times = []
         
-        # Record this request
         self.request_times.append(time.time())
     
     def record_429(self):
-        """Record a 429 error and potentially open circuit breaker"""
         self.consecutive_429s += 1
         print(f"    ⚠️  429 count: {self.consecutive_429s}/{CIRCUIT_BREAKER_THRESHOLD}")
         
@@ -213,42 +153,40 @@ class AdvancedRateLimiter:
             print(f"    🚨 CIRCUIT BREAKER TRIGGERED! Entering {COOL_DOWN_PERIOD}s cooldown...")
     
     def record_success(self):
-        """Record a successful request"""
         self.consecutive_429s = 0
 
 
-# ── Session Manager ──────────────────────────────────────────────────────────
 class TrendsSessionManager:
-    """Manages pytrends sessions with rotation to avoid fingerprinting"""
+    """Session manager with more conservative approach"""
     
     def __init__(self):
         self.session_count = 0
         self.current_session = None
     
     def get_session(self, force_new: bool = False) -> TrendReq:
-        """Get current session or create new one"""
         if force_new or self.current_session is None:
             user_agent = random.choice(USER_AGENTS)
             print(f"      🔄 Creating new session (#{self.session_count + 1})")
-            print(f"      🌐 User-Agent: {user_agent[:50]}...")
+            print(f"      🌐 User-Agent: {user_agent[:60]}...")
             
-            # Add random delay before creating new session
-            time.sleep(random.uniform(3, 8))
+            # Longer delay before creating session
+            time.sleep(random.uniform(5, 12))
             
             self.current_session = TrendReq(
                 hl="en-IN",
                 tz=330,
-                retries=1,  # Lower retries (we handle it ourselves)
-                backoff_factor=3.0,
-                timeout=(10, 25),  # Connection and read timeouts
+                retries=0,  # No automatic retries
+                backoff_factor=5.0,
+                timeout=(15, 30),
                 requests_args={
                     'headers': {
                         'User-Agent': user_agent,
-                        'Accept-Language': random.choice([
-                            'en-US,en;q=0.9',
-                            'en-IN,en;q=0.9',
-                            'en-GB,en;q=0.9',
-                        ]),
+                        'Accept-Language': 'en-IN,en;q=0.9',
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                        'Accept-Encoding': 'gzip, deflate, br',
+                        'DNT': '1',
+                        'Connection': 'keep-alive',
+                        'Upgrade-Insecure-Requests': '1',
                     }
                 }
             )
@@ -257,11 +195,9 @@ class TrendsSessionManager:
         return self.current_session
     
     def should_refresh(self, products_processed: int) -> bool:
-        """Check if session should be refreshed"""
         return products_processed > 0 and (products_processed % SESSION_REFRESH_EVERY) == 0
 
 
-# ── Dashboard Products Extraction ────────────────────────────────────────────
 def load_products_from_dashboard(html_path: str) -> List[Tuple[str, str, str]]:
     """Extract all products from the dashboard HTML file."""
     try:
@@ -301,153 +237,104 @@ def load_products_from_dashboard(html_path: str) -> List[Tuple[str, str, str]]:
         sys.exit(1)
 
 
-# ── Search Term Extraction ───────────────────────────────────────────────────
 def extract_search_terms(product_name: str) -> List[str]:
-    """Extract relevant search terms for a product."""
+    """Extract relevant search terms - SIMPLIFIED to use only ONE term"""
     product_lower = product_name.lower()
     
-    # Find ALL matching keywords and their positions in the product name
+    # Find matching keywords
     matches = []
     for keyword, terms in PRODUCT_SEARCH_TERMS.items():
         pos = product_lower.find(keyword)
         if pos != -1:
             matches.append((pos, keyword, terms))
     
-    # Use the keyword that appears FIRST in the product name
+    # Use ONLY the first term from the earliest match
     if matches:
-        matches.sort(key=lambda x: x[0])  # Sort by position (earliest first)
+        matches.sort(key=lambda x: x[0])
         _, keyword, terms = matches[0]
-        return terms[:2]
+        return [terms[0]]  # Only first term
     
-    # Fallback logic: extract key words from product name
+    # Fallback: use first meaningful word
     words = product_name.split()
-    stop_words = {
-        "the", "a", "an", "and", "or", "of", "for", "with", "in", "&", 
-        "—", "-", "set", "sets", "pack", "piece", "pieces", "online",
-        "wholesale", "export", "bulk"
-    }
-    key_words = []
+    stop_words = {"the", "a", "an", "and", "or", "of", "for", "with", "in", "&"}
     
     for word in words:
-        if "(" in word or "—" in word:
-            break
-        clean_word = word.lower().strip("(),.")
+        clean_word = word.lower().strip("(),.-")
         if clean_word not in stop_words and len(clean_word) > 2:
-            key_words.append(clean_word)
-        if len(key_words) >= 2:
-            break
-    
-    if key_words:
-        return [" ".join(key_words)]
-    
-    fallback_words = [w for w in words[:3] if w.lower() not in stop_words]
-    if fallback_words:
-        return [" ".join(fallback_words[:2]).lower()]
+            return [clean_word]
     
     return [words[0].lower()] if words else ["product"]
 
 
-# ── Improved Trend Fetching ──────────────────────────────────────────────────
 def fetch_interest(session_mgr: TrendsSessionManager, terms: List[str], 
                    timeframe: str, geo: str, rate_limiter: AdvancedRateLimiter, 
                    retry_count: int = 0) -> Optional[List[float]]:
-    """
-    Returns a 12-element list of normalised monthly interest (0.0–1.0).
-    Uses session manager for fingerprint avoidance.
-    """
-    all_monthly = []
-    chunk_size = 5
+    """Fetch interest with maximum caution - only ONE term at a time"""
     
-    for i in range(0, len(terms), chunk_size):
-        chunk = terms[i: i + chunk_size]
+    # Use only first term to minimize request complexity
+    term = terms[0] if terms else "product"
+    
+    print(f"      🔍 Querying Google Trends for: {term}")
+    
+    rate_limiter.wait_if_needed()
+    pytrends = session_mgr.get_session()
+    
+    try:
+        pytrends.build_payload([term], timeframe=timeframe, geo=geo)
+        df = pytrends.interest_over_time()
+        print(f"      ✓ Data received ({len(df)} rows)")
+        rate_limiter.record_success()
         
-        print(f"      🔍 Querying Google Trends for: {', '.join(chunk)}")
+    except Exception as exc:
+        error_str = str(exc).lower()
         
-        rate_limiter.wait_if_needed()
-        
-        # Get current session (may create new one)
-        pytrends = session_mgr.get_session()
-        
-        try:
-            pytrends.build_payload(chunk, timeframe=timeframe, geo=geo)
-            df = pytrends.interest_over_time()
-            print(f"      ✓ Data received ({len(df)} rows)")
+        if '429' in error_str or 'too many' in error_str or 'rate' in error_str:
+            rate_limiter.record_429()
             
-            # Record success
-            rate_limiter.record_success()
-            
-        except Exception as exc:
-            error_str = str(exc).lower()
-            
-            if '429' in error_str or 'too many' in error_str or 'rate' in error_str:
-                rate_limiter.record_429()
-                
-                if retry_count < RETRY_ATTEMPTS:
-                    if EXPONENTIAL_BACKOFF:
-                        backoff_delay = RETRY_DELAY * (2 ** retry_count)
-                    else:
-                        backoff_delay = RETRY_DELAY
-                    
-                    # Add jitter to backoff
-                    backoff_delay = rate_limiter.add_jitter(backoff_delay)
-                    
-                    print(f"      🚫 Rate limited (429), backing off {backoff_delay:.0f}s...")
-                    print(f"      🔄 Will create fresh session on retry...")
-                    time.sleep(backoff_delay)
-                    
-                    # Force new session on retry
-                    session_mgr.get_session(force_new=True)
-                    
-                    return fetch_interest(session_mgr, terms, timeframe, geo, 
-                                        rate_limiter, retry_count + 1)
-                else:
-                    print(f"      ❌ Rate limit exceeded after {RETRY_ATTEMPTS} retries")
-                    return None
+            if retry_count < RETRY_ATTEMPTS:
+                backoff_delay = rate_limiter.add_jitter(RETRY_DELAY)
+                print(f"      🚫 Rate limited (429), backing off {backoff_delay:.0f}s...")
+                print(f"      🔄 Will create fresh session on retry...")
+                time.sleep(backoff_delay)
+                session_mgr.get_session(force_new=True)
+                return fetch_interest(session_mgr, terms, timeframe, geo, 
+                                    rate_limiter, retry_count + 1)
             else:
-                if retry_count < RETRY_ATTEMPTS:
-                    wait = rate_limiter.add_jitter(RETRY_DELAY / 2)
-                    print(f"      ⚠️  API error, retrying in {wait:.0f}s... ({exc})")
-                    time.sleep(wait)
-                    return fetch_interest(session_mgr, terms, timeframe, geo, 
-                                        rate_limiter, retry_count + 1)
-                else:
-                    print(f"      ❌ Failed after {RETRY_ATTEMPTS} retries: {exc}")
-                    return None
-
-        if df.empty:
-            print(f"      ⚠️  No data returned for terms: {chunk}")
-            continue
-
-        if "isPartial" in df.columns:
-            df = df.drop(columns=["isPartial"])
-
-        df.index = df.index.to_period("M")
-        monthly = df.groupby(df.index).mean()
-
-        all_periods = sorted(monthly.index)
-        
-        # Maintain chronological order
-        if len(all_periods) >= 12:
-            last_12_periods = all_periods[-12:]
-            monthly_vals = [float(monthly.loc[p].mean()) for p in last_12_periods]
+                print(f"      ❌ Rate limit exceeded after {RETRY_ATTEMPTS} retries")
+                return None
         else:
-            monthly_vals = [0.0] * (12 - len(all_periods))
-            for period in all_periods:
-                monthly_vals.append(float(monthly.loc[period].mean()))
+            if retry_count < RETRY_ATTEMPTS:
+                wait = rate_limiter.add_jitter(RETRY_DELAY / 2)
+                print(f"      ⚠️  API error, retrying in {wait:.0f}s... ({exc})")
+                time.sleep(wait)
+                return fetch_interest(session_mgr, terms, timeframe, geo, 
+                                    rate_limiter, retry_count + 1)
+            else:
+                print(f"      ❌ Failed after {RETRY_ATTEMPTS} retries: {exc}")
+                return None
 
-        mx = max(monthly_vals) or 1.0
-        normalised = [v / mx for v in monthly_vals]
-        all_monthly.append(normalised)
-
-        # INCREASED delay between chunks with jitter
-        chunk_delay = rate_limiter.add_jitter(5.0)
-        time.sleep(chunk_delay)
-
-    if not all_monthly:
+    if df.empty:
+        print(f"      ⚠️  No data returned")
         return None
 
-    averaged = [sum(col) / len(col) for col in zip(*all_monthly)]
-    return averaged
+    if "isPartial" in df.columns:
+        df = df.drop(columns=["isPartial"])
+
+    df.index = df.index.to_period("M")
+    monthly = df.groupby(df.index).mean()
+    all_periods = sorted(monthly.index)
+    
+    if len(all_periods) >= 12:
+        last_12_periods = all_periods[-12:]
+        monthly_vals = [float(monthly.loc[p].mean()) for p in last_12_periods]
+    else:
+        monthly_vals = [0.0] * (12 - len(all_periods))
+        for period in all_periods:
+            monthly_vals.append(float(monthly.loc[period].mean()))
+
+    mx = max(monthly_vals) or 1.0
+    normalised = [v / mx for v in monthly_vals]
+    return normalised
 
 
 def normalise_to_demand(values: List[float]) -> List[int]:
@@ -461,9 +348,8 @@ def normalise_to_demand(values: List[float]) -> List[int]:
     return [bucket(v) for v in values]
 
 
-# ── Progress Tracking ────────────────────────────────────────────────────────
 class ProgressTracker:
-    """Tracks progress and allows resume capability"""
+    """Tracks progress"""
     
     def __init__(self, batch_num: int):
         self.batch_num = batch_num
@@ -513,30 +399,24 @@ class ProgressTracker:
 
 
 def calculate_total_batches(total_products: int) -> int:
-    """Calculate total number of batches needed"""
     return (total_products + PRODUCTS_PER_BATCH - 1) // PRODUCTS_PER_BATCH
 
 
-# ── Main Execution ───────────────────────────────────────────────────────────
 def main():
-    parser = argparse.ArgumentParser(
-        description="Fetch Google Trends product-level demand data (IMPROVED VERSION)"
-    )
+    parser = argparse.ArgumentParser(description="ULTRA-SAFE Google Trends fetcher")
     parser.add_argument("--batch", type=int, help="Batch number")
     parser.add_argument("--start", type=int, help="Custom start index")
     parser.add_argument("--end", type=int, help="Custom end index")
-    parser.add_argument("--dry-run", action="store_true", help="Print without writing")
-    parser.add_argument("--resume", action="store_true", help="Resume from checkpoint")
-    parser.add_argument("--timeframe", default="today 12-m", help="pytrends timeframe")
-    parser.add_argument("--geo", default="IN", help="Google Trends geo code")
-    parser.add_argument("--dashboard", default="index.html", help="Path to dashboard HTML")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--timeframe", default="today 12-m")
+    parser.add_argument("--geo", default="IN")
+    parser.add_argument("--dashboard", default="index.html")
     args = parser.parse_args()
     
     print(f"\n{'='*70}")
-    print(f"  India Logistics Dashboard — IMPROVED Demand Data Updater")
+    print(f"  ULTRA-SAFE Mode — Product Demand Fetcher")
     print(f"{'='*70}")
-    print(f"  Started: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
-    print(f"  Loading products from dashboard...")
     
     dashboard_path = args.dashboard
     if not pathlib.Path(dashboard_path).exists():
@@ -567,29 +447,19 @@ def main():
     batch_products = all_products[start_idx:end_idx]
     batch_size = len(batch_products)
     
-    print(f"\n  📦 Batch {batch_num} Configuration:")
-    print(f"     Range: Products {start_idx} to {end_idx-1}")
-    print(f"     Count: {batch_size} products")
-    print(f"     Timeframe: {args.timeframe}")
-    print(f"     Geo: {args.geo}")
-    print(f"     Rate Limit: {MAX_REQUESTS_PER_MINUTE} req/min")
-    print(f"     Session Refresh: Every {SESSION_REFRESH_EVERY} products")
-    print(f"     Delays: {MIN_DELAY_SECONDS}-{MAX_DELAY_SECONDS}s ±{JITTER_FACTOR*100}% jitter")
-    print(f"     Long Delays: {LONG_DELAY_SECONDS}s every {LONG_DELAY_EVERY} products")
-    print(f"     Circuit Breaker: {CIRCUIT_BREAKER_THRESHOLD} consecutive 429s → {COOL_DOWN_PERIOD}s cooldown")
+    print(f"\n  📦 ULTRA-CONSERVATIVE Batch {batch_num}:")
+    print(f"     Products: {batch_size}")
+    print(f"     Delays: {MIN_DELAY_SECONDS}-{MAX_DELAY_SECONDS}s per request")
+    print(f"     Warmup: {INITIAL_WARMUP_DELAY}s before first request")
+    print(f"     Breaks: {LONG_DELAY_SECONDS}s every {LONG_DELAY_EVERY} products")
+    print(f"     Rate: {MAX_REQUESTS_PER_MINUTE} request/minute MAX")
     
     avg_delay = (MIN_DELAY_SECONDS + MAX_DELAY_SECONDS) / 2
-    extra_delays = (batch_size // LONG_DELAY_EVERY) * LONG_DELAY_SECONDS
-    total_time_seconds = (batch_size * avg_delay) + extra_delays
-    estimated_minutes = total_time_seconds / 60
-    print(f"     Est. Time: {estimated_minutes:.1f} minutes")
+    total_time = (batch_size * avg_delay) + ((batch_size // LONG_DELAY_EVERY) * LONG_DELAY_SECONDS)
+    print(f"     Est. Time: {total_time/60:.1f} minutes")
     print(f"{'='*70}\n")
     
     tracker = ProgressTracker(batch_num if batch_num > 0 else 0)
-    
-    if args.resume and tracker.data["completed_products"]:
-        completion = tracker.get_completion_rate(batch_size)
-        print(f"  🔄 Resume Mode: {len(tracker.data['completed_products'])} completed ({completion:.1f}%)\n")
     
     out_path = pathlib.Path("data") / "demand_products.json"
     try:
@@ -598,7 +468,6 @@ def main():
     except Exception:
         product_map = {}
     
-    # Initialize managers
     session_mgr = TrendsSessionManager()
     rate_limiter = AdvancedRateLimiter(MAX_REQUESTS_PER_MINUTE)
     
@@ -617,19 +486,17 @@ def main():
         processed_count += 1
         progress = ((idx - start_idx + 1) / batch_size) * 100
         
-        # Check if we should refresh session
         if session_mgr.should_refresh(processed_count):
-            print(f"\n  🔄 Refreshing session (processed {processed_count} products)...")
+            print(f"\n  🔄 Session refresh (product #{processed_count})...")
             session_mgr.get_session(force_new=True)
         
         print(f"\n{'─'*70}")
-        print(f"  [{idx+1}/{end_idx}] ({progress:.1f}%) Processing...")
-        print(f"  📦 Product: {product_name}")
-        print(f"  📁 Category: {cat_id} | 📍 State: {state}")
+        print(f"  [{idx+1}/{end_idx}] ({progress:.1f}%)")
+        print(f"  📦 {product_name}")
+        print(f"  📁 {cat_id} | 📍 {state}")
         
         search_terms = extract_search_terms(product_name)
-        terms_display = ' + '.join(['"%s"' % t for t in search_terms])
-        print(f"  🔍 Search Terms: {terms_display}")
+        print(f"  🔍 Term: {search_terms[0]}")
         
         old_demand = product_map.get(product_key, {}).get("demand", [0] * 12)
         
@@ -637,65 +504,43 @@ def main():
                             args.geo, rate_limiter)
         
         if raw is None:
-            print(f"  ❌ FAILED - No trends data")
+            print(f"  ❌ FAILED")
             failed_count += 1
             tracker.mark_failed(product_key, "API fetch failed")
             new_demand = old_demand
         else:
             new_demand = normalise_to_demand(raw)
             
-            diff_parts = []
-            for mi, (old, new) in enumerate(zip(old_demand, new_demand)):
-                if old != new:
-                    arrow = "↑" if new > old else "↓"
-                    diff_parts.append(f"{MONTH_NAMES[mi]}:{old}→{new}{arrow}")
-            
-            if diff_parts:
-                print(f"  📊 Changes: {', '.join(diff_parts)}")
+            changes = sum(1 for o, n in zip(old_demand, new_demand) if o != n)
+            if changes > 0:
+                print(f"  📊 Changes: {changes} months updated")
             else:
-                print(f"  ✅ No changes (stable)")
+                print(f"  ✅ Stable")
             
             print(f"  📈 Demand: {new_demand}")
             
-            result = {
+            tracker.mark_completed(product_key, {
                 "old": old_demand,
                 "new": new_demand,
                 "terms": search_terms,
                 "category": cat_id,
                 "state": state,
-            }
-            tracker.mark_completed(product_key, result)
-        
-        elapsed = time.time() - start_time
-        if processed_count > 0:
-            avg_time = elapsed / processed_count
-            remaining = batch_size - (idx - start_idx + 1) + skipped_count
-            eta_minutes = (avg_time * remaining) / 60
-            print(f"  ⏱️  ETA: {eta_minutes:.1f} minutes")
+            })
         
         if idx < end_idx - 1:
-            # Base delay with jitter
             delay = rate_limiter.add_jitter(
                 random.uniform(MIN_DELAY_SECONDS, MAX_DELAY_SECONDS)
             )
             
-            # Long delay check
             if (processed_count % LONG_DELAY_EVERY) == 0:
                 long_delay = rate_limiter.add_jitter(LONG_DELAY_SECONDS)
-                print(f"  ⏸️  Extra safety break ({long_delay:.0f}s)...")
+                print(f"  ⏸️  Safety break ({long_delay:.0f}s)...")
                 time.sleep(long_delay)
             else:
                 time.sleep(delay)
     
-    elapsed_total = time.time() - start_time
-    
     print(f"\n{'='*70}")
-    print(f"  Batch {batch_num} Summary")
-    print(f"{'='*70}")
-    print(f"   Processed: {processed_count} | Skipped: {skipped_count} | Failed: {failed_count}")
-    print(f"   Time: {elapsed_total/60:.1f} minutes | Avg: {elapsed_total/max(processed_count,1):.1f}s/product")
-    print(f"   Sessions created: {session_mgr.session_count}")
-    print(f"   429 errors: {rate_limiter.consecutive_429s}")
+    print(f"  Summary: {processed_count} processed | {failed_count} failed")
     print(f"{'='*70}\n")
     
     if args.dry_run:
@@ -735,16 +580,7 @@ def main():
         json.dump(current_data, f, indent=2)
         f.write("\n")
     
-    print(f"  ✅ Wrote {len(current_data['products'])} total products to {out_path}")
-    
-    if failed_count > 0:
-        print(f"  ⚠️  {failed_count} failed. Rerun with --resume to retry.")
-    
-    remaining = total_batches - len([k for k in current_data.get("batches", {}).keys() if k.startswith("batch_")])
-    if remaining > 0 and batch_num < total_batches:
-        print(f"  📅 Next: python patch_demand_improved.py --batch {batch_num + 1}")
-    
-    print()
+    print(f"  ✅ Wrote {len(current_data['products'])} products to {out_path}\n")
 
 
 if __name__ == "__main__":

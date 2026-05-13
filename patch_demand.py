@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 """
-patch_demand.py — Ultra-Safe Product Demand Fetching with Real-Time Progress
-===========================================================================
-Fetches Google Trends data with immediate console output for CI/CD monitoring.
+patch_demand_improved.py — Ultra-Safe Product Demand Fetching with Advanced Anti-Rate-Limiting
+==============================================================================================
+Fetches Google Trends data with sophisticated evasion techniques to avoid 429 errors.
+
+KEY IMPROVEMENTS:
+- User agent rotation with fresh sessions
+- Request jitter and randomization
+- Smarter retry logic with circuit breaker
+- Session recycling to avoid fingerprinting
+- Better rate limiting with burst protection
 """
 
 import argparse
@@ -26,17 +33,33 @@ except ImportError:
         "pytrends not found.  Run:  pip install pytrends --break-system-packages"
     )
 
+# User-Agent rotation to avoid fingerprinting
+USER_AGENTS = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+]
+
 
 # ── Configuration ─────────────────────────────────────────────────────────────
-PRODUCTS_PER_BATCH = 50      
-MIN_DELAY_SECONDS = 12.0     # INCREASED from 8.0
-MAX_DELAY_SECONDS = 20.0     # INCREASED from 15.0
-RETRY_ATTEMPTS = 3
-RETRY_DELAY = 45.0           # INCREASED from 30.0
-LONG_DELAY_EVERY = 8         # CHANGED from 10 (more frequent breaks)
-LONG_DELAY_SECONDS = 60.0    # INCREASED from 45.0
+PRODUCTS_PER_BATCH = 35      # REDUCED for safety
+MIN_DELAY_SECONDS = 20.0     # INCREASED significantly
+MAX_DELAY_SECONDS = 40.0     # INCREASED significantly
+RETRY_ATTEMPTS = 2           # REDUCED (fewer retries = less detectable)
+RETRY_DELAY = 120.0          # INCREASED (longer backoff)
+LONG_DELAY_EVERY = 5         # More frequent breaks
+LONG_DELAY_SECONDS = 180.0   # MUCH longer breaks (3 minutes)
 EXPONENTIAL_BACKOFF = True   
-MAX_REQUESTS_PER_MINUTE = 3  # REDUCED from 4 (safer rate)
+MAX_REQUESTS_PER_MINUTE = 2  # Conservative rate
+SESSION_REFRESH_EVERY = 6    # Recreate pytrends instance frequently
+JITTER_FACTOR = 0.4          # Add ±40% randomness to all delays
+CIRCUIT_BREAKER_THRESHOLD = 3  # Stop after this many consecutive 429s
+COOL_DOWN_PERIOD = 300.0     # 5 minute cooldown after circuit breaker
 
 MONTH_NAMES = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -130,16 +153,36 @@ PRODUCT_SEARCH_TERMS = {
 }
 
 
-# ── Rate Limiter ─────────────────────────────────────────────────────────────
-class RateLimiter:
-    """Enforces strict rate limiting to avoid 429 errors"""
+# ── Advanced Rate Limiter with Circuit Breaker ────────────────────────────────
+class AdvancedRateLimiter:
+    """Enforces strict rate limiting with circuit breaker and burst protection"""
     
     def __init__(self, max_per_minute: int):
         self.max_per_minute = max_per_minute
         self.request_times = []
+        self.consecutive_429s = 0
+        self.circuit_open = False
+        self.circuit_opened_at = None
+    
+    def add_jitter(self, delay: float) -> float:
+        """Add random jitter to a delay to avoid detectable patterns"""
+        jitter = delay * JITTER_FACTOR * (random.random() * 2 - 1)  # ±JITTER_FACTOR
+        return max(1.0, delay + jitter)
     
     def wait_if_needed(self):
         """Wait if we've hit the rate limit"""
+        # Check circuit breaker
+        if self.circuit_open:
+            elapsed = time.time() - self.circuit_opened_at
+            if elapsed < COOL_DOWN_PERIOD:
+                remaining = COOL_DOWN_PERIOD - elapsed
+                print(f"    🚨 CIRCUIT BREAKER: Cooling down for {remaining:.0f}s...")
+                time.sleep(remaining)
+            else:
+                print(f"    ✅ Circuit breaker reset")
+                self.circuit_open = False
+                self.consecutive_429s = 0
+        
         now = time.time()
         
         # Remove requests older than 1 minute
@@ -148,7 +191,9 @@ class RateLimiter:
         # If we're at the limit, wait
         if len(self.request_times) >= self.max_per_minute:
             oldest = self.request_times[0]
-            wait_time = 60 - (now - oldest) + random.uniform(2, 8)  # INCREASED buffer
+            base_wait = 60 - (now - oldest)
+            # Add extra buffer and jitter
+            wait_time = self.add_jitter(base_wait + random.uniform(5, 15))
             if wait_time > 0:
                 print(f"    ⏳ Rate limit: waiting {wait_time:.1f}s...")
                 time.sleep(wait_time)
@@ -156,6 +201,64 @@ class RateLimiter:
         
         # Record this request
         self.request_times.append(time.time())
+    
+    def record_429(self):
+        """Record a 429 error and potentially open circuit breaker"""
+        self.consecutive_429s += 1
+        print(f"    ⚠️  429 count: {self.consecutive_429s}/{CIRCUIT_BREAKER_THRESHOLD}")
+        
+        if self.consecutive_429s >= CIRCUIT_BREAKER_THRESHOLD:
+            self.circuit_open = True
+            self.circuit_opened_at = time.time()
+            print(f"    🚨 CIRCUIT BREAKER TRIGGERED! Entering {COOL_DOWN_PERIOD}s cooldown...")
+    
+    def record_success(self):
+        """Record a successful request"""
+        self.consecutive_429s = 0
+
+
+# ── Session Manager ──────────────────────────────────────────────────────────
+class TrendsSessionManager:
+    """Manages pytrends sessions with rotation to avoid fingerprinting"""
+    
+    def __init__(self):
+        self.session_count = 0
+        self.current_session = None
+    
+    def get_session(self, force_new: bool = False) -> TrendReq:
+        """Get current session or create new one"""
+        if force_new or self.current_session is None:
+            user_agent = random.choice(USER_AGENTS)
+            print(f"      🔄 Creating new session (#{self.session_count + 1})")
+            print(f"      🌐 User-Agent: {user_agent[:50]}...")
+            
+            # Add random delay before creating new session
+            time.sleep(random.uniform(3, 8))
+            
+            self.current_session = TrendReq(
+                hl="en-IN",
+                tz=330,
+                retries=1,  # Lower retries (we handle it ourselves)
+                backoff_factor=3.0,
+                timeout=(10, 25),  # Connection and read timeouts
+                requests_args={
+                    'headers': {
+                        'User-Agent': user_agent,
+                        'Accept-Language': random.choice([
+                            'en-US,en;q=0.9',
+                            'en-IN,en;q=0.9',
+                            'en-GB,en;q=0.9',
+                        ]),
+                    }
+                }
+            )
+            self.session_count += 1
+        
+        return self.current_session
+    
+    def should_refresh(self, products_processed: int) -> bool:
+        """Check if session should be refreshed"""
+        return products_processed > 0 and (products_processed % SESSION_REFRESH_EVERY) == 0
 
 
 # ── Dashboard Products Extraction ────────────────────────────────────────────
@@ -198,7 +301,7 @@ def load_products_from_dashboard(html_path: str) -> List[Tuple[str, str, str]]:
         sys.exit(1)
 
 
-# ── Search Term Extraction (FIXED) ───────────────────────────────────────────
+# ── Search Term Extraction ───────────────────────────────────────────────────
 def extract_search_terms(product_name: str) -> List[str]:
     """Extract relevant search terms for a product."""
     product_lower = product_name.lower()
@@ -244,13 +347,13 @@ def extract_search_terms(product_name: str) -> List[str]:
     return [words[0].lower()] if words else ["product"]
 
 
-# ── Trend Fetching (FIXED VERSION) ───────────────────────────────────────────
-def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str, 
-                   geo: str, rate_limiter: RateLimiter, 
+# ── Improved Trend Fetching ──────────────────────────────────────────────────
+def fetch_interest(session_mgr: TrendsSessionManager, terms: List[str], 
+                   timeframe: str, geo: str, rate_limiter: AdvancedRateLimiter, 
                    retry_count: int = 0) -> Optional[List[float]]:
     """
     Returns a 12-element list of normalised monthly interest (0.0–1.0).
-    FIXED: Properly maintains chronological month ordering.
+    Uses session manager for fingerprint avoidance.
     """
     all_monthly = []
     chunk_size = 5
@@ -262,31 +365,51 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
         
         rate_limiter.wait_if_needed()
         
+        # Get current session (may create new one)
+        pytrends = session_mgr.get_session()
+        
         try:
             pytrends.build_payload(chunk, timeframe=timeframe, geo=geo)
             df = pytrends.interest_over_time()
             print(f"      ✓ Data received ({len(df)} rows)")
+            
+            # Record success
+            rate_limiter.record_success()
+            
         except Exception as exc:
             error_str = str(exc).lower()
             
-            if '429' in error_str or 'too many' in error_str:
+            if '429' in error_str or 'too many' in error_str or 'rate' in error_str:
+                rate_limiter.record_429()
+                
                 if retry_count < RETRY_ATTEMPTS:
                     if EXPONENTIAL_BACKOFF:
                         backoff_delay = RETRY_DELAY * (2 ** retry_count)
                     else:
                         backoff_delay = RETRY_DELAY
                     
+                    # Add jitter to backoff
+                    backoff_delay = rate_limiter.add_jitter(backoff_delay)
+                    
                     print(f"      🚫 Rate limited (429), backing off {backoff_delay:.0f}s...")
+                    print(f"      🔄 Will create fresh session on retry...")
                     time.sleep(backoff_delay)
-                    return fetch_interest(pytrends, terms, timeframe, geo, rate_limiter, retry_count + 1)
+                    
+                    # Force new session on retry
+                    session_mgr.get_session(force_new=True)
+                    
+                    return fetch_interest(session_mgr, terms, timeframe, geo, 
+                                        rate_limiter, retry_count + 1)
                 else:
                     print(f"      ❌ Rate limit exceeded after {RETRY_ATTEMPTS} retries")
                     return None
             else:
                 if retry_count < RETRY_ATTEMPTS:
-                    print(f"      ⚠️  API error, retrying in {RETRY_DELAY}s... ({exc})")
-                    time.sleep(RETRY_DELAY)
-                    return fetch_interest(pytrends, terms, timeframe, geo, rate_limiter, retry_count + 1)
+                    wait = rate_limiter.add_jitter(RETRY_DELAY / 2)
+                    print(f"      ⚠️  API error, retrying in {wait:.0f}s... ({exc})")
+                    time.sleep(wait)
+                    return fetch_interest(session_mgr, terms, timeframe, geo, 
+                                        rate_limiter, retry_count + 1)
                 else:
                     print(f"      ❌ Failed after {RETRY_ATTEMPTS} retries: {exc}")
                     return None
@@ -303,7 +426,7 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
 
         all_periods = sorted(monthly.index)
         
-        # FIXED: Maintain chronological order
+        # Maintain chronological order
         if len(all_periods) >= 12:
             last_12_periods = all_periods[-12:]
             monthly_vals = [float(monthly.loc[p].mean()) for p in last_12_periods]
@@ -316,8 +439,9 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
         normalised = [v / mx for v in monthly_vals]
         all_monthly.append(normalised)
 
-        # INCREASED delay between chunks
-        time.sleep(3.0)
+        # INCREASED delay between chunks with jitter
+        chunk_delay = rate_limiter.add_jitter(5.0)
+        time.sleep(chunk_delay)
 
     if not all_monthly:
         return None
@@ -396,9 +520,9 @@ def calculate_total_batches(total_products: int) -> int:
 # ── Main Execution ───────────────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(
-        description="Fetch Google Trends product-level demand data"
+        description="Fetch Google Trends product-level demand data (IMPROVED VERSION)"
     )
-    parser.add_argument("--batch", type=int, help="Batch number (1-8 for 50 products per batch)")
+    parser.add_argument("--batch", type=int, help="Batch number")
     parser.add_argument("--start", type=int, help="Custom start index")
     parser.add_argument("--end", type=int, help="Custom end index")
     parser.add_argument("--dry-run", action="store_true", help="Print without writing")
@@ -409,7 +533,7 @@ def main():
     args = parser.parse_args()
     
     print(f"\n{'='*70}")
-    print(f"  India Logistics Dashboard — Demand Data Updater")
+    print(f"  India Logistics Dashboard — IMPROVED Demand Data Updater")
     print(f"{'='*70}")
     print(f"  Started: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print(f"  Loading products from dashboard...")
@@ -449,7 +573,10 @@ def main():
     print(f"     Timeframe: {args.timeframe}")
     print(f"     Geo: {args.geo}")
     print(f"     Rate Limit: {MAX_REQUESTS_PER_MINUTE} req/min")
-    print(f"     Delays: {MIN_DELAY_SECONDS}-{MAX_DELAY_SECONDS}s + {LONG_DELAY_SECONDS}s every {LONG_DELAY_EVERY}")
+    print(f"     Session Refresh: Every {SESSION_REFRESH_EVERY} products")
+    print(f"     Delays: {MIN_DELAY_SECONDS}-{MAX_DELAY_SECONDS}s ±{JITTER_FACTOR*100}% jitter")
+    print(f"     Long Delays: {LONG_DELAY_SECONDS}s every {LONG_DELAY_EVERY} products")
+    print(f"     Circuit Breaker: {CIRCUIT_BREAKER_THRESHOLD} consecutive 429s → {COOL_DOWN_PERIOD}s cooldown")
     
     avg_delay = (MIN_DELAY_SECONDS + MAX_DELAY_SECONDS) / 2
     extra_delays = (batch_size // LONG_DELAY_EVERY) * LONG_DELAY_SECONDS
@@ -471,8 +598,9 @@ def main():
     except Exception:
         product_map = {}
     
-    pytrends = TrendReq(hl="en-IN", tz=330, retries=2, backoff_factor=2.0)
-    rate_limiter = RateLimiter(MAX_REQUESTS_PER_MINUTE)
+    # Initialize managers
+    session_mgr = TrendsSessionManager()
+    rate_limiter = AdvancedRateLimiter(MAX_REQUESTS_PER_MINUTE)
     
     processed_count = 0
     skipped_count = 0
@@ -489,6 +617,11 @@ def main():
         processed_count += 1
         progress = ((idx - start_idx + 1) / batch_size) * 100
         
+        # Check if we should refresh session
+        if session_mgr.should_refresh(processed_count):
+            print(f"\n  🔄 Refreshing session (processed {processed_count} products)...")
+            session_mgr.get_session(force_new=True)
+        
         print(f"\n{'─'*70}")
         print(f"  [{idx+1}/{end_idx}] ({progress:.1f}%) Processing...")
         print(f"  📦 Product: {product_name}")
@@ -500,7 +633,8 @@ def main():
         
         old_demand = product_map.get(product_key, {}).get("demand", [0] * 12)
         
-        raw = fetch_interest(pytrends, search_terms, args.timeframe, args.geo, rate_limiter)
+        raw = fetch_interest(session_mgr, search_terms, args.timeframe, 
+                            args.geo, rate_limiter)
         
         if raw is None:
             print(f"  ❌ FAILED - No trends data")
@@ -540,13 +674,18 @@ def main():
             print(f"  ⏱️  ETA: {eta_minutes:.1f} minutes")
         
         if idx < end_idx - 1:
-            delay = random.uniform(MIN_DELAY_SECONDS, MAX_DELAY_SECONDS)
+            # Base delay with jitter
+            delay = rate_limiter.add_jitter(
+                random.uniform(MIN_DELAY_SECONDS, MAX_DELAY_SECONDS)
+            )
             
+            # Long delay check
             if (processed_count % LONG_DELAY_EVERY) == 0:
-                print(f"  ⏸️  Extra safety break ({LONG_DELAY_SECONDS}s)...")
-                time.sleep(LONG_DELAY_SECONDS)
-            
-            time.sleep(delay)
+                long_delay = rate_limiter.add_jitter(LONG_DELAY_SECONDS)
+                print(f"  ⏸️  Extra safety break ({long_delay:.0f}s)...")
+                time.sleep(long_delay)
+            else:
+                time.sleep(delay)
     
     elapsed_total = time.time() - start_time
     
@@ -555,6 +694,8 @@ def main():
     print(f"{'='*70}")
     print(f"   Processed: {processed_count} | Skipped: {skipped_count} | Failed: {failed_count}")
     print(f"   Time: {elapsed_total/60:.1f} minutes | Avg: {elapsed_total/max(processed_count,1):.1f}s/product")
+    print(f"   Sessions created: {session_mgr.session_count}")
+    print(f"   429 errors: {rate_limiter.consecutive_429s}")
     print(f"{'='*70}\n")
     
     if args.dry_run:
@@ -601,7 +742,7 @@ def main():
     
     remaining = total_batches - len([k for k in current_data.get("batches", {}).keys() if k.startswith("batch_")])
     if remaining > 0 and batch_num < total_batches:
-        print(f"  📅 Next: python patch_demand.py --batch {batch_num + 1}")
+        print(f"  📅 Next: python patch_demand_improved.py --batch {batch_num + 1}")
     
     print()
 

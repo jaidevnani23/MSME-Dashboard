@@ -29,14 +29,14 @@ except ImportError:
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 PRODUCTS_PER_BATCH = 50      
-MIN_DELAY_SECONDS = 8.0      
-MAX_DELAY_SECONDS = 15.0     
+MIN_DELAY_SECONDS = 12.0     # INCREASED from 8.0
+MAX_DELAY_SECONDS = 20.0     # INCREASED from 15.0
 RETRY_ATTEMPTS = 3
-RETRY_DELAY = 30.0           
-LONG_DELAY_EVERY = 10        
-LONG_DELAY_SECONDS = 45.0    
+RETRY_DELAY = 45.0           # INCREASED from 30.0
+LONG_DELAY_EVERY = 8         # CHANGED from 10 (more frequent breaks)
+LONG_DELAY_SECONDS = 60.0    # INCREASED from 45.0
 EXPONENTIAL_BACKOFF = True   
-MAX_REQUESTS_PER_MINUTE = 4  
+MAX_REQUESTS_PER_MINUTE = 3  # REDUCED from 4 (safer rate)
 
 MONTH_NAMES = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -148,7 +148,7 @@ class RateLimiter:
         # If we're at the limit, wait
         if len(self.request_times) >= self.max_per_minute:
             oldest = self.request_times[0]
-            wait_time = 60 - (now - oldest) + random.uniform(1, 5)
+            wait_time = 60 - (now - oldest) + random.uniform(2, 8)  # INCREASED buffer
             if wait_time > 0:
                 print(f"    ⏳ Rate limit: waiting {wait_time:.1f}s...")
                 time.sleep(wait_time)
@@ -198,20 +198,25 @@ def load_products_from_dashboard(html_path: str) -> List[Tuple[str, str, str]]:
         sys.exit(1)
 
 
-# ── Search Term Extraction ───────────────────────────────────────────────────
+# ── Search Term Extraction (FIXED) ───────────────────────────────────────────
 def extract_search_terms(product_name: str) -> List[str]:
     """Extract relevant search terms for a product."""
     product_lower = product_name.lower()
     
-    matched_terms = []
+    # Find ALL matching keywords and their positions in the product name
+    matches = []
     for keyword, terms in PRODUCT_SEARCH_TERMS.items():
-        if keyword in product_lower:
-            matched_terms.extend(terms)
-            break
+        pos = product_lower.find(keyword)
+        if pos != -1:
+            matches.append((pos, keyword, terms))
     
-    if matched_terms:
-        return matched_terms[:2]
+    # Use the keyword that appears FIRST in the product name
+    if matches:
+        matches.sort(key=lambda x: x[0])  # Sort by position (earliest first)
+        _, keyword, terms = matches[0]
+        return terms[:2]
     
+    # Fallback logic: extract key words from product name
     words = product_name.split()
     stop_words = {
         "the", "a", "an", "and", "or", "of", "for", "with", "in", "&", 
@@ -311,7 +316,8 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
         normalised = [v / mx for v in monthly_vals]
         all_monthly.append(normalised)
 
-        time.sleep(2.0)
+        # INCREASED delay between chunks
+        time.sleep(3.0)
 
     if not all_monthly:
         return None
@@ -442,6 +448,8 @@ def main():
     print(f"     Count: {batch_size} products")
     print(f"     Timeframe: {args.timeframe}")
     print(f"     Geo: {args.geo}")
+    print(f"     Rate Limit: {MAX_REQUESTS_PER_MINUTE} req/min")
+    print(f"     Delays: {MIN_DELAY_SECONDS}-{MAX_DELAY_SECONDS}s + {LONG_DELAY_SECONDS}s every {LONG_DELAY_EVERY}")
     
     avg_delay = (MIN_DELAY_SECONDS + MAX_DELAY_SECONDS) / 2
     extra_delays = (batch_size // LONG_DELAY_EVERY) * LONG_DELAY_SECONDS

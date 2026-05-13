@@ -3,13 +3,12 @@ on:
   schedule:
     - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
   workflow_dispatch:
-
 jobs:
   update-demand:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    timeout-minutes: 360  # 6 hour timeout
+    timeout-minutes: 480  # 8 hour timeout (increased for longer delays)
     
     steps:
       - name: Checkout repo
@@ -29,14 +28,14 @@ jobs:
           pip install 'urllib3<2.0' pandas requests
           pip install git+https://github.com/GeneralMills/pytrends.git
       
-      - name: Run all batches (1-8)
+      - name: Run all batches (1-11)
         run: |
-          echo "Starting demand data update for 374 products (8 batches)"
+          echo "Starting demand data update for 374 products (11 batches @ 35 products/batch)"
           
-          for batch in {1..8}; do
+          for batch in {1..11}; do
             echo ""
             echo "=========================================="
-            echo "Starting Batch $batch"
+            echo "Starting Batch $batch/11"
             echo "=========================================="
             
             python patch_demand.py --batch $batch --dashboard "index.html" --resume
@@ -47,14 +46,15 @@ jobs:
             git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
             
             if ! git diff --staged --quiet; then
-              git commit -m "chore: update demand data batch $batch - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+              git commit -m "chore: update demand data batch $batch/11 - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
               git pull --rebase origin main && git push || echo "Push failed, will retry at end"
             fi
             
-            # Wait 15 minutes between batches (except after last batch)
-            if [ $batch -lt 8 ]; then
-              echo "Waiting 15 minutes before next batch..."
-              sleep 900
+            # Wait 20 minutes between batches (except after last batch)
+            # Increased from 15 to 20 minutes for extra safety
+            if [ $batch -lt 11 ]; then
+              echo "Waiting 20 minutes before next batch..."
+              sleep 1200
             fi
           done
           
@@ -74,7 +74,7 @@ jobs:
             exit 0
           fi
           
-          git commit -m "chore: complete demand data update (all 8 batches) - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          git commit -m "chore: complete demand data update (all 11 batches) - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
           
           # Retry push up to 3 times
           for i in 1 2 3; do

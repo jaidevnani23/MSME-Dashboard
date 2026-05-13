@@ -525,7 +525,9 @@ def main():
         
         # Generate search terms
         search_terms = extract_search_terms(product_name)
-        print(f"    🔍 Search Terms: {' + '.join([f'"{t}"' for t in search_terms])}")
+        # Fixed f-string - using single quotes inside to avoid nesting issues
+        terms_display = ' + '.join([f'"{t}"' for t in search_terms])
+        print(f"    🔍 Search Terms: {terms_display}")
         
         # Get old demand if exists
         old_demand = product_map.get(product_key, {}).get("demand", [0] * 12)

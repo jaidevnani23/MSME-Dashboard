@@ -35,7 +35,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: List batches
-        run: python patch_demand_ultra_safe.py --dashboard index.html --list-batches
+        run: python patch_demand.py --dashboard index.html --list-batches
 
       - name: Run all batches (1-19)
         run: |
@@ -49,7 +49,7 @@ jobs:
             echo "  Batch $batch / $TOTAL_BATCHES"
             echo "=========================================="
 
-            if python patch_demand_ultra_safe.py \
+            if python patch_demand.py \
                 --batch "$batch" \
                 --dashboard index.html \
                 --resume; then

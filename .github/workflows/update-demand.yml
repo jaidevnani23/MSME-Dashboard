@@ -1,10 +1,26 @@
 name: Update Demand Data
 on:
   schedule:
-    - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
+    - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC - Batches 1-3
+    - cron: '0 2 * * 3'  # Every Wednesday at 2 AM UTC - Batches 4-6
+    - cron: '0 2 * * 5'  # Every Friday at 2 AM UTC - Batches 7-8
   workflow_dispatch:
+    inputs:
+      batch_group:
+        description: 'Batch group to run (1=batches 1-3, 2=batches 4-6, 3=batches 7-8)'
+        required: true
+        default: '1'
+        type: choice
+        options:
+          - '1'
+          - '2'
+          - '3'
+
 jobs:
-  update-demand:
+  update-demand-group-1:
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 2 * * 1') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.batch_group == '1')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -27,31 +43,53 @@ jobs:
           pip install 'urllib3<2.0' pandas requests
           pip install git+https://github.com/GeneralMills/pytrends.git
       
-      - name: Run demand patcher - Batch 1 (Products 0-24)
+      - name: Run demand patcher - Batch 1 (Products 0-49)
         run: python patch_demand.py --batch 1 --dashboard "index.html" --resume
         continue-on-error: false
       
-      - name: Wait between batches
-        run: sleep 600  # 10 minute break between batches
+      - name: Intermediate commit - Batch 1
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "chore: update demand data batch 1 - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          git pull --rebase origin main && git push || true
       
-      - name: Run demand patcher - Batch 2 (Products 25-49)
+      - name: Wait between batches
+        run: sleep 900  # 15 minute break
+      
+      - name: Run demand patcher - Batch 2 (Products 50-99)
         run: python patch_demand.py --batch 2 --dashboard "index.html" --resume
         continue-on-error: false
       
-      - name: Commit and push demand data
+      - name: Intermediate commit - Batch 2
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "chore: update demand data batch 2 - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          git pull --rebase origin main && git push || true
+      
+      - name: Wait between batches
+        run: sleep 900  # 15 minute break
+      
+      - name: Run demand patcher - Batch 3 (Products 100-149)
+        run: python patch_demand.py --batch 3 --dashboard "index.html" --resume
+        continue-on-error: true
+      
+      - name: Final commit - Group 1
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/demand_products.json
           git add data/progress_batch_*.json 2>/dev/null || true
-          git add index.html 2>/dev/null || true
           
           if git diff --staged --quiet; then
             echo "No changes to commit"
             exit 0
           fi
           
-          git commit -m "chore: update demand data (batches 1-2) - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          git commit -m "chore: update demand data (batches 1-3) - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
           
           for i in 1 2 3; do
             echo "Push attempt $i..."
@@ -70,7 +108,186 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: demand-update-logs
+          name: demand-update-logs-group-1
+          path: |
+            data/progress_batch_*.json
+            *.log
+          retention-days: 7
+
+  update-demand-group-2:
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 2 * * 3') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.batch_group == '2')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install 'urllib3<2.0' pandas requests
+          pip install git+https://github.com/GeneralMills/pytrends.git
+      
+      - name: Run demand patcher - Batch 4 (Products 150-199)
+        run: python patch_demand.py --batch 4 --dashboard "index.html" --resume
+        continue-on-error: false
+      
+      - name: Intermediate commit - Batch 4
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "chore: update demand data batch 4 - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          git pull --rebase origin main && git push || true
+      
+      - name: Wait between batches
+        run: sleep 900  # 15 minute break
+      
+      - name: Run demand patcher - Batch 5 (Products 200-249)
+        run: python patch_demand.py --batch 5 --dashboard "index.html" --resume
+        continue-on-error: false
+      
+      - name: Intermediate commit - Batch 5
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "chore: update demand data batch 5 - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          git pull --rebase origin main && git push || true
+      
+      - name: Wait between batches
+        run: sleep 900  # 15 minute break
+      
+      - name: Run demand patcher - Batch 6 (Products 250-299)
+        run: python patch_demand.py --batch 6 --dashboard "index.html" --resume
+        continue-on-error: true
+      
+      - name: Final commit - Group 2
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/demand_products.json
+          git add data/progress_batch_*.json 2>/dev/null || true
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git commit -m "chore: update demand data (batches 4-6) - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          
+          for i in 1 2 3; do
+            echo "Push attempt $i..."
+            if git pull --rebase origin main && git push; then
+              echo "Successfully pushed changes"
+              exit 0
+            fi
+            echo "Push failed, retrying in 5 seconds..."
+            sleep 5
+          done
+          
+          echo "Failed to push after 3 attempts"
+          exit 1
+      
+      - name: Upload workflow artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: demand-update-logs-group-2
+          path: |
+            data/progress_batch_*.json
+            *.log
+          retention-days: 7
+
+  update-demand-group-3:
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 2 * * 5') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.batch_group == '3')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install 'urllib3<2.0' pandas requests
+          pip install git+https://github.com/GeneralMills/pytrends.git
+      
+      - name: Run demand patcher - Batch 7 (Products 300-349)
+        run: python patch_demand.py --batch 7 --dashboard "index.html" --resume
+        continue-on-error: false
+      
+      - name: Intermediate commit - Batch 7
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/demand_products.json data/progress_batch_*.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "chore: update demand data batch 7 - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          git pull --rebase origin main && git push || true
+      
+      - name: Wait between batches
+        run: sleep 900  # 15 minute break
+      
+      - name: Run demand patcher - Batch 8 (Products 350-374)
+        run: python patch_demand.py --batch 8 --dashboard "index.html" --resume
+        continue-on-error: true
+      
+      - name: Final commit - Group 3
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/demand_products.json
+          git add data/progress_batch_*.json 2>/dev/null || true
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git commit -m "chore: update demand data (batches 7-8, COMPLETE) - $(date +'%Y-%m-%d %H:%M UTC') [skip ci]"
+          
+          for i in 1 2 3; do
+            echo "Push attempt $i..."
+            if git pull --rebase origin main && git push; then
+              echo "Successfully pushed changes"
+              exit 0
+            fi
+            echo "Push failed, retrying in 5 seconds..."
+            sleep 5
+          done
+          
+          echo "Failed to push after 3 attempts"
+          exit 1
+      
+      - name: Upload workflow artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: demand-update-logs-group-3
           path: |
             data/progress_batch_*.json
             *.log

@@ -269,6 +269,8 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
     Returns a 12-element list of normalised monthly interest (0.0–1.0).
     Averages across all provided terms using chunked requests (max 5 per call).
     Returns None on failure after retries.
+    
+    FIXED: Properly handles month ordering regardless of data completeness.
     """
     all_monthly = []
     chunk_size = 5
@@ -317,19 +319,26 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
         if "isPartial" in df.columns:
             df = df.drop(columns=["isPartial"])
 
+        # Convert to monthly periods
         df.index = df.index.to_period("M")
         monthly = df.groupby(df.index).mean()
 
+        # Get all periods and ensure we have exactly 12 months
         all_periods = sorted(monthly.index)
-        if len(all_periods) < 12:
-            monthly_vals = [0.0] * 12
-            for period, row in monthly.iterrows():
-                idx = period.month - 1
-                monthly_vals[idx] = float(row.mean())
+        
+        # FIXED: Always get the last 12 months chronologically
+        if len(all_periods) >= 12:
+            # Take the last 12 months
+            last_12_periods = all_periods[-12:]
+            monthly_vals = [float(monthly.loc[p].mean()) for p in last_12_periods]
         else:
-            last_12 = all_periods[-12:]
-            monthly_vals = [float(monthly.loc[p].mean()) for p in last_12]
+            # If we have less than 12 months, pad with zeros at the start
+            # This maintains chronological order
+            monthly_vals = [0.0] * (12 - len(all_periods))
+            for period in all_periods:
+                monthly_vals.append(float(monthly.loc[period].mean()))
 
+        # Normalize to 0.0-1.0
         mx = max(monthly_vals) or 1.0
         normalised = [v / mx for v in monthly_vals]
         all_monthly.append(normalised)
@@ -340,9 +349,10 @@ def fetch_interest(pytrends: TrendReq, terms: List[str], timeframe: str,
     if not all_monthly:
         return None
 
+    # Average across all search terms
     averaged = [sum(col) / len(col) for col in zip(*all_monthly)]
     return averaged
-
+                       
 
 def normalise_to_demand(values: List[float]) -> List[int]:
     """
